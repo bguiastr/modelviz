@@ -1,0 +1,13 @@
+Package: modelviz
+Type: Package
+Title: Generation of QMD for NONMEM outputs
+Version: 0.1
+Date: 2015-06-29
+Author: Benjamin Guiastrennec
+Maintainer: Benjamin Guiastrennec <guiastrennec@gmail.com>
+Description: Generation of quantitative model diagrams (QMD) for evaluation of NONMEM outputs
+Depends: R (>= 3.0.2)
+Imports: DiagrammeR (>= 0.6)
+License: GPL-2
+LazyData: true
+URL: https://github.com/guiastrennec/ModelViz
