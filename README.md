@@ -19,7 +19,7 @@ modelviz(twocomp)
 
 ## How to use
 ```{r, eval=FALSE}
- # Import dataset from NONMEM
+# Import dataset from NONMEM
 prm_list <- prm_import(dir='../models/pk/', runno='001')
 
 # Generate QMD
