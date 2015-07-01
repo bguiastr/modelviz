@@ -6,7 +6,7 @@ To facilitate model communication and evaluation through intuitive visual repres
 
 ## Installation
 
-```{r, eval=FALSE}
+```r
 # Install modelviz package (first time only)
 devtools::install_github("guiastrennec/modelviz")
 
