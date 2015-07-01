@@ -1,6 +1,6 @@
 #' DiagrammeR functions
 #'
-#' @description Derived from DiagrammeR
+#' @description Edited from DiagrammeR to include ranking option but remain compatible
 #' @importFrom DiagrammeR x11_hex
 make_graph <- function (nodes_df = NULL, edges_df = NULL, graph_attrs = NULL,
                         node_attrs = NULL, edge_attrs = NULL, directed = TRUE, graph_name = NULL,

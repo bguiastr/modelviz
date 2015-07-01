@@ -7,11 +7,11 @@
 prm_import(dir = NULL, prefix = "run", runno, ext = ".mod")
 }
 \arguments{
-\item{dir}{where are the model files located}
+\item{dir}{location of the model files}
 
-\item{prefix}{start of the model file name}
+\item{prefix}{prefix of the model file name}
 
-\item{runno}{run number of the table files to read}
+\item{runno}{run number to be evaluated}
 
 \item{ext}{model file extention}
 }

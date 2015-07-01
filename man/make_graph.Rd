@@ -9,6 +9,6 @@ make_graph(nodes_df = NULL, edges_df = NULL, graph_attrs = NULL,
   graph_name = NULL, graph_time = NULL, graph_tz = NULL)
 }
 \description{
-Derived from DiagrammeR
+Edited from DiagrammeR to include ranking option but remain compatible
 }
 

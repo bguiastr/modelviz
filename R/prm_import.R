@@ -2,10 +2,11 @@
 #'
 #' @description Import model parameters from NONMEM run
 #'
-#' @param dir where are the model files located
-#' @param runno run number of the table files to read
-#' @param prefix start of the model file name
+#' @param dir location of the model files
+#' @param runno run number to be evaluated
+#' @param prefix prefix of the model file name
 #' @param ext model file extention
+#'
 #' @seealso \code{\link{prm_format}}, \code{\link{modelviz}}
 #' @return A list containing the parameters and RSE as \code{"data.frame"},
 #'         the nonmem ADVAN (advan) and TRANS (trans) as numeric value.

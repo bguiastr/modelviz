@@ -2,36 +2,44 @@
 % Please edit documentation in R/make_comp.R
 \name{make_comp}
 \alias{make_comp}
-\title{Create compartment data}
+\title{Create compartment layout}
 \usage{
 make_comp(prms = NA, rse = NA, advan = NULL, scaling = TRUE,
   scale.fun = "cubic", box.ratio = 3/4, filled = TRUE, font = "Avenir",
-  node.fontsize = 12, ...)
+  comp.fontsize = 12, ...)
 }
 \arguments{
 \item{prms}{a numerical vector of parameter values}
 
 \item{rse}{a numerical vector of parameter uncertainty}
 
-\item{advan}{the nonmem $SUB ADVAN}
+\item{advan}{the value of the nonmem subroutine ADVAN}
 
-\item{scaling}{logical if \code{TRUE} compartment size and colors will be scaled}
+\item{scaling}{logical if \code{TRUE} compartment size and colors will be scaled.
+If \code{FALSE} standard model diagram will be created}
 
 \item{scale.fun}{function to be used for compartment size scaling}
 
-\item{box.ratio}{compartment aspect ratio}
+\item{box.ratio}{value for the compartment aspect ratio}
 
-\item{filled}{logical if \code{TRUE} compartment will be filled}
+\item{filled}{logical if \code{TRUE} compartment will be filled.
+If \code{FALSE} only the compartment edges will be drawn}
 
-\item{font}{font of the compartment labels}
+\item{font}{font name of the compartment labels}
 
-\item{node.fontsize}{font size of the compartment labels}
+\item{comp.fontsize}{font size of the compartment labels in point size}
 }
 \value{
-A \code{data.frame} of compartments
+A \code{data.frame}
 }
 \description{
-Creates information on compartments label, size, color, scaling, etc.
+Combine information for each compartment's rank, label, size,
+color, scaling, etc.
+}
+\details{
+The default \code{scaling.fun} argument is set to \code{cubic}, each
+ compartment will be sized to the cubic root of the volume value. This scaling
+ allows for a more realistic size comparison and avoids too big differences in size.
 }
 \seealso{
 \code{\link{prm_import}}, \code{\link{modelviz}}

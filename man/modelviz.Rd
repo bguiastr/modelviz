@@ -8,15 +8,32 @@ modelviz(data, horizontal = TRUE, ...)
 }
 \arguments{
 \item{data}{a \code{list} containing the parameters, their RSE and the
-nonmem $SUB ADVAN}
+nonmem subroutine ADVAN value}
 
 \item{horizontal}{logical if \code{TRUE} the layout will be horizontal}
+
+\item{...}{other arguments passed to \code{\link{make_comp}}
+and \code{\link{make_arrow}} see additional option below for
+a list of available options}
 }
 \value{
 A graphic object
 }
 \description{
 Create and renders Quantitative Model Diagrams (QMD)
+for NONMEM models
+}
+\details{
+\itemize{
+ \item{scaling}
+ \item{scale.fun}
+ \item{font}
+ \item{comp.fontsize}
+ \item{arrow.fontsize}
+ \item{box.ratio}
+ \item{filled}
+ \item{clearance}
+}
 }
 \examples{
 \dontrun{

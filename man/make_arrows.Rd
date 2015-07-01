@@ -2,36 +2,43 @@
 % Please edit documentation in R/make_arrows.R
 \name{make_arrows}
 \alias{make_arrows}
-\title{Create arrow data}
+\title{Create arrow connections}
 \usage{
 make_arrows(prms = NULL, rse = NULL, advan = NULL, scaling = TRUE,
   scale.fun = "cubic", font = "Avenir", clearance = TRUE,
-  edge.fontsize = 12, ...)
+  arrow.fontsize = 12, ...)
 }
 \arguments{
 \item{prms}{a numerical vector of parameter values}
 
 \item{rse}{a numerical vector of parameter uncertainty}
 
-\item{advan}{the nonmem $SUB ADVAN}
+\item{advan}{the value of the nonmem subroutine ADVAN}
 
-\item{scaling}{logical if \code{TRUE} arrow width and colors will be scaled}
+\item{scaling}{logical, if \code{TRUE} arrow width and colors will be scaled.
+If \code{FALSE} standard model diagram will be created}
 
 \item{scale.fun}{function to be used for arrow width scaling}
 
-\item{font}{font of arrow labels}
+\item{font}{font name of arrow labels}
 
-\item{clearance}{logical if \code{TRUE} arrows will be scaled to their available
+\item{clearance}{logical, if \code{TRUE} arrows will be scaled to their available
 clearance value. If \code{FALSE} arrows will be scaled to their available
 rate constant value}
 
-\item{node.fontsize}{font size of the arrow labels}
+\item{arrow.fontsize}{font size of the arrow labels in point size}
 }
 \value{
-A \code{data.frame} of arrows
+A \code{data.frame}
 }
 \description{
-Creates information on arrows label, witdh, color, scaling, etc.
+Combine information for each arrow's origin, destination, label,
+witdh, color, scaling and more into a dataframe
+}
+\details{
+The default \code{scaling.fun} argument is set to \code{cubic}, to match
+ each the method used on volumes. Arrow will be sized to the cubic root of the
+ clearance or rate constant value.
 }
 \seealso{
 \code{\link{prm_import}}, \code{\link{modelviz}}

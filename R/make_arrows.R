@@ -1,23 +1,30 @@
-#' Create arrow data
+#' Create arrow connections
 #'
-#' @description Creates information on arrows label, witdh, color, scaling, etc.
+#' @description Combine information for each arrow's origin, destination, label,
+#' witdh, color, scaling and more into a dataframe
 #'
 #' @param prms a numerical vector of parameter values
 #' @param rse a numerical vector of parameter uncertainty
-#' @param advan the nonmem $SUB ADVAN
-#' @param scaling logical if \code{TRUE} arrow width and colors will be scaled
+#' @param advan the value of the nonmem subroutine ADVAN
+#' @param scaling logical, if \code{TRUE} arrow width and colors will be scaled.
+#' If \code{FALSE} standard model diagram will be created
 #' @param scale.fun function to be used for arrow width scaling
-#' @param clearance logical if \code{TRUE} arrows will be scaled to their available
+#' @param clearance logical, if \code{TRUE} arrows will be scaled to their available
 #'       clearance value. If \code{FALSE} arrows will be scaled to their available
 #'       rate constant value
-#' @param font font of arrow labels
-#' @param node.fontsize font size of the arrow labels
+#' @param font font name of arrow labels
+#' @param arrow.fontsize font size of the arrow labels in point size
+
+#' @details The default \code{scaling.fun} argument is set to \code{cubic}, to match
+#'  each the method used on volumes. Arrow will be sized to the cubic root of the
+#'  clearance or rate constant value.
+#
 #' @seealso \code{\link{prm_import}}, \code{\link{modelviz}}
-#' @return A \code{data.frame} of arrows
+#' @return A \code{data.frame}
 #' @export
 make_arrows <- function(prms=NULL, rse=NULL, advan=NULL, scaling=TRUE,
                         scale.fun ='cubic', font='Avenir', clearance=TRUE,
-                        edge.fontsize=12,...){
+                        arrow.fontsize=12,...){
 
   if(advan==1){
     if(clearance){
@@ -151,7 +158,7 @@ make_arrows <- function(prms=NULL, rse=NULL, advan=NULL, scaling=TRUE,
     edge$arrowsize <- 0.8
   }
 
-  edge$fontsize  <- edge.fontsize*edge$penwidth
+  edge$fontsize  <- arrow.fontsize*edge$penwidth
   edge$fontname  <- font
 
   return(edge)

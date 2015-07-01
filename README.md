@@ -7,19 +7,31 @@ To facilitate model communication and evaluation through intuitive visual repres
 ## Installation
 
 ```{r, eval=FALSE}
-library(devtools)
-install_github("guiastrennec/modelviz")
+# Install modelviz package (first time only)
+devtools::install_github("guiastrennec/modelviz")
+
+# Load modelviz package
 library(modelviz)
 ```
 
 ## Example
-```{r, eval=FALSE}
-modelviz(twocomp)
+
+### Without scaling
+```r
+modelviz(twocomp, scaling=FALSE)
 ```
+<img src="inst/img/Unscaled_model.png">
+
+
+### With scaling
+```r
+modelviz(twocomp, scaling=TRUE)
+```
+<img src="inst/img/Scaled_model.png">
 
 ## How to use
-```{r, eval=FALSE}
-# Import dataset from NONMEM
+```r
+# Import dataset from a NONMEM run
 prm_list <- prm_import(dir='../models/pk/', runno='001')
 
 # Generate QMD

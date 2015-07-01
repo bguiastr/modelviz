@@ -1,23 +1,31 @@
-#' Create compartment data
+#' Create compartment layout
 #'
-#' @description Creates information on compartments label, size, color, scaling, etc.
+#' @description Combine information for each compartment's rank, label, size,
+#' color, scaling, etc.
 #'
 #' @param prms a numerical vector of parameter values
 #' @param rse a numerical vector of parameter uncertainty
-#' @param advan the nonmem $SUB ADVAN
-#' @param scaling logical if \code{TRUE} compartment size and colors will be scaled
+#' @param advan the value of the nonmem subroutine ADVAN
+#' @param scaling logical if \code{TRUE} compartment size and colors will be scaled.
+#'  If \code{FALSE} standard model diagram will be created
 #' @param scale.fun function to be used for compartment size scaling
-#' @param box.ratio compartment aspect ratio
-#' @param filled logical if \code{TRUE} compartment will be filled
-#' @param font font of the compartment labels
-#' @param node.fontsize font size of the compartment labels
+#' @param box.ratio value for the compartment aspect ratio
+#' @param filled logical if \code{TRUE} compartment will be filled.
+#'  If \code{FALSE} only the compartment edges will be drawn
+#' @param font font name of the compartment labels
+#' @param comp.fontsize font size of the compartment labels in point size
+
+#' @details The default \code{scaling.fun} argument is set to \code{cubic}, each
+#'  compartment will be sized to the cubic root of the volume value. This scaling
+#'  allows for a more realistic size comparison and avoids too big differences in size.
+
 #' @seealso \code{\link{prm_import}}, \code{\link{modelviz}}
-#' @return A \code{data.frame} of compartments
+#' @return A \code{data.frame}
 #' @export
 make_comp <- function(prms=NA, rse=NA, advan=NULL,
                       scaling = TRUE, scale.fun='cubic',
                       box.ratio = 3/4, filled = TRUE,
-                      font = 'Avenir', node.fontsize=12,...){
+                      font = 'Avenir', comp.fontsize=12,...){
 
   check <- function(x, check, uncert=FALSE,...){
     if(length(setdiff(check,names(x)))>0){
@@ -139,7 +147,7 @@ make_comp <- function(prms=NA, rse=NA, advan=NULL,
   }
 
   node$height   <- node$width*ifelse(node$shape=='circle',1,box.ratio)
-  node$fontsize <- node.fontsize*node$width
+  node$fontsize <- comp.fontsize*node$width
   node$fontname <- font
 
   node$alpha_color <- 80
