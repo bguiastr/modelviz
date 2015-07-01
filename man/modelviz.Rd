@@ -13,8 +13,8 @@ nonmem subroutine ADVAN value}
 \item{horizontal}{logical if \code{TRUE} the layout will be horizontal}
 
 \item{...}{other arguments passed to \code{\link{make_comp}}
-and \code{\link{make_arrow}} see additional option below for
-a list of available options}
+and \code{\link{make_arrow}} see details below for
+a list of the available options}
 }
 \value{
 A graphic object
