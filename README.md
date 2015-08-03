@@ -20,14 +20,14 @@ The example dataset ```onecomp``` contains typical pharmacokinetic parameters va
 
 #### Without scaling
 ```r
-modelviz(onecomp, scaling=FALSE)
+qmd(onecomp, scaling=FALSE)
 ```
 <img src="inst/img/Unscaled_onecomp.png">
 
 
 #### With scaling
 ```r
-modelviz(onecomp, scaling=TRUE)
+qmd(onecomp, scaling=TRUE)
 ```
 <img src="inst/img/Scaled_onecomp.png">
 
@@ -37,14 +37,14 @@ The example dataset ```twocomp``` contains typical pharmacokinetic parameters va
 
 #### Without scaling
 ```r
-modelviz(twocomp, scaling=FALSE)
+qmd(twocomp, scaling=FALSE)
 ```
 <img src="inst/img/Unscaled_twocomp.png">
 
 
 #### With scaling
 ```r
-modelviz(twocomp, scaling=TRUE)
+qmd(twocomp, scaling=TRUE)
 ```
 <img src="inst/img/Scaled_twocomp.png">
 
@@ -54,14 +54,14 @@ The example dataset ```threecomp``` contains typical pharmacokinetic parameters 
 
 #### Without scaling
 ```r
-modelviz(threecomp, scaling=FALSE)
+qmd(threecomp, scaling=FALSE)
 ```
 <img src="inst/img/Unscaled_threecomp.png">
 
 
 #### With scaling
 ```r
-modelviz(threecomp, scaling=TRUE)
+qmd(threecomp, scaling=TRUE)
 ```
 <img src="inst/img/Scaled_threecomp.png">
 
@@ -69,12 +69,13 @@ modelviz(threecomp, scaling=TRUE)
 ## How to use
 ```r
 # Import dataset from a NONMEM run
-prm_list <- prm_import(dir='../models/pk/', runno='001')
+prm_list <- import_qmd_info(
+  dir=paste0(system.file(package = "modelviz"), "/models/"), 
+  runno=101)
 
 # Generate QMD
-modelviz(prm_list)
+qmd(prm_list)
 ```
 
 ## In development
 Modelviz automatically handles outputs from NONMEM ADVAN 1-4, 11-12. A differencial equation translator will be implemented to make modelviz compatible with any model.
-

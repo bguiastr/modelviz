@@ -19,15 +19,21 @@
 #'  each the method used on volumes. Arrow will be sized to the cubic root of the
 #'  clearance or rate constant value.
 #
-#' @seealso \code{\link{prm_import}}, \code{\link{modelviz}}
+#' @seealso \code{\link{import_qmd_info}}, \code{\link{qmd}}
 #' @return A \code{data.frame}
 #' @export
-make_arrows <- function(prms=NULL, rse=NULL, advan=NULL, scaling=TRUE,
-                        scale.fun ='cubic', font='Avenir', clearance=TRUE,
-                        arrow.fontsize=12,...){
+define_arrow_layout <- function(prms = NULL,
+                                rse = NULL,
+                                advan = NULL,
+                                des_info = NULL,
+                                scaling = TRUE,
+                                scale.fun = function(x) { x^(1/3) },
+                                font='Avenir',
+                                clearance = TRUE,
+                                arrow.fontsize = 12, ...) {
 
-  if(advan==1){
-    if(clearance){
+  if(advan == 1) {
+    if(clearance) {
       edge <- DiagrammeR::create_edges(from  = 'A1',
                                        to    = 'A2',
                                        label = 'CL',
@@ -40,13 +46,13 @@ make_arrows <- function(prms=NULL, rse=NULL, advan=NULL, scaling=TRUE,
     }
   }
 
-  if(advan==2){
-    if(clearance){
+  if(advan == 2) {
+    if(clearance) {
       edge <- DiagrammeR::create_edges(from  = c('A1','A2'),
                                        to    = c('A2','A3'),
                                        label = c('KA','CL'),
                                        dir   = 'forward')
-    }else{
+    } else {
       edge <- DiagrammeR::create_edges(from  = c('A1','A2'),
                                        to    = c('A2','A3'),
                                        label = c('KA','K'),
@@ -54,13 +60,13 @@ make_arrows <- function(prms=NULL, rse=NULL, advan=NULL, scaling=TRUE,
     }
   }
 
-  if(advan==3){
-    if(clearance){
+  if(advan == 3) {
+    if(clearance) {
       edge <- DiagrammeR::create_edges(from  = c('A1','A1'),
                                        to    = c('A3','A2'),
                                        label = c('CL','Q'),
                                        dir   = c('forward','both'))
-    }else{
+    } else {
       edge <- DiagrammeR::create_edges(from  = c('A1','A1','A2'),
                                        to    = c('A3','A2','A1'),
                                        label = c('K','K12','K21'),
@@ -68,13 +74,13 @@ make_arrows <- function(prms=NULL, rse=NULL, advan=NULL, scaling=TRUE,
     }
   }
 
-  if(advan==4){
-    if(clearance){
+  if(advan==4) {
+    if(clearance) {
       edge <- DiagrammeR::create_edges(from  = c('A1','A2','A2'),
                                        to    = c('A2','A4','A3'),
                                        label = c('KA','CL','Q'),
                                        dir   = c('forward','forward','both'))
-    }else{
+    } else {
       edge <- DiagrammeR::create_edges(from  = c('A1','A2','A2','A3'),
                                        to    = c('A2','A4','A3','A2'),
                                        label = c('KA','K','K23','K32'),
@@ -82,13 +88,13 @@ make_arrows <- function(prms=NULL, rse=NULL, advan=NULL, scaling=TRUE,
     }
   }
 
-  if(advan==11){
-    if(clearance){
+  if(advan == 11) {
+    if(clearance) {
       edge <- DiagrammeR::create_edges(from  = c('A1','A1','A1'),
                                        to    = c('A2','A3','A4'),
                                        label = c('Q2','Q3','CL'),
                                        dir   = c('both','both','forward'))
-    }else{
+    } else {
       edge <- DiagrammeR::create_edges(from  = c('A1','A2','A1','A3','A1'),
                                        to    = c('A2','A1','A3','A1','A4'),
                                        label = c('K12','K21','K13','K31','K'),
@@ -96,13 +102,13 @@ make_arrows <- function(prms=NULL, rse=NULL, advan=NULL, scaling=TRUE,
     }
   }
 
-  if(advan==12){
-    if(clearance){
+  if(advan == 12) {
+    if(clearance) {
       edge <- DiagrammeR::create_edges(from  = c('A1','A2','A2','A2'),
                                        to    = c('A2','A3','A4','A5'),
                                        label = c('KA','Q2','Q3','CL'),
                                        dir   = c('forward','both','both','forward'))
-    }else{
+    } else {
       edge <- DiagrammeR::create_edges(from  = c('A1','A2','A3','A2','A4','A2'),
                                        to    = c('A2','A3','A2','A4','A2','A5'),
                                        label = c('KA','K23','K32','K24','K42','K'),
@@ -110,7 +116,7 @@ make_arrows <- function(prms=NULL, rse=NULL, advan=NULL, scaling=TRUE,
     }
   }
 
-  if(advan==20){
+  if(advan == 20) {
     edge <- DiagrammeR::create_edges(from  = c('A1','A2','A1','A2','A1','A2'),
                                      to    = c('A2','A1','A1','A2','A3','A3'),
                                      label = c('K10','K01','K00','K11','K20','K21'),
@@ -144,7 +150,7 @@ make_arrows <- function(prms=NULL, rse=NULL, advan=NULL, scaling=TRUE,
 
   edge$scale <- NA
   if(clearance){
-    edge$scale[grep('^[CL|Q]',toupper(edge$label))] <- prm_scale(edge$prm[grep('^[CL|Q]',toupper(edge$label))],scale.fun)
+    edge$scale[grep('^[CL|Q]',toupper(edge$label))] <- prm_scale(edge$prm[grep('^[CL|Q]',toupper(edge$label))], scale.fun)
   }else{
     edge$scale[grep('^K',toupper(edge$label))] <- prm_scale(edge$prm[grep('^K',toupper(edge$label))],scale.fun)
   }

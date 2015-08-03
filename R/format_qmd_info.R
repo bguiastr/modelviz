@@ -6,17 +6,17 @@
 #' @param data a \code{data.frame} of parameters
 #' @param advan the nonmem $SUB ADVAN
 #' @param trans the nonmem $SUB TRANS
-#' @seealso \code{\link{prm_import}}, \code{\link{modelviz}}
+#' @seealso \code{\link{import_qmd_info}}, \code{\link{qmd}}
 #' @return A \code{data.frame} of parameters
 #' @examples
 #' \dontrun{
-#' prm_list   <- prm_import(dir='../models/pk/', runno='001')
-#' parameters <- prm_format(data=prm_list$prm, advan=prm_list$advan, trans=prm_list$trans)
+#' prm_list   <- import_qmd_info(dir='../models/pk/', runno='001')
+#' parameters <- format_qmd_info(data=prm_list$prm, advan=prm_list$advan, trans=prm_list$trans)
 #' }
 #' @export
-prm_format <- function(data,advan,trans){
+format_qmd_info <- function(data, advan, trans) {
 
-message('This function is currently not ready for use')
+  message('This function is currently not ready for use')
   return(data)
 
 #   if(!trans%in%c(1,3,4)){stop('wrong TRANS provided for ADVAN4')}
