@@ -6,6 +6,7 @@
 #' @param data a \code{list} containing the parameters, their RSE and the
 #'  nonmem subroutine ADVAN value
 #' @param horizontal logical if \code{TRUE} the layout will be horizontal
+#' @param shiny logical if \code{TRUE} output will be formated for shiny output
 #' @param ... other arguments passed to \code{\link{define_comp_layout}}
 #'  and \code{\link{define_arrow_layout}} see details below for
 #'  a list of the available options
@@ -29,10 +30,10 @@
 #' qmd(parameters, horizontal = FALSE)
 #' }
 #' @export
-qmd <- function(data, horizontal = TRUE,...) {
+qmd <- function(data, horizontal = TRUE, shiny = FALSE,...) {
 
   if(missing(data)) {
-    stop('The "data" argument is required for this function to work')
+    stop('Missing required argument \'data\'')
   }
 
   # define compartments
@@ -49,5 +50,10 @@ qmd <- function(data, horizontal = TRUE,...) {
                                               'layout = dot',
                                               ifelse(horizontal,'rankdir = LR','rankdir = TB')))
   # create plot
-  DiagrammeR::render_graph(graph)
+  if(shiny) {
+    DiagrammeR::grViz(graph$dot_code)
+  } else {
+    DiagrammeR::render_graph(graph)
+  }
+
 }
