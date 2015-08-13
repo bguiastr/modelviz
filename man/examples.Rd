@@ -20,23 +20,26 @@ in paediatric renal transplant candidates. British Journal of Clinical Pharmacol
 64:6, 772–784. (2007)
 }
 \description{
-A dataset containing the pharmacokinetic typical parameters values
-and uncertainty for nevirapine (\code{onecomp}), miltefosine (\code{twocomp}) and
+A list of 3 \code{qmd_info} examples on the pharmacokinetic models for
+nevirapine (\code{onecomp}), miltefosine (\code{twocomp}) and
 ciclosporin (\code{threecomp}).
 }
 \details{
 The \code{examples} file contains the following:
 \itemize{
-\item \code{examples$onecomp} nevirapine model information for QMD
-\item \code{examples$twocomp} miltefosine model information for QMD
-\item \code{examples$threecomp} ciclosporin model information for QMD
+\item \code{examples$onecomp} nevirapine PK model \code{qmd_info}
+\item \code{examples$twocomp} miltefosine PK model \code{qmd_info}
+\item \code{examples$threecomp} ciclosporin PK model \code{qmd_info}
 }
 
 Each of these three examples contain the following:
 \itemize{
-  \item prm. the model parameters typical values eg. KA (h-1), CL (L/h) and V (L)
-  \item rse. the model parameters uncertainty as relative standard error (rse)
+  \item tvprm. the model parameters typical values eg. KA (h-1), CL (L/h) and V (L)
+  \item rse. the model parameters uncertainty as relative standard error (%)
+  \item data. the individual model parameter read from a patab file
   \item advan. the nonmem subroutine ADVAN defining the structural model
+  \item trans. the nonmem subroutine TRANS defining the parametrization
+  \item des_info. the parsed differencial equations
 }
 }
 \examples{

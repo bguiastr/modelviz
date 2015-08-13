@@ -5,7 +5,7 @@
 \title{Import model parameters}
 \usage{
 import_qmd_info(dir = NULL, prefix = "run", runno, ext = ".mod",
-  file = NULL)
+  file = NULL, interactive = TRUE)
 }
 \arguments{
 \item{dir}{location of the model files}
@@ -15,17 +15,25 @@ import_qmd_info(dir = NULL, prefix = "run", runno, ext = ".mod",
 \item{runno}{run number to be evaluated}
 
 \item{ext}{model file extention}
+
+\item{file}{full file name as an alternative to \code{dir}, \code{prefix},
+\code{runno} and \code{ext}}
+
+\item{interactive}{if \code{TRUE} parameter labels can not be matched with their thetas, omega
+and sigma, the user will be asked to manually provide labels. If \code{FALSE} an error will be
+returned instead.}
 }
 \value{
-A list containing the parameters and RSE as \code{"data.frame"},
-        the nonmem ADVAN (advan) and TRANS (trans) as numeric value.
+A list containing the individuals (\code{tvprm}) and population (\code{data}) parameters,
+parameter uncertainty (\code{rse}) the nonmem ADVAN (\code{advan}) and TRANS (\code{trans})
+as well as the parsed differencial equation (\code{des_info}).
 }
 \description{
 Import model parameters from NONMEM run
 }
 \examples{
 \dontrun{
-prm_list <- import_qmd_info(dir='../models/pk/', runno='001')
+qmd_info <- import_qmd_info(dir = '../models/pk/', runno = '001')
 }
 }
 \seealso{

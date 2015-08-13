@@ -2,31 +2,28 @@
 % Please edit documentation in R/format_qmd_info.R
 \name{format_qmd_info}
 \alias{format_qmd_info}
-\title{Format parameter vector}
+\title{Parameter translator}
 \usage{
-format_qmd_info(data, advan, trans)
+format_qmd_info(qmd_info = NULL)
 }
 \arguments{
-\item{data}{a \code{data.frame} of parameters}
-
-\item{advan}{the nonmem $SUB ADVAN}
-
-\item{trans}{the nonmem $SUB TRANS}
+\item{qmd_info}{a \code{qmd_info} object generated with \code{import_qmd_info}
+or \code{skeleton_qmd_info}}
 }
 \value{
-A \code{data.frame} of parameters
+A \code{data.frame} \code{qmd_info} object
 }
 \description{
-Translate clearances (CL, Q) and volumes (V) into
-             rate constant and the other way around.
+Translate clearances into rate constant or rate constant into
+clearances for the built-in nonmem model library (i.e. ADVAN 1-4 and 11-12)
 }
 \examples{
 \dontrun{
-prm_list   <- import_qmd_info(dir='../models/pk/', runno='001')
-parameters <- format_qmd_info(data=prm_list$prm, advan=prm_list$advan, trans=prm_list$trans)
+qmd_info  <- import_qmd_info(dir = '../models/pk/', runno = '001')
+qmd_info_formatted <- format_qmd_info(qmd_info)
 }
 }
 \seealso{
-\code{\link{import_qmd_info}}, \code{\link{qmd}}
+\code{\link{import_qmd_info}}, \code{\link{skeleton_qmd_info}}, \code{\link{qmd}}
 }
 

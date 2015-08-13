@@ -4,10 +4,10 @@
 \alias{qmd}
 \title{Create and render QMD}
 \usage{
-qmd(data, horizontal = TRUE, shiny = FALSE, ...)
+qmd(qmd_info = NULL, horizontal = TRUE, shiny = FALSE, ...)
 }
 \arguments{
-\item{data}{a \code{list} containing the parameters, their RSE and the
+\item{qmd_info}{a \code{list} containing the parameters, their RSE and the
 nonmem subroutine ADVAN value}
 
 \item{horizontal}{logical if \code{TRUE} the layout will be horizontal}
@@ -39,7 +39,7 @@ for NONMEM models
 }
 \examples{
 \dontrun{
-qmd(parameters, horizontal = FALSE)
+qmd(qmd_info, horizontal = FALSE)
 }
 }
 \seealso{

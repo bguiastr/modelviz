@@ -1,27 +1,36 @@
-#' Format parameter vector
+#' Parameter translator
 #'
-#' @description Translate clearances (CL, Q) and volumes (V) into
-#'              rate constant and the other way around.
+#' @description Translate clearances into rate constant or rate constant into
+#' clearances for the built-in nonmem model library (i.e. ADVAN 1-4 and 11-12)
 #'
-#' @param data a \code{data.frame} of parameters
-#' @param advan the nonmem $SUB ADVAN
-#' @param trans the nonmem $SUB TRANS
-#' @seealso \code{\link{import_qmd_info}}, \code{\link{qmd}}
-#' @return A \code{data.frame} of parameters
+#' @param qmd_info a \code{qmd_info} object generated with \code{import_qmd_info}
+#' or \code{skeleton_qmd_info}
+#' @seealso \code{\link{import_qmd_info}}, \code{\link{skeleton_qmd_info}}, \code{\link{qmd}}
+#' @return A \code{data.frame} \code{qmd_info} object
 #' @examples
 #' \dontrun{
-#' prm_list   <- import_qmd_info(dir='../models/pk/', runno='001')
-#' parameters <- format_qmd_info(data=prm_list$prm, advan=prm_list$advan, trans=prm_list$trans)
+#' qmd_info  <- import_qmd_info(dir = '../models/pk/', runno = '001')
+#' qmd_info_formatted <- format_qmd_info(qmd_info)
 #' }
 #' @export
-format_qmd_info <- function(data, advan, trans) {
+format_qmd_info <- function(qmd_info = NULL) {
 
-  message('This function is currently not ready for use')
-  return(data)
+  if(is.null(qmd_info)) {
+    stop('Argument \"qmd_info\" required')
+  }
 
-#   if(!trans%in%c(1,3,4)){stop('wrong TRANS provided for ADVAN4')}
-#
-#
+  if(!qmd_info$advan %in% c(1:4, 11:12)) {
+    message('This function is only intended to work with built-in nonmem model
+            library (i.e. ADVAN 1-4 and 11-12). Returning unchanged qmd_info object!')
+    return(qmd_info)
+  }
+
+  message('This function is currently not ready for use. Returning unchanged qmd_info object')
+  return(qmd_info)
+
+} # End format_qmd_info
+
+
 #   # Normalize parameter names across ADVAN 3-4 and all TRANS ----------------
 #
 #   if(advan==3){
@@ -72,4 +81,3 @@ format_qmd_info <- function(data, advan, trans) {
 #       data[,'K32'] <- data[,'Q']/data[,'V3']
 #     }
 #   } # End trans 4
-}

@@ -6,7 +6,6 @@
 #' @seealso \code{\link{import_qmd_info}}, \code{\link{qmd}}
 #' @return A \code{list}
 #' @export
-parse_des_block = function(
-  des_block = NULL) {
+parse_des_block = function(des_block = NULL) {
   return(NULL)
 }
