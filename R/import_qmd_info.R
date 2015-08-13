@@ -56,20 +56,21 @@ import_qmd_info <- function(dir = NULL, prefix = 'run', runno, ext = '.mod',
                                     value = TRUE), '.*FILE\\s*=\\s*'), '[', 2))
   tab_file  <- tab_file[file.exists(paste0(dir, tab_file))]
 
-  if(is.null(tab_file)) {
-    stop(paste('Could not find any \"patab\" associated with',
-               basename(file_full), 'under', dir))
-  }
-
-  tab_file  <- read_nmtab(file = paste0(dir, tab_file))
-
-  if(!'ID' %in% colnames(tab_file)) {
-    message('\"ID\" column required in patab: setting patab to NULL')
+  if(length(tab_file) == 0) {
+    message(paste0('Could not find any \"patab\" associated with ',
+                  basename(file_full), ' under ', dir, ': setting patab to NULL'))
     tab_file <- NULL
-  }  else {
-    tab_file <- tab_file[!duplicated(tab_file[,'ID']),
-                         !duplicated(colnames(tab_file)) &
-                           !colnames(tab_file) %in% c('DV', 'PRED', 'RES', 'WRES')]
+  } else {
+    tab_file  <- read_nmtab(file = paste0(dir, tab_file))
+
+    if(!'ID' %in% colnames(tab_file)) {
+      message('\"ID\" column required in patab: setting patab to NULL')
+      tab_file <- NULL
+    }  else {
+      tab_file <- tab_file[!duplicated(tab_file[,'ID']),
+                           !duplicated(colnames(tab_file)) &
+                             !colnames(tab_file) %in% c('DV', 'PRED', 'RES', 'WRES')]
+    }
   }
 
 
