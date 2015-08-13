@@ -29,7 +29,7 @@ import_qmd_info <- function(dir = NULL, prefix = 'run', runno, ext = '.mod',
     file_full <- file
     dir       <- dirname(file_full)
   } else {
-    file_full <- paste0(dir, '/', prefix, runno, ext)
+    file_full <- paste0(dir, prefix, runno, ext)
   }
 
   if(!file.exists(file_full)) {
@@ -51,17 +51,17 @@ import_qmd_info <- function(dir = NULL, prefix = 'run', runno, ext = '.mod',
 
 
   # Import PRM ind
-  tab_file  <- sapply(strsplit(grep(pattern = '.*FILE\\s*=\\s*patab.*',
+  tab_file  <- unlist(sapply(strsplit(grep(pattern = '.*FILE\\s*=\\s*patab.*',
                                     x = mod_file$CODE[mod_file$ABREV == 'TAB'],
-                                    value = TRUE), '.*FILE\\s*=\\s*'), '[', 2)
-  tab_file  <- tab_file[file.exists(paste0(dir, '/', tab_file))]
+                                    value = TRUE), '.*FILE\\s*=\\s*'), '[', 2))
+  tab_file  <- tab_file[file.exists(paste0(dir, tab_file))]
 
   if(is.null(tab_file)) {
     stop(paste('Could not find any \"patab\" associated with',
                basename(file_full), 'under', dir))
   }
 
-  tab_file  <- read_nmtab(file = paste0(dir, '/', tab_file))
+  tab_file  <- read_nmtab(file = paste0(dir, tab_file))
 
   if(!'ID' %in% colnames(tab_file)) {
     message('\"ID\" column required in patab: setting patab to NULL')

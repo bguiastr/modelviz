@@ -23,7 +23,7 @@ parse_nonmem_model <- function(dir = NULL, runno = NULL, prefix = 'run', ext = '
   if(!is.null(file)) {
     file_full <- file
   } else {
-    file_full <- paste0(dir, '/', prefix, runno, ext)
+    file_full <- paste0(dir, prefix, runno, ext)
   }
 
   if(!file.exists(file_full)) {
