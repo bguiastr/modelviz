@@ -20,14 +20,14 @@ The example dataset ```onecomp``` contains typical pharmacokinetic parameters va
 
 #### Without scaling
 ```r
-qmd(examples$onecomp, scaling=FALSE)
+qmd(examples$onecomp, scaling = FALSE)
 ```
 <img src="inst/img/Unscaled_onecomp.png">
 
 
 #### With scaling
 ```r
-qmd(examples$onecomp, scaling=TRUE)
+qmd(examples$onecomp, scaling = TRUE)
 ```
 <img src="inst/img/Scaled_onecomp.png">
 
@@ -37,14 +37,14 @@ The example dataset ```twocomp``` contains typical pharmacokinetic parameters va
 
 #### Without scaling
 ```r
-qmd(examples$twocomp, scaling=FALSE)
+qmd(examples$twocomp, scaling = FALSE)
 ```
 <img src="inst/img/Unscaled_twocomp.png">
 
 
 #### With scaling
 ```r
-qmd(examples$twocomp, scaling=TRUE)
+qmd(examples$twocomp, scaling = TRUE)
 ```
 <img src="inst/img/Scaled_twocomp.png">
 
@@ -54,14 +54,14 @@ The example dataset ```threecomp``` contains typical pharmacokinetic parameters 
 
 #### Without scaling
 ```r
-qmd(examples$threecomp, scaling=FALSE)
+qmd(examples$threecomp, scaling = FALSE)
 ```
 <img src="inst/img/Unscaled_threecomp.png">
 
 
 #### With scaling
 ```r
-qmd(examples$threecomp, scaling=TRUE)
+qmd(examples$threecomp, scaling = TRUE)
 ```
 <img src="inst/img/Scaled_threecomp.png">
 
@@ -69,12 +69,10 @@ qmd(examples$threecomp, scaling=TRUE)
 ## How to use
 ```r
 # Import dataset from a NONMEM run
-prm_list <- import_qmd_info(
-  dir=paste0(system.file(package = "modelviz"), "/models/"), 
-  runno=101)
+qmd_info <- import_qmd_info(dir = '/nonmem/runs', runno = '101')
 
 # Generate QMD
-qmd(prm_list)
+qmd(qmd_info)
 ```
 
 ## In development
