@@ -5,7 +5,7 @@
 \title{Import model parameters}
 \usage{
 import_qmd_info(dir = NULL, prefix = "run", runno = NULL, ext = ".mod",
-  file = NULL, interactive = TRUE)
+  file = NULL, interactive = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{dir}{location of the model files}
@@ -21,7 +21,9 @@ import_qmd_info(dir = NULL, prefix = "run", runno = NULL, ext = ".mod",
 
 \item{interactive}{if \code{TRUE} parameter labels can not be matched with their thetas, omega
 and sigma, the user will be asked to manually provide labels. If \code{FALSE} an error will be
-returned instead.}
+returned instead}
+
+\item{verbose}{if \code{TRUE} messages are printed to the console}
 }
 \value{
 A list containing the individuals (\code{tvprm}) and population (\code{data}) parameters,

@@ -13,19 +13,19 @@
 #' qmd_info_formatted <- format_qmd_info(qmd_info)
 #' }
 #' @export
-format_qmd_info <- function(qmd_info = NULL) {
+format_qmd_info <- function(qmd_info = NULL, verbose = FALSE) {
 
   if(is.null(qmd_info)) {
-    stop('Argument \"qmd_info\" required')
+    stop('Argument \"qmd_info\" required.')
   }
 
   if(!qmd_info$advan %in% c(1:4, 11:12)) {
-    message('This function is only intended to work with built-in nonmem model
-            library (i.e. ADVAN 1-4 and 11-12). Returning unchanged qmd_info object!')
+    msg('This function is only intended to work with built-in nonmem model
+            library (i.e. ADVAN 1-4 and 11-12).', verbose)
     return(qmd_info)
   }
 
-  message('This function is currently not ready for use. Returning unchanged qmd_info object')
+  msg('This function is not yet supported.', verbose)
   return(qmd_info)
 
 } # End format_qmd_info

@@ -4,15 +4,18 @@
 \alias{read_nmtab}
 \title{NONMEM output table import function}
 \usage{
-read_nmtab(file = NULL, skip = NULL, header = NULL, nonmem_tab = TRUE)
+read_nmtab(file = NULL, skip = NULL, header = NULL,
+  rm_duplicates = FALSE, nonmem_tab = TRUE)
 }
 \arguments{
 \item{file}{full file name}
 
 \item{skip}{number of lines to skip before reading data}
 
-\item{header}{a logical value indicating whether the file contains the names
+\item{header}{logical value indicating whether the file contains the names
 of the variables as its first line}
+
+\item{rm_duplicates}{logical value indicating whether duplicated columns should be removed}
 
 \item{nonmem_tab}{logical value indicading to the function whether the file is a
 table or a nonmem additional output file.}

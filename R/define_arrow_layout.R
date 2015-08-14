@@ -32,14 +32,14 @@ define_arrow_layout <- function(qmd_info = NULL, scaling = TRUE,
                                 arrow.fontsize = 12, ...) {
 
   # Check inputs
-  if(is.null(qmd_info$advan)) {
-    stop('advan level required in \"qmd_info\"')
+  if(is.null(qmd_info)) {
+    stop('Argument \"qmd_info\" required.')
   }
 
   # $DES parser placeholder
   if(!qmd_info$advan %in% c(1:4, 11:12)) {
     if(is.null(qmd_info$des_info)) {
-      stop('des_info level required in \"qmd_info\" when $DES used')
+      stop('des_info level required in \"qmd_info\" when $DES used.')
     }
     # qmd_info$des_info to edge <- DiagrammeR::create_edges()
   }

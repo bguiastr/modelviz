@@ -10,7 +10,8 @@
 #' \code{runno} and \code{ext}
 #' @param interactive if \code{TRUE} parameter labels can not be matched with their thetas, omega
 #' and sigma, the user will be asked to manually provide labels. If \code{FALSE} an error will be
-#' returned instead.
+#' returned instead
+#' @param verbose if \code{TRUE} messages are printed to the console
 #'
 #' @seealso \code{\link{format_qmd_info}}, \code{\link{qmd}}
 #' @return A list containing the individuals (\code{tvprm}) and population (\code{data}) parameters,
@@ -22,26 +23,32 @@
 #' }
 #' @export
 import_qmd_info <- function(dir = NULL, prefix = 'run', runno = NULL,
-                            ext = '.mod', file = NULL, interactive = TRUE) {
+                            ext = '.mod', file = NULL, interactive = TRUE,
+                            verbose = FALSE) {
 
   # Check inputs
   if(is.null(runno) & is.null(file)) {
-    stop('Argument \"runno\" or \"file\" required')
-  }
-
-  if(!is.null(dir) && !substr(dir, nchar(dir), nchar(dir)) == '/') {
-    dir <- paste0(dir, '/')
+    stop('Argument \"runno\" or \"file\" required.')
   }
 
   if(!is.null(file)) {
     file_full <- file
     dir       <- paste0(dirname(file_full), '/')
   } else {
+
+    if(!is.null(dir) && !substr(dir, nchar(dir), nchar(dir)) == '/') {
+      dir <- paste0(dir, '/')
+    }
+
+    if(!ext %in% paste0('.', c('ctl', 'mod', 'lst', 'txt'))) {
+      stop('Argument \"ext\" must be one of: \".ctl\", \".mod\", \".lst\" or \".txt\".')
+    }
+
     file_full <- paste0(dir, prefix, runno, ext)
   }
 
   if(!file.exists(file_full)) {
-    stop(paste('file', file_full, 'could not be found.'))
+    stop(paste('file', basename(file_full), 'not found.'))
   }
 
 
@@ -52,129 +59,24 @@ import_qmd_info <- function(dir = NULL, prefix = 'run', runno = NULL,
   # Grab ADVAN and TRANS
   subr <- as.numeric(sapply(unlist(strsplit(mod_file$CODE[mod_file$ABREV == 'SUB'], '\\s+')),
                             gsub, pattern = '\\D', replacement = ''))
-
-  if(!subr[1] %in% c(1:4, 11:12)) {
-    subr[2] <- 1  # Set TRANS to 1 when not used
-  }
+  if(!subr[1] %in% c(1:4, 11:12)) { subr[2] <- 1 } # Set TRANS to 1 when DES
 
 
-  # Import PRM ind
-  tab_file  <- unlist(sapply(strsplit(grep(pattern = '.*FILE\\s*=\\s*patab.*',
-                                           x = mod_file$CODE[mod_file$ABREV == 'TAB'],
-                                           value = TRUE), '.*FILE\\s*=\\s*'), '[', 2))
-
-  tab_file  <- tab_file[file.exists(paste0(dir, tab_file))]
-
-  if(is.null(tab_file) | length(tab_file) == 0) {
-    message(paste0('Could not find any \"patab\" associated with ',
-                   basename(file_full), ' under ', dir, ': setting patab to NULL'))
-    tab_file <- NULL
-  } else {
-    tab_file  <- read_nmtab(file = paste0(dir, tab_file))
-
-    if(!'ID' %in% colnames(tab_file)) {
-      message('\"ID\" column required in patab: setting patab to NULL')
-      tab_file <- NULL
-    }  else {
-      tab_file <- tab_file[!duplicated(tab_file[,'ID']),
-                           !duplicated(colnames(tab_file)) &
-                             !colnames(tab_file) %in% c('DV', 'PRED', 'RES', 'WRES')]
-    }
-  }
+  # Import parsed patab
+  tab_file  <- parse_patab(mod_file, dir, verbose)
 
 
-  # Import TVPRM and RSE
-  ext_file <- paste0(substr(x = file_full, start = 1, stop = nchar(file_full)-3), 'ext')
-
-  if(!file.exists(ext_file)) {
-    stop(paste('Could not find the \".ext\" file associated with',
-               basename(ext_file), 'under', dir))
-  }
-
-  ext_file <- read_nmtab(file = ext_file, nonmem_tab = FALSE)
-  ext_file <- ext_file[, grepl('ITERATION|THETA', colnames(ext_file)) |
-                         # Remove off diagonal elements
-                         colnames(ext_file) %in% paste0('OMEGA(', 1:999, ',', 1:999, ')') |
-                         colnames(ext_file) %in% paste0('SIGMA(', 1:999, ',', 1:999, ')') ]
-
-  tvprm    <- ext_file[ext_file$ITERATION == -1000000000, -1]
-
-  if(-1000000001 %in% ext_file$ITERATION) {
-    rse     <- ext_file[ext_file$ITERATION == -1000000001, -1]
-    rse     <- abs(100 * rse / tvprm)
-  } else {
-    message('Parameters standard error not found: setting rse to NULL')
-    rse    <- NULL
-  }
-
-
-  # Assign labels to TVPRM and RSE
-  n_theta     <- length(grep('THETA', colnames(tvprm)))
-  n_omega     <- length(grep('OMEGA', colnames(tvprm)))
-  n_sigma     <- length(grep('SIGMA', colnames(tvprm)))
-
-  theta_names <- mod_file$COMMENT[mod_file$ABREV == 'THETA']
-  omega_names <- mod_file$COMMENT[mod_file$ABREV == 'OMEGA']
-  sigma_names <- mod_file$COMMENT[mod_file$ABREV == 'SIGMA']
-
-  if(n_theta != length(theta_names)) {
-    if(interactive) {
-      while(n_theta != length(theta_names)) {
-        theta_names <- readline(prompt = paste('Enter the', n_theta, 'names for the thetas in',
-                                               basename(file_full),' separated by commas: '))
-        theta_names <- unlist(strsplit(x = theta_names, split = '\\s*,\\s*'))
-      }
-    } else {
-      stop('$THETA labels did not match the number of thetas in the \".ext\" file')
-    }
-  }
-
-  colnames(tvprm)[grep('THETA', colnames(tvprm))] <- theta_names
-
-  if(n_omega == length(omega_names)) {
-    colnames(tvprm)[grep('OMEGA', colnames(tvprm))] <- omega_names
-  } else {
-    message('Names could not be attributed to omegas')
-  }
-
-  if(n_sigma == length(sigma_names)) {
-    colnames(tvprm)[grep('SIGMA', colnames(tvprm))] <- sigma_names
-  } else {
-    message('Names could not be attributed to sigmas')
-  }
-
-  if(!is.null(rse)) {
-    colnames(rse) <- colnames(tvprm)
-  }
-
-  tmp     <- readLines(file_full)
-  subr    <- tmp[grep('$SUB',tmp,fixed=T)]
-  subr    <- as.numeric(sapply(unlist(strsplit(subr,'\\s+'))[-1],gsub,pattern='\\D',replacement=''))
-
-  # get $DES
-  sel_des <- grep("\\$DES", tmp)
-  sel_dollar <- grep("\\$", tmp)
-  des_info <- NULL
-  if(length(sel_des) > 0) {
-    sel_end_des[(sel_dollar - sel_des) > 0][1] - 1
-    des_block <- tmp[sel_des:sel_end_des]
-    des_info <- NULL
-    if(is.null(des_block)) {
-      des_info <- parse_des_block(des_block)
-    }
-  }
-
-  tmp2     <- sapply(strsplit(tmp[grep('.*FILE\\s*=\\s*patab.*',tmp, perl=TRUE)],'.*FILE\\s*=\\s*',perl=TRUE),'[',2)
-  tmp2     <- tmp2[file.exists(paste0(dir, tmp2))]
-  tmp2     <- do.call('cbind',lapply(paste0(dir, tmp2), read.table, skip=1, header=T, as.is=T))
+  # Import parsed .ext file
+  ext_file   <- paste0(substr(x = file_full, start = 1, stop = nchar(file_full)-3), 'ext')
+  parsed_ext <- parse_ext_file(ext_file, mod_file, verbose, interactive)
 
   # Create output object
-  out <- list(tvprm    = tvprm,    # Parameters typical values
-              rse      = rse,      # Parameters uncertainty
-              data     = tab_file, # Individual parameter values
-              advan    = subr[1],  # NONMEM ADVAN
-              trans    = subr[2],  # NONMEM trans
-              des_info = des_info
+  out <- list(tvprm    = parsed_ext$tvprm,    # Parameters typical values
+              rse      = parsed_ext$rse,      # Parameters uncertainty
+              data     = tab_file,            # Individual parameter values
+              advan    = subr[1],             # NONMEM ADVAN
+              trans    = subr[2],             # NONMEM trans
+              des_info = des_info             # $DES: just a placeholder for now
   )
   return(out)
 

@@ -21,7 +21,7 @@ parse_nonmem_model <- function(dir = NULL, runno = NULL, prefix = 'run', ext = '
 
   # Check inputs
   if(is.null(runno) & is.null(file)) {
-    stop('Argument \"runno\" or \"file\" required')
+    stop('Argument \"runno\" or \"file\" required.')
   }
 
   if(!is.null(dir) && !substr(dir, nchar(dir), nchar(dir)) == '/') {
@@ -34,9 +34,7 @@ parse_nonmem_model <- function(dir = NULL, runno = NULL, prefix = 'run', ext = '
     file_full <- paste0(dir, prefix, runno, ext)
   }
 
-  if(!file.exists(file_full)) {
-    stop(paste('file', file_full, 'could not be found.'))
-  }
+  if(!file.exists(file_full)) { stop(paste('file', file_full, 'not found.')) }
 
   # Import mod_file
   mod_file <- readLines(file_full)
@@ -78,6 +76,12 @@ parse_nonmem_model <- function(dir = NULL, runno = NULL, prefix = 'run', ext = '
                                                       mod_file$CODE[grepl(';', mod_file$CODE)])
   mod_file$COMMENT <- gsub('\\s+$|^\\s+', '', mod_file$COMMENT)
   mod_file$CODE <- gsub('\\s*;.*', '', mod_file$CODE)
+
+  # extract $DES and parse
+  ## will fix later
+#   des_block <- mod_file[mod_file$SUB == 'DES', 'CODE']
+#   des_info  <- NULL
+#   if(!is.null(des_block)) { des_info <- parse_des_block(des_block) }
 
   # Sort columns
   mod_file <- mod_file[, c('LEVEL', 'SUB', 'ABREV', 'CODE', 'COMMENT')]
