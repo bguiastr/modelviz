@@ -66,6 +66,7 @@ parse_nonmem_model <- function(dir = NULL, runno = NULL, prefix = 'run', ext = '
   # Extract comments
   mod_file$COMMENT[grepl(';', mod_file$CODE)] <- gsub('^.+;\\s*', '\\1',
                                                       mod_file$CODE[grepl(';', mod_file$CODE)])
+  mod_file$COMMENT <- gsub('\\s+$|^\\s+', '', mod_file$COMMENT)
   mod_file$CODE <- gsub('\\s*;.*', '', mod_file$CODE)
 
   # Sort columns

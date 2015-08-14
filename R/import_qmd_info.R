@@ -21,6 +21,12 @@
 #' qmd_info <- import_qmd_info(dir = '../models/pk/', runno = '001')
 #' }
 #' @export
+dir = '~/Downloads/run1_model/'
+runno = '1'
+prefix = 'run'
+ext = '.mod'
+file = NULL
+interactive = TRUE
 import_qmd_info <- function(dir = NULL, prefix = 'run', runno, ext = '.mod',
                             file = NULL, interactive = TRUE) {
 
@@ -54,9 +60,10 @@ import_qmd_info <- function(dir = NULL, prefix = 'run', runno, ext = '.mod',
   tab_file  <- unlist(sapply(strsplit(grep(pattern = '.*FILE\\s*=\\s*patab.*',
                                     x = mod_file$CODE[mod_file$ABREV == 'TAB'],
                                     value = TRUE), '.*FILE\\s*=\\s*'), '[', 2))
+
   tab_file  <- tab_file[file.exists(paste0(dir, tab_file))]
 
-  if(length(tab_file) == 0) {
+  if(is.null(tab_file) | length(tab_file) == 0) {
     message(paste0('Could not find any \"patab\" associated with ',
                   basename(file_full), ' under ', dir, ': setting patab to NULL'))
     tab_file <- NULL
@@ -94,6 +101,7 @@ import_qmd_info <- function(dir = NULL, prefix = 'run', runno, ext = '.mod',
     rse    <- ext_file[ext_file$ITERATION == -1000000001, -1]
     rse    <- abs(100*rse/tvprm)
   } else {
+    message('Parameters standard error not found: setting rse to NULL')
     rse    <- NULL
   }
 
@@ -132,8 +140,10 @@ import_qmd_info <- function(dir = NULL, prefix = 'run', runno, ext = '.mod',
   } else {
     message('Names could not be attributed to sigmas')
   }
-  colnames(rse) <- colnames(tvprm)
 
+  if(!is.null(rse)) {
+    colnames(rse) <- colnames(tvprm)
+  }
 
   # $DES: just a placeholder for now
   des_block <- mod_file[mod_file$SUB == 'DES', 'CODE']
