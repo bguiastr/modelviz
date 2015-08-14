@@ -3,7 +3,7 @@
 #' @description Create and renders Quantitative Model Diagrams (QMD)
 #' for NONMEM models
 #'
-#' @param data a \code{list} containing the parameters, their RSE and the
+#' @param qmd_info a \code{list} containing the parameters, their RSE and the
 #'  nonmem subroutine ADVAN value
 #' @param horizontal logical if \code{TRUE} the layout will be horizontal
 #' @param shiny logical if \code{TRUE} output will be formated for shiny output
@@ -27,35 +27,35 @@
 #' @return A graphic object
 #' @examples
 #' \dontrun{
-#' qmd(parameters, horizontal = FALSE)
+#' qmd(qmd_info, horizontal = FALSE)
 #' }
 #' @export
-qmd <- function(data, des_block = NULL, horizontal = TRUE, shiny = FALSE,...) {
 
-  if(missing(data)) {
-    stop('Missing required argument \'data\'')
+qmd <- function(qmd_info, horizontal = TRUE, shiny = FALSE,...) {
+
+  # Check inputs
+  if(is.null(qmd_info)) {
+    stop('Argument \"qmd_info\" required')
   }
 
-  data$advan <- 6
+  # Define compartments
+  comp_data  <- define_comp_layout(qmd_info, ...)
 
-  # define compartments
-  comp_data  <- define_comp_layout (data$prm, data$rse, data$advan, data$des_info, ...)
+  # Define lines/arrows between compartments
+  arrow_data <- define_arrow_layout(qmd_info, ...)
 
-  # define lines/arrows between compartments
-  arrow_data <- define_arrow_layout (data$prm, data$rse, data$advan, data$des_info, ...)
-
-  # define diagram
-  graph      <- define_graph (nodes_df    = comp_data,
-                              edges_df    = arrow_data,
-                              graph_attrs = c('minlen = 2',
-                                              'splines = true',
-                                              'layout = dot',
-                                              ifelse(horizontal,'rankdir = LR','rankdir = TB')))
-  # create plot
+  # Define diagram
+  graph      <- define_graph(nodes_df    = comp_data,
+                             edges_df    = arrow_data,
+                             graph_attrs = c('minlen = 2',
+                                             'splines = true',
+                                             'layout = dot',
+                                             ifelse(horizontal,'rankdir = LR', 'rankdir = TB')))
+  # Create plot
   if(shiny) {
     DiagrammeR::grViz(graph$dot_code)
   } else {
-    DiagrammeR::render_graph(graph)
+    DiagrammeR::render_graph(graph, ...)
   }
 
 }
