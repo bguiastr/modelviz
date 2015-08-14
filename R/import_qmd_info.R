@@ -21,13 +21,21 @@
 #' qmd_info <- import_qmd_info(dir = '../models/pk/', runno = '001')
 #' }
 #' @export
-import_qmd_info <- function(dir = NULL, prefix = 'run', runno, ext = '.mod',
-                            file = NULL, interactive = TRUE) {
+import_qmd_info <- function(dir = NULL, prefix = 'run', runno = NULL,
+                            ext = '.mod', file = NULL, interactive = TRUE) {
 
   # Check inputs
+  if(is.null(runno) & is.null(file)) {
+    stop('Argument \"runno\" or \"file\" required')
+  }
+
+  if(!is.null(dir) && !substr(dir, nchar(dir), nchar(dir)) == '/') {
+    dir <- paste0(dir, '/')
+  }
+
   if(!is.null(file)) {
     file_full <- file
-    dir       <- dirname(file_full)
+    dir       <- paste0(dirname(file_full), '/')
   } else {
     file_full <- paste0(dir, prefix, runno, ext)
   }
@@ -52,14 +60,14 @@ import_qmd_info <- function(dir = NULL, prefix = 'run', runno, ext = '.mod',
 
   # Import PRM ind
   tab_file  <- unlist(sapply(strsplit(grep(pattern = '.*FILE\\s*=\\s*patab.*',
-                                    x = mod_file$CODE[mod_file$ABREV == 'TAB'],
-                                    value = TRUE), '.*FILE\\s*=\\s*'), '[', 2))
+                                           x = mod_file$CODE[mod_file$ABREV == 'TAB'],
+                                           value = TRUE), '.*FILE\\s*=\\s*'), '[', 2))
 
   tab_file  <- tab_file[file.exists(paste0(dir, tab_file))]
 
   if(is.null(tab_file) | length(tab_file) == 0) {
     message(paste0('Could not find any \"patab\" associated with ',
-                  basename(file_full), ' under ', dir, ': setting patab to NULL'))
+                   basename(file_full), ' under ', dir, ': setting patab to NULL'))
     tab_file <- NULL
   } else {
     tab_file  <- read_nmtab(file = paste0(dir, tab_file))
@@ -83,17 +91,18 @@ import_qmd_info <- function(dir = NULL, prefix = 'run', runno, ext = '.mod',
                basename(ext_file), 'under', dir))
   }
 
-  ext_file <- read_nmtab(file = ext_file)
+
+  ext_file <- read_nmtab(file = ext_file, nonmem_tab = FALSE)
   ext_file <- ext_file[, grepl('ITERATION|THETA', colnames(ext_file)) |
                          # Remove off diagonal elements
                          colnames(ext_file) %in% paste0('OMEGA(', 1:999, ',', 1:999, ')') |
                          colnames(ext_file) %in% paste0('SIGMA(', 1:999, ',', 1:999, ')') ]
 
-  tvprm    <- ext_file[ext_file$ITERATION == -1000000000, -1]
+  tvprm    <- ext_file[ext_file$ITERATION == '-1000000000', -1]
 
-  if(-1000000001 %in% ext_file$ITERATION) {
-    rse    <- ext_file[ext_file$ITERATION == -1000000001, -1]
-    rse    <- abs(100*rse/tvprm)
+  if('-1000000001' %in% ext_file$ITERATION) {
+    rse     <- ext_file[ext_file$ITERATION == '-1000000001', -1]
+    rse[1,] <- abs(100 * as.numeric(rse) / as.numeric(tvprm))
   } else {
     message('Parameters standard error not found: setting rse to NULL')
     rse    <- NULL

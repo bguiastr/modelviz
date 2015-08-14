@@ -20,6 +20,14 @@
 parse_nonmem_model <- function(dir = NULL, runno = NULL, prefix = 'run', ext = '.mod', file = NULL) {
 
   # Check inputs
+  if(is.null(runno) & is.null(file)) {
+    stop('Argument \"runno\" or \"file\" required')
+  }
+
+  if(!is.null(dir) && !substr(dir, nchar(dir), nchar(dir)) == '/') {
+    dir <- paste0(dir, '/')
+  }
+
   if(!is.null(file)) {
     file_full <- file
   } else {

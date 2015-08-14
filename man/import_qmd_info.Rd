@@ -4,7 +4,7 @@
 \alias{import_qmd_info}
 \title{Import model parameters}
 \usage{
-import_qmd_info(dir = NULL, prefix = "run", runno, ext = ".mod",
+import_qmd_info(dir = NULL, prefix = "run", runno = NULL, ext = ".mod",
   file = NULL, interactive = TRUE)
 }
 \arguments{

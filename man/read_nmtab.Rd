@@ -4,7 +4,7 @@
 \alias{read_nmtab}
 \title{NONMEM output table import function}
 \usage{
-read_nmtab(file = NULL, skip = NULL, header = NULL)
+read_nmtab(file = NULL, skip = NULL, header = NULL, nonmem_tab = TRUE)
 }
 \arguments{
 \item{file}{full file name}
@@ -13,6 +13,9 @@ read_nmtab(file = NULL, skip = NULL, header = NULL)
 
 \item{header}{a logical value indicating whether the file contains the names
 of the variables as its first line}
+
+\item{nonmem_tab}{logical value indicading to the function whether the file is a
+table or a nonmem additional output file.}
 }
 \value{
 A \code{data.frame}
