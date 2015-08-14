@@ -54,7 +54,7 @@ qmd <- function(qmd_info = NULL, horizontal = TRUE, shiny = FALSE,...) {
   if(shiny) {
     DiagrammeR::grViz(graph$dot_code)
   } else {
-    DiagrammeR::render_graph(graph)
+    DiagrammeR::render_graph(graph, ...)
   }
 
 }
