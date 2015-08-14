@@ -21,7 +21,7 @@ parse_nonmem_model <- function(dir = NULL, runno = NULL, prefix = 'run', ext = '
 
   # Check inputs
   if(is.null(runno) & is.null(file)) {
-    stop('Argument \"runno\" or \"file\" required')
+    stop('Argument \"runno\" or \"file\" required.')
   }
 
   if(!is.null(dir) && !substr(dir, nchar(dir), nchar(dir)) == '/') {
@@ -34,9 +34,7 @@ parse_nonmem_model <- function(dir = NULL, runno = NULL, prefix = 'run', ext = '
     file_full <- paste0(dir, prefix, runno, ext)
   }
 
-  if(!file.exists(file_full)) {
-    stop(paste('file', file_full, 'could not be found.'))
-  }
+  if(!file.exists(file_full)) { stop(paste('file', file_full, 'not found.')) }
 
   # Import mod_file
   mod_file <- readLines(file_full)

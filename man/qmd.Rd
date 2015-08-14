@@ -4,7 +4,8 @@
 \alias{qmd}
 \title{Create and render QMD}
 \usage{
-qmd(qmd_info = NULL, horizontal = TRUE, shiny = FALSE, ...)
+qmd(qmd_info = NULL, horizontal = TRUE, shiny = FALSE, output = "graph",
+  width = NULL, height = NULL, ...)
 }
 \arguments{
 \item{qmd_info}{a \code{list} containing the parameters, their RSE and the
@@ -13,6 +14,12 @@ nonmem subroutine ADVAN value}
 \item{horizontal}{logical if \code{TRUE} the layout will be horizontal}
 
 \item{shiny}{logical if \code{TRUE} output will be formated for shiny output}
+
+\item{output}{format of the output to be returned by qmd ('graph', 'SVG', 'DOT' or 'vivagraph')}
+
+\item{width}{width of the resulting graphic in pixels}
+
+\item{height}{height of the resulting graphic in pixels}
 
 \item{...}{other arguments passed to \code{\link{define_comp_layout}}
 and \code{\link{define_arrow_layout}} see details below for

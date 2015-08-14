@@ -7,6 +7,9 @@
 #'  nonmem subroutine ADVAN value
 #' @param horizontal logical if \code{TRUE} the layout will be horizontal
 #' @param shiny logical if \code{TRUE} output will be formated for shiny output
+#' @param output format of the output to be returned by qmd ('graph', 'SVG', 'DOT' or 'vivagraph')
+#' @param width width of the resulting graphic in pixels
+#' @param height height of the resulting graphic in pixels
 #' @param ... other arguments passed to \code{\link{define_comp_layout}}
 #'  and \code{\link{define_arrow_layout}} see details below for
 #'  a list of the available options
@@ -30,11 +33,12 @@
 #' qmd(qmd_info, horizontal = FALSE)
 #' }
 #' @export
-qmd <- function(qmd_info = NULL, horizontal = TRUE, shiny = FALSE,...) {
+qmd <- function(qmd_info = NULL, horizontal = TRUE, shiny = FALSE,
+                output = 'graph', width = NULL, height = NULL, ...) {
 
   # Check inputs
   if(is.null(qmd_info)) {
-    stop('Argument \"qmd_info\" required')
+    stop('Argument \"qmd_info\" required.')
   }
 
   # Define compartments
@@ -54,7 +58,7 @@ qmd <- function(qmd_info = NULL, horizontal = TRUE, shiny = FALSE,...) {
   if(shiny) {
     DiagrammeR::grViz(graph$dot_code)
   } else {
-    DiagrammeR::render_graph(graph, ...)
+    DiagrammeR::render_graph(graph, output = output, width = width, height = height)
   }
 
 }
