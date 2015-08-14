@@ -91,18 +91,17 @@ import_qmd_info <- function(dir = NULL, prefix = 'run', runno = NULL,
                basename(ext_file), 'under', dir))
   }
 
-
   ext_file <- read_nmtab(file = ext_file, nonmem_tab = FALSE)
   ext_file <- ext_file[, grepl('ITERATION|THETA', colnames(ext_file)) |
                          # Remove off diagonal elements
                          colnames(ext_file) %in% paste0('OMEGA(', 1:999, ',', 1:999, ')') |
                          colnames(ext_file) %in% paste0('SIGMA(', 1:999, ',', 1:999, ')') ]
 
-  tvprm    <- ext_file[ext_file$ITERATION == '-1000000000', -1]
+  tvprm    <- ext_file[ext_file$ITERATION == -1000000000, -1]
 
-  if('-1000000001' %in% ext_file$ITERATION) {
-    rse     <- ext_file[ext_file$ITERATION == '-1000000001', -1]
-    rse[1,] <- abs(100 * as.numeric(rse) / as.numeric(tvprm))
+  if(-1000000001 %in% ext_file$ITERATION) {
+    rse     <- ext_file[ext_file$ITERATION == -1000000001, -1]
+    rse     <- abs(100 * rse / tvprm)
   } else {
     message('Parameters standard error not found: setting rse to NULL')
     rse    <- NULL

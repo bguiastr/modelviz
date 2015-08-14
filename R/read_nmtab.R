@@ -57,7 +57,7 @@ read_nmtab <- function(file = NULL, skip = NULL, header = NULL, nonmem_tab = TRU
     tab_file <- read.table(file = file, skip = max(grep('TABLE NO', test)),
                            header = FALSE, fill = TRUE, as.is = TRUE)
     colnames(tab_file) <- tab_file[1, ]
-    tab_file <- tab_file[-1, ]
+    tab_file <- suppressWarnings(as.data.frame(apply(tab_file[-1, ], 2, as.numeric)))
   }
 
   return(tab_file)
