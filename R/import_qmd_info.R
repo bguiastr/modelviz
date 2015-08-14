@@ -27,29 +27,36 @@ import_qmd_info <- function(dir=NULL, prefix='run', runno, ext='.mod', file=NULL
   tmp     <- readLines(file_full)
   subr    <- tmp[grep('$SUB',tmp,fixed=T)]
   subr    <- as.numeric(sapply(unlist(strsplit(subr,'\\s+'))[-1],gsub,pattern='\\D',replacement=''))
-  tmp     <- sapply(strsplit(tmp[grep('.*FILE\\s*=\\s*patab.*',tmp,perl=TRUE)],'.*FILE\\s*=\\s*',perl=TRUE),'[',2)
-  tmp     <- tmp[file.exists(paste0(dir,tmp))]
-  tmp     <- do.call('cbind',lapply(paste0(dir,tmp), read.table, skip=1, header=T, as.is=T))
 
-  # $DES: just a placeholder for now
-  des_block <- NULL
+  # get $DES
+  sel_des <- grep("\\$DES", tmp)
+  sel_dollar <- grep("\\$", tmp)
   des_info <- NULL
-  if(is.null(des_block)) {
-    des_info <- parse_des_block(des_block)
+  if(length(sel_des) > 0) {
+    sel_end_des[(sel_dollar - sel_des) > 0][1] - 1
+    des_block <- tmp[sel_des:sel_end_des]
+    des_info <- NULL
+    if(is.null(des_block)) {
+      des_info <- parse_des_block(des_block)
+    }
   }
 
-  if(!'ID' %in% colnames(tmp)) {
+  tmp2     <- sapply(strsplit(tmp[grep('.*FILE\\s*=\\s*patab.*',tmp, perl=TRUE)],'.*FILE\\s*=\\s*',perl=TRUE),'[',2)
+  tmp2     <- tmp2[file.exists(paste0(dir, tmp2))]
+  tmp2     <- do.call('cbind',lapply(paste0(dir, tmp2), read.table, skip=1, header=T, as.is=T))
+
+  if(!'ID' %in% colnames(tmp2)) {
     stop('Need the ID column in parameter table')
   } else {
-    tmp <- tmp[!duplicated(tmp[,'ID']), !duplicated(colnames(tmp)) &
-                 !colnames(tmp)%in%c('DV','PRED','RES','WRES') &
-                 grepl('^(?!(ETA|ET)\\d)',colnames(tmp),perl=TRUE)] # Remove IIV for now
+    prm <- tmp2[!duplicated(tmp2[,'ID']), !duplicated(colnames(tmp2)) &
+                 !colnames(tmp2)%in%c('DV','PRED','RES','WRES') &
+                 grepl('^(?!(ETA|ET)\\d)',colnames(tmp2), perl=TRUE)] # Remove IIV for now
 
-    out <- list(prm = tmp,
+    out <- list(prm = prm,
                 rse = NA,
                 advan = subr[1],
                 trans = subr[2],
-                des_info = des_info # placeholder
+                des_info = des_info
                 )
     return(out)
   }

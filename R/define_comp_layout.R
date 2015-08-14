@@ -119,9 +119,12 @@ define_comp_layout <- function(prms = NA,
   }
 
   if(advan %in% c(6,9,13)) {
-
-    ## code here to handle $DES
-
+    l <- length(des_info)
+    node <- DiagrammeR::create_nodes(nodes    = paste0("A", 1:l),
+                                     label    = paste0("A", 1:l),
+                                     rank     = rep(1, l),
+                                     prm      = rep(10, l),
+                                     rse      = rep(.1, l))
   }
 
   # Add formatting to nodes -------------------------------------------------

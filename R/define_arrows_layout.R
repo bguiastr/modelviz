@@ -125,6 +125,13 @@ define_arrow_layout <- function(prms = NULL,
                                      tailport=c('_','_','_','_','_','_'))
   }
 
+  if(advan %in% c(6,9,13)) {
+    edge <- DiagrammeR::create_edges(from  = c('A1','A2'),
+                                     to    = c('A2','A3'),
+                                     label = c('KA','KEL'),
+                                     dir   = c('forward','forward'))
+  }
+
   # Additional formatting ---------------------------------------------------
   edge$prm <- NA
   if(!is.null(prms)){

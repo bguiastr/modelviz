@@ -30,11 +30,13 @@
 #' qmd(parameters, horizontal = FALSE)
 #' }
 #' @export
-qmd <- function(data, horizontal = TRUE, shiny = FALSE,...) {
+qmd <- function(data, des_block = NULL, horizontal = TRUE, shiny = FALSE,...) {
 
   if(missing(data)) {
     stop('Missing required argument \'data\'')
   }
+
+  data$advan <- 6
 
   # define compartments
   comp_data  <- define_comp_layout (data$prm, data$rse, data$advan, data$des_info, ...)
