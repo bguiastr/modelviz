@@ -53,13 +53,15 @@ parse_nonmem_model <- function(dir = NULL, runno = NULL, prefix = 'run', ext = '
   if(any(grepl('NM-TRAN MESSAGES', mod_file[, 1], fixed = TRUE))) {
     lst <- grep('NM-TRAN MESSAGES', mod_file[, 1], fixed = TRUE):nrow(mod_file)
     mod_file[lst, 'LEVEL'] <- mod_file[lst, 'LEVEL'] + 1
-    mod_file[c(1,lst), 'SUB']   <- 'LST'
+    mod_file[c(1,lst), 'SUB']   <- '$LST'
   }
 
   # Further format mod_file
   mod_file$ABREV   <- substr(x = mod_file$SUB, start = 2,
                              stop = ifelse(grepl('THETA|OMEGA|SIGMA', mod_file$SUB),
                                            nchar(mod_file$SUB), 4)) # Handle priors
+  mod_file$ABREV   <- gsub('\\s+', '', mod_file$ABREV)
+
   mod_file$CODE    <- gsub('^\\s*\\$\\w+\\s*', '', mod_file$CODE)
   mod_file         <- mod_file[!grepl('^\\s*$', mod_file$CODE), ]
 

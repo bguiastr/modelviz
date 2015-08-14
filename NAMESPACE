@@ -2,8 +2,8 @@
 
 export(define_arrow_layout)
 export(define_comp_layout)
-export(dir)
 export(format_qmd_info)
+export(import_qmd_info)
 export(parse_des_block)
 export(parse_nonmem_model)
 export(qmd)

@@ -21,12 +21,6 @@
 #' qmd_info <- import_qmd_info(dir = '../models/pk/', runno = '001')
 #' }
 #' @export
-dir = '~/Downloads/run1_model/'
-runno = '1'
-prefix = 'run'
-ext = '.mod'
-file = NULL
-interactive = TRUE
 import_qmd_info <- function(dir = NULL, prefix = 'run', runno, ext = '.mod',
                             file = NULL, interactive = TRUE) {
 
