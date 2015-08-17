@@ -34,8 +34,13 @@
 #' }
 #' @export
 
-qmd <- function(qmd_info = NULL, horizontal = TRUE, shiny = FALSE,
-                output = 'graph', width = NULL, height = NULL, ...) {
+qmd <- function(qmd_info = NULL,
+                horizontal = TRUE,
+                shiny = FALSE,
+                output = 'graph',
+                width = NULL,
+                height = NULL,
+                ...) {
 
   # Check inputs
   if(is.null(qmd_info)) {

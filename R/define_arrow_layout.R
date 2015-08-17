@@ -26,10 +26,13 @@
 #' arrows   <- define_arrow_layout(qmd_info)
 #' }
 #' @export
-define_arrow_layout <- function(qmd_info = NULL, scaling = TRUE,
+define_arrow_layout <- function(qmd_info = NULL,
+                                scaling = TRUE,
                                 scale.fun = function(x) { x^(1/3) },
-                                font = 'Avenir', clearance = TRUE,
-                                arrow.fontsize = 12, ...) {
+                                font = 'Avenir',
+                                clearance = TRUE,
+                                arrow.fontsize = 12,
+                                ...) {
 
   # Check inputs
   if(is.null(qmd_info)) {

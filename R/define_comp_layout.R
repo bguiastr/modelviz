@@ -32,7 +32,8 @@ define_comp_layout <- function(qmd_info = NULL,
                                box.ratio = 3/4,
                                filled = TRUE,
                                font = 'Avenir',
-                               comp.fontsize = 12, ...) {
+                               comp.fontsize = 12,
+                               ...) {
 
   # Check inputs
   if(is.null(qmd_info)) {

@@ -22,8 +22,12 @@
 #' qmd_info <- import_qmd_info(dir = '../models/pk/', runno = '001')
 #' }
 #' @export
-import_qmd_info <- function(dir = NULL, prefix = 'run', runno = NULL,
-                            ext = '.mod', file = NULL, interactive = TRUE,
+import_qmd_info <- function(dir = NULL,
+                            prefix = 'run',
+                            runno = NULL,
+                            ext = '.mod',
+                            file = NULL,
+                            interactive = TRUE,
                             verbose = FALSE) {
 
   # Check inputs
@@ -70,13 +74,14 @@ import_qmd_info <- function(dir = NULL, prefix = 'run', runno = NULL,
   ext_file   <- paste0(substr(x = file_full, start = 1, stop = nchar(file_full)-3), 'ext')
   parsed_ext <- parse_ext_file(ext_file, mod_file, verbose, interactive)
 
+
   # Create output object
   out <- list(tvprm    = parsed_ext$tvprm,    # Parameters typical values
               rse      = parsed_ext$rse,      # Parameters uncertainty
               data     = tab_file,            # Individual parameter values
               advan    = subr[1],             # NONMEM ADVAN
               trans    = subr[2],             # NONMEM trans
-              des_info = des_info             # $DES: just a placeholder for now
+              des_info = NULL                 # $DES: just a placeholder for now
   )
   return(out)
 

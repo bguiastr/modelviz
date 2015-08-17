@@ -1,4 +1,7 @@
-parse_ext_file <- function(ext_file = NULL, mod_file = NULL, verbose = TRUE, interactive = TRUE) {
+parse_ext_file <- function(ext_file = NULL,
+                           mod_file = NULL,
+                           verbose = TRUE,
+                           interactive = TRUE) {
 
   # Check inputs
   if(is.null(ext_file) | is.null(mod_file)) {

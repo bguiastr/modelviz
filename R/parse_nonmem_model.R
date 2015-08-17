@@ -17,7 +17,11 @@
 #' mod_file <- parse_nonmem_model(dir = '../models/pk/', runno = '101')
 #' }
 #' @export
-parse_nonmem_model <- function(dir = NULL, runno = NULL, prefix = 'run', ext = '.mod', file = NULL) {
+parse_nonmem_model <- function(dir = NULL,
+                               runno = NULL,
+                               prefix = 'run',
+                               ext = '.mod',
+                               file = NULL) {
 
   # Check inputs
   if(is.null(runno) & is.null(file)) {
@@ -45,10 +49,12 @@ parse_nonmem_model <- function(dir = NULL, runno = NULL, prefix = 'run', ext = '
 
   # Index mod_file
   mod_file <- data.frame(CODE  = mod_file,
-                         LEVEL = findInterval(seq_along(mod_file), grep('^\\s*\\$.+', mod_file)),
+                         LEVEL = findInterval(seq_along(mod_file),
+                                              grep('^\\s*\\$.+', mod_file)),
                          stringsAsFactors = FALSE)
 
-  mod_file <- by(data = mod_file, INDICES = mod_file$LEVEL,
+  mod_file <- by(data = mod_file,
+                 INDICES = mod_file$LEVEL,
                  FUN  = function(x) {
                    x$SUB <- gsub('^(\\s*\\$\\w+)\\s.+', '\\1', x[1,'CODE'])
                    return(x)

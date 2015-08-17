@@ -24,7 +24,12 @@ skeleton_qmd_info <- function(help = TRUE) {
                 des_info = 'Parsed $DES block [vector of strings, required when advan is not 1-4 or 11-12]'
     )
   } else {
-    out <- list(tvprm = NULL, rse = NULL, data = NULL, advan = NULL, trans = NULL, des_info = NULL)
+    out <- list(tvprm    = NULL,
+                rse      = NULL,
+                data     = NULL,
+                advan    = NULL,
+                trans    = NULL,
+                des_info = NULL)
   }
   return(out)
 

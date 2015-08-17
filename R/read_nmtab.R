@@ -23,8 +23,11 @@
 #' data <- read_nmtab(file = '../models/pk/sdtab101')
 #' }
 #' @export
-read_nmtab <- function(file = NULL, skip = NULL, header = NULL,
-                       rm_duplicates = FALSE, nonmem_tab = TRUE) {
+read_nmtab <- function(file = NULL,
+                       skip = NULL,
+                       header = NULL,
+                       rm_duplicates = FALSE,
+                       nonmem_tab = TRUE) {
 
   # Check inputs
   if(is.null(file)) {

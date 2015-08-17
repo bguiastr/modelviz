@@ -1,4 +1,6 @@
-parse_patab <- function(mod_file = NULL, dir = NULL, verbose = FALSE){
+parse_patab <- function(mod_file = NULL,
+                        dir = NULL,
+                        verbose = FALSE){
 
   # Check inputs
   if(is.null(mod_file)) {

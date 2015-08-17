@@ -13,7 +13,8 @@
 #' qmd_info_formatted <- format_qmd_info(qmd_info)
 #' }
 #' @export
-format_qmd_info <- function(qmd_info = NULL, verbose = FALSE) {
+format_qmd_info <- function(qmd_info = NULL,
+                            verbose = FALSE) {
 
   if(is.null(qmd_info)) {
     stop('Argument \"qmd_info\" required.')
