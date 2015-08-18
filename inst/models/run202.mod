@@ -1,6 +1,6 @@
-;; 1. Based on:                     na
-;; 2. Description:                  $DES block
-;; 3. Label:                        201
+;; 1. Based on:                     201
+;; 2. Description:                  OMEGA BLOCK
+;; 3. Label:                        202
 ;; 4. Structural model:             1CMT-oral
 ;; 5. Covariate model:              na
 ;; 6. Inter-individual variability: na
@@ -45,10 +45,10 @@ $THETA
  (0,2.845)    ; Th.4 VC (L)
  (0,3)        ; Th.5 Half-life KA (h)
 
-$OMEGA  
- 0  FIX       ; Om1.1  CL
- 0  FIX       ; Om2.2. VC
- 0  FIX       ; Om3.3. KA
+$OMEGA BLOCK(3) 
+ 0.1          ; Om1.1  CL
+ 0.1 0.1      ; Om2.2. VC
+ 0.1 0.1 0.1  ; Om3.3. KA
 
 $SIGMA  
  1  FIX       ; Sig1.1. Error
@@ -56,5 +56,5 @@ $SIGMA
 $ESTIMATION METHOD=1 SIGL=6 NSIG=2 INTER MAXEVAL=9999 PRINT=1 NOABORT
 $COVARIANCE UNCONDITIONAL
 $TABLE      ID TIME DOSE MDV IPRED IWRES CWRES NOPRINT ONEHEADER
-            FILE=sdtab201
-$TABLE      ID TIME CL VC KA ETAS(1:3) NOPRINT ONEHEADER FILE=patab201
+            FILE=sdtab202
+$TABLE      ID TIME CL VC KA ETAS(1:3) NOPRINT ONEHEADER FILE=patab202

@@ -35,8 +35,8 @@ parse_ext_file <- function(ext_file = NULL,
   n_sigma     <- length(grep('SIGMA', colnames(tvprm)))
 
   theta_names <- mod_file$COMMENT[mod_file$ABREV == 'THETA']
-  omega_names <- mod_file$COMMENT[mod_file$ABREV == 'OMEGA']
-  sigma_names <- mod_file$COMMENT[mod_file$ABREV == 'SIGMA']
+  omega_names <- mod_file$COMMENT[mod_file$ABREV == 'OMEGA' & !is.na(mod_file$COMMENT)]
+  sigma_names <- mod_file$COMMENT[mod_file$ABREV == 'SIGMA' & !is.na(mod_file$COMMENT)]
 
   if(n_theta != length(theta_names)) {
     if(interactive) {

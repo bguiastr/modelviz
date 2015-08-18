@@ -15,9 +15,9 @@ P3 <- parse_nonmem_model(file = 'inst/models/run101.mod')
 P4 <- parse_nonmem_model(dir = 'inst/models/', runno = '101')
 
 ## More complicated parsing
-P5 <- parse_nonmem_model(file = '/Users/bengu839/Farmbio/projects/cph/cph-ge-1/Analysis/Model/Para2/run039b.mod')
+P5 <- parse_nonmem_model(file='inst/models/run201.mod')
 
-
+P6 <- parse_nonmem_model(file='inst/models/run202.mod')
 
 # Test read_nmtab ---------------------------------------------------------
 
@@ -44,7 +44,6 @@ R6 <- read_nmtab(file = paste0('/Users/bengu839/Farmbio/projects/cph/cph-ge-1/An
 R7 <- read_nmtab(file = '/Users/bengu839/Farmbio/projects/cph/cph-ge-1/Analysis/Model/Para2/run039b.ext', nonmem_tab = FALSE)
 
 
-
 # Test import_qmd_info ----------------------------------------------------
 
 ## No input
@@ -64,8 +63,6 @@ I5 <- import_qmd_info(dir = 'inst/models/', runno = '101', verbose = FALSE)
 
 ## More complicated parsing
 I6 <- import_qmd_info(file = '/Users/bengu839/Farmbio/projects/cph/cph-ge-1/Analysis/Model/Para2/run039b.mod', verbose = TRUE)
-
-
 
 # Test qmd ----------------------------------------------------------------
 
