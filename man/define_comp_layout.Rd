@@ -5,8 +5,10 @@
 \title{Create compartment layout}
 \usage{
 define_comp_layout(qmd_info = NULL, scaling = TRUE,
-  scale.fun = function(x) {     x^(1/3) }, box.ratio = 3/4, filled = TRUE,
-  font = "Avenir", comp.fontsize = 12, ...)
+  comp_scale_fun = function(x) {     sqrt(x) }, color_scaling = "RSE",
+  color_cutoff = c(25, 50), filled = TRUE, alpha = 1,
+  unscaled_color = "grey50", unscaled_shape = "circle",
+  scaled_shape = "square", font = "Avenir", comp_fontsize = 1, ...)
 }
 \arguments{
 \item{qmd_info}{a \code{qmd_info} object generated with \code{import_qmd_info} or
@@ -15,28 +17,38 @@ define_comp_layout(qmd_info = NULL, scaling = TRUE,
 \item{scaling}{logical if \code{TRUE} compartment size and colors will be scaled.
 If \code{FALSE} standard model diagram will be created}
 
-\item{scale.fun}{a function to be used for compartment size scaling}
+\item{comp_scale_fun}{a function to be used for compartment size scaling}
 
-\item{box.ratio}{value for the compartment aspect ratio}
+\item{color_scaling}{can be 'iiv', 'rse', 'none' or 'pbpk'}
 
-\item{filled}{logical if \code{TRUE} compartment will be filled.
+\item{color_cutoff}{numeric vector of length 2 setting the cutoff limits in color coding
+for RSE (\%) or IIV (\%)}
+
+\item{filled}{logical if \code{TRUE} compartment will be filled
 If \code{FALSE} only the compartment edges will be drawn}
 
-\item{font}{font name of the compartment labels}
+\item{alpha}{transparency factor}
 
-\item{comp.fontsize}{font size of the compartment labels in point size}
+\item{unscaled_color}{color of the unscaled compartments}
+
+\item{unscaled_shape}{shape of the unscaled compartments. Can be square, circle or diamond}
+
+\item{scaled_shape}{shape of the scaled compartments. Can be square, circle or diamond}
+
+\item{font}{font name of the compartment label}
+
+\item{comp_fontsize}{font size expansion factor}
 }
 \value{
 A \code{data.frame}
 }
 \description{
 Combine information for each compartment's rank, label, size,
-color, scaling, etc.
+color and scaling into a \code{data.frame}.
 }
 \details{
-The default \code{scaling.fun} argument is set to be the cubic root, each
- compartment will be sized to the cubic root of the volume value. This scaling
- allows for a more realistic size comparison and avoids too big differences in size.
+The default \code{scaling_fun} argument is set to be a surface area
+of the compartment.
 }
 \examples{
 \dontrun{

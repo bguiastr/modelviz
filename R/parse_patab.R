@@ -16,14 +16,14 @@ parse_patab <- function(mod_file = NULL,
   tab_file  <- tab_file[file.exists(paste0(dir, tab_file))]
 
   if(is.null(tab_file) | length(tab_file) == 0) {
-    msg(paste0('Parameter table \"patab\" not available.'), verbose)
+    msg(paste0('Warning: parameter table \"patab\" not available.'), verbose)
     tab_file <- NULL
   } else {
     tab_file  <- read_nmtab(file = paste0(dir, tab_file))
 
     # Clean up file
     if(!'ID' %in% colnames(tab_file)) {
-      msg('Missing \"ID\" column in patab.', verbose)
+      msg('Warning: missing \"ID\" column in patab.', verbose)
       tab_file <- NULL
     } else {
       tab_file <- tab_file[!duplicated(tab_file[,'ID']),

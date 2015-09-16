@@ -22,7 +22,6 @@ table or a nonmem additional output file.}
 }
 \value{
 A \code{data.frame}
-(\code{LEVEL}) and character (\code{SUB}) indexing for subroutines.
 }
 \description{
 Quickly import NONMEM output tables into R.

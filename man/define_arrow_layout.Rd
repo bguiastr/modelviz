@@ -5,8 +5,10 @@
 \title{Create arrow connections between compartments}
 \usage{
 define_arrow_layout(qmd_info = NULL, scaling = TRUE,
-  scale.fun = function(x) {     x^(1/3) }, font = "Avenir",
-  clearance = TRUE, arrow.fontsize = 12, ...)
+  arrow_scale_fun = function(x) {     x }, clearance_mode = FALSE,
+  color_scaling = "RSE", color_cutoff = c(25, 50), labels = TRUE,
+  alpha = 1, unscaled_color = "grey50", font = "Avenir",
+  arrow_fontsize = 1, ...)
 }
 \arguments{
 \item{qmd_info}{a \code{qmd_info} object generated with \code{import_qmd_info} or
@@ -15,32 +17,41 @@ define_arrow_layout(qmd_info = NULL, scaling = TRUE,
 \item{scaling}{logical, if \code{TRUE} arrow width and colors will be scaled.
 If \code{FALSE} standard model diagram will be created}
 
-\item{scale.fun}{a function to be used for arrow width scaling}
+\item{arrow_scale_fun}{a function to be used for arrow width scaling}
+
+\item{clearance_mode}{logical if \code{TRUE} clearances will be represented by triangles
+and their surface area will be proportional to the volume cleared per unit of time}
+
+\item{color_scaling}{can be 'iiv', 'rse', 'none' or 'pbpk'}
+
+\item{color_cutoff}{numeric vector of length 2 setting the cutoff limits in color coding
+for RSE (\%) or IIV (\%)}
+
+\item{labels}{logical if \code{TRUE} labels are added to arrows}
+
+\item{alpha}{transparency factor}
+
+\item{unscaled_color}{color of the unscaled compartments}
 
 \item{font}{font name of arrow labels}
 
-\item{clearance}{logical, if \code{TRUE} arrows will be scaled to their available
-clearance value. If \code{FALSE} arrows will be scaled to their available
-rate constant value}
-
-\item{arrow.fontsize}{font size of the arrow labels in point size}
+\item{arrow_fontsize}{font size expansion factor}
 }
 \value{
 A \code{data.frame}
 }
 \description{
-Combine information for each arrow (origin, destination, label,
-witdh, color, scaling and more) into a dataframe
+Combine information for each arrow's origin, destination, label,
+width, color and scaling into a \code{data.frame}.
 }
 \details{
-The default \code{scaling.fun} argument is set to \code{cubic}, to match
- each the method used on volumes. Arrow will be sized to the cubic root of the
- clearance or rate constant value.
+The default \code{scaling_fun} argument is set to scale the arrow width proportionally to the
+square root of the parameter value, to match the method used on volumes.
 }
 \examples{
 \dontrun{
 qmd_info <- import_qmd_info(dir = '../models/pk/', runno = '001')
-arrows   <- define_arrow_layout(qmd_info)
+arrow    <- define_arrow_layout(qmd_info)
 }
 }
 \seealso{

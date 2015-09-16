@@ -8,29 +8,31 @@
 #' @param ext model file extention
 #' @param file full file name as an alternative to \code{dir}, \code{prefix},
 #' \code{runno} and \code{ext}
-#' @param interactive if \code{TRUE} parameter labels can not be matched with their thetas, omega
+#' @param interactive if \code{TRUE} parameter labels can not be associated with their thetas, omega
 #' and sigma, the user will be asked to manually provide labels. If \code{FALSE} an error will be
 #' returned instead
 #' @param verbose if \code{TRUE} messages are printed to the console
 #'
 #' @seealso \code{\link{format_qmd_info}}, \code{\link{qmd}}
-#' @return A list containing the individuals (\code{tvprm}) and population (\code{data}) parameters,
-#' parameter uncertainty (\code{rse}) the nonmem ADVAN (\code{advan}) and TRANS (\code{trans})
-#' as well as the parsed differencial equation (\code{des_info}).
+#' @return A list containing the fixed effect (\code{theta}), random effect variance (\code{omega})
+#' typical values along with their uncertainty, the indivudual parameters (\code{data})
+#' the nonmem ADVAN (\code{advan}), the parsed compartment information (\code{parsed_comp}),
+#' and the parsed arrow information (\code{parsed_arrow}).
 #' @examples
 #' \dontrun{
 #' qmd_info <- import_qmd_info(dir = '../models/pk/', runno = '001')
 #' }
 #' @export
-import_qmd_info <- function(dir = NULL,
-                            prefix = 'run',
-                            runno = NULL,
-                            ext = '.mod',
-                            file = NULL,
+import_qmd_info <- function(dir         = NULL,
+                            prefix      = 'run',
+                            runno       = NULL,
+                            ext         = '.mod',
+                            file        = NULL,
                             interactive = TRUE,
-                            verbose = FALSE) {
+                            verbose     = FALSE) {
 
-  # Check inputs
+
+  # Check inputs ------------------------------------------------------------
   if(is.null(runno) & is.null(file)) {
     stop('Argument \"runno\" or \"file\" required.')
   }
@@ -56,32 +58,55 @@ import_qmd_info <- function(dir = NULL,
   }
 
 
-  # Import parsed model
+  # Import parsed model -----------------------------------------------------
   mod_file  <- parse_nonmem_model(file = file_full)
 
 
-  # Grab ADVAN and TRANS
+  # Get model description ---------------------------------------------------
+  descr <- paste0(basename(file_full), ': ', mod_file$CODE[mod_file$ABREV == 'PRO'])
+
+
+  # Grab ADVAN and TRANS ----------------------------------------------------
   subr <- as.numeric(sapply(unlist(strsplit(mod_file$CODE[mod_file$ABREV == 'SUB'], '\\s+')),
                             gsub, pattern = '\\D', replacement = ''))
   if(!subr[1] %in% c(1:4, 11:12)) { subr[2] <- 1 } # Set TRANS to 1 when DES
 
 
-  # Import parsed patab
+  # Import parsed patab -----------------------------------------------------
   tab_file  <- parse_patab(mod_file, dir, verbose)
 
 
-  # Import parsed .ext file
-  ext_file   <- paste0(substr(x = file_full, start = 1, stop = nchar(file_full)-3), 'ext')
-  parsed_ext <- parse_ext_file(ext_file, mod_file, verbose, interactive)
+  # Import parsed .ext file -------------------------------------------------
+  ext_file   <- paste0(substr(x = file_full, start = 1, stop = nchar(file_full) - 3), 'ext')
+  parsed_ext <- parse_ext_file(ext_file    = ext_file,
+                               mod_file    = mod_file,
+                               verbose     = verbose,
+                               interactive = interactive)
 
 
-  # Create output object
-  out <- list(tvprm    = parsed_ext$tvprm,    # Parameters typical values
-              rse      = parsed_ext$rse,      # Parameters uncertainty
-              data     = tab_file,            # Individual parameter values
-              advan    = subr[1],             # NONMEM ADVAN
-              trans    = subr[2],             # NONMEM trans
-              des_info = NULL                 # $DES: just a placeholder for now
+  # Parse comp --------------------------------------------------------------
+  parsed_comp <- parse_comp_data(mod_file   = mod_file,
+                                 parsed_ext = parsed_ext,
+                                 advan      = subr[1],
+                                 trans      = subr[2],
+                                 verbose    = verbose)
+
+
+  # Parse arrow -------------------------------------------------------------
+  parsed_arrow <- parse_arrow_data(des_block = mod_file$CODE[mod_file$ABREV == 'DES'],
+                                   advan     = subr[1],
+                                   trans     = subr[2],
+                                   verbose   = verbose)
+
+
+  # Create the qmd_info object ----------------------------------------------
+  out <- list(descr          = descr,             # Model description
+              theta          = parsed_ext$theta,  # Theta and RSE (%)
+              omega          = parsed_ext$omega,  # Omega(%) and RSE (%)
+              data           = tab_file,          # Individual parameter values
+              advan          = subr[1],           # NONMEM ADVAN
+              parsed_comp    = parsed_comp,       # Parsed compartment info
+              parsed_arrow   = parsed_arrow       # Parsed arrow info
   )
   return(out)
 

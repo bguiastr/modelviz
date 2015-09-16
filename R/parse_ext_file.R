@@ -24,9 +24,10 @@ parse_ext_file <- function(ext_file = NULL,
   if(-1000000001 %in% ext_file$ITERATION) {
     rse     <- ext_file[ext_file$ITERATION == -1000000001, -1]
     rse     <- abs(100 * rse / tvprm)
+    rse[tvprm == 0] <- 0
   } else {
-    msg('Parameters standard error not available.', verbose)
-    rse    <- NULL
+    msg('Warning: parameter\'s standard error not available.', verbose)
+    rse    <- NA
   }
 
   # Assign labels to TVPRM and RSE
@@ -38,6 +39,17 @@ parse_ext_file <- function(ext_file = NULL,
   omega_names <- mod_file$COMMENT[mod_file$ABREV == 'OMEGA' & !is.na(mod_file$COMMENT)]
   sigma_names <- mod_file$COMMENT[mod_file$ABREV == 'SIGMA' & !is.na(mod_file$COMMENT)]
 
+  tvprm[2, ]  <- rse
+  row.names(tvprm) <- c('tvprm','rse')
+
+  theta_prm   <- tvprm[, grep('THETA', colnames(tvprm)), drop = FALSE]
+  omega_prm   <- tvprm[, grep('OMEGA', colnames(tvprm)), drop = FALSE]
+  sigma_prm   <- tvprm[, grep('SIGMA', colnames(tvprm)), drop = FALSE]
+
+  # Scale IIV to % scale
+  omega_prm['tvprm',] <- sqrt(omega_prm['tvprm',])*100
+
+  # Assign names to parameters
   if(n_theta != length(theta_names)) {
     if(interactive) {
       while(n_theta != length(theta_names)) {
@@ -50,22 +62,24 @@ parse_ext_file <- function(ext_file = NULL,
     }
   }
 
-  colnames(tvprm)[grep('THETA', colnames(tvprm))] <- theta_names
+  colnames(theta_prm) <- toupper(theta_names)
 
   if(n_omega == length(omega_names)) {
-    colnames(tvprm)[grep('OMEGA', colnames(tvprm))] <- omega_names
+    colnames(omega_prm) <- toupper(omega_names)
   } else {
-    msg('Names could not be attributed to omegas.', verbose)
+    msg('Warning: names could not be attributed to omegas.', verbose)
   }
 
   if(n_sigma == length(sigma_names)) {
-    colnames(tvprm)[grep('SIGMA', colnames(tvprm))] <- sigma_names
+    colnames(sigma_prm) <- toupper(sigma_names)
   } else {
-    msg('Names could not be attributed to sigmas.', verbose)
+    msg('Warning: names could not be attributed to sigmas.', FALSE) # Not used for now
   }
 
-  if(!is.null(rse)) { colnames(rse) <- colnames(tvprm) }
+  # Match omega_names with theta_names
+  colnames(omega_prm) <- gsub(paste0('.*(', paste0(colnames(theta_prm), collapse = '|'),
+                                     ').*'), '\\1', colnames(omega_prm))
 
-  return(list(tvprm = tvprm, rse = rse))
+  return(list(theta = theta_prm, omega = omega_prm, sigma = sigma_prm))
 
 } # End parse_ext_file

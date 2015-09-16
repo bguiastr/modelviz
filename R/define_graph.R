@@ -1,10 +1,63 @@
-#' DiagrammeR functions
+#' Create a graph object using data frames representative of comp and arrow
 #'
-#' @description Edited from DiagrammeR to include ranking option but remain compatible
+#' @description Generates a graph object using data frames for comp and arrow;
+#' the graph object can be manipulated by other functions.
+#'
+#' @param comp a data.frame created by \code{define_comp_layout}
+#' @param arrow a data.frame created by \code{define_arrow_layout}
+#' @param pbpk a list created by \code{define_pbpk_layout}
+#' @param graph_attrs	an optional vector of graph attribute statements that can
+#' serve as defaults for the graph.
+#' @param comp_attrs an optional vector of comp attribute statements that can
+#' serve as defaults for comp.
+#' @param arrow_attrs an optional vector of comp attribute statements that can
+#' serve as defaults for arrow.
+#' @param directed logical, if \code{TRUE} (default) directed arrow operations
+#' will be generated.
+#' @param graph_name an optional string for labeling the graph object.
+#' @param graph_time a date or date-time string (required for insertion of graph
+#' into a graph series of the type temporal).
+#' @param graph_tz an optional value for the time zone (tz) corresponding to the
+#' date or date-time string supplied as a value to graph_time. If no time zone is
+#' provided then it will be set to GMT.
+#'
+#' @description Function from package DiagrammeR edited to include ranking and
+#' follow notation used by modelviz.
+#' @examples
+#' \dontrun{
+#' graph <- define_graph(comp  = define_comp_layout(examples$onecomp),
+#'                       arrow = define_arrow_layout(examples$onecomp),
+#'                       graph_attrs = c('splines = true',
+#'                                       'ranksep = 0',
+#'                                       'nodesep = 0.15',
+#'                                       'rankdir = LR'))
+#' DiagrammeR::render_graph(graph)
+#' }
 #' @importFrom DiagrammeR x11_hex
-define_graph <- function (nodes_df = NULL, edges_df = NULL, graph_attrs = NULL,
-                          node_attrs = NULL, edge_attrs = NULL, directed = TRUE, graph_name = NULL,
-                          graph_time = NULL, graph_tz = NULL) {
+#' @export
+define_graph <- function (comp        = NULL,
+                          arrow       = NULL,
+                          pbpk        = NULL,
+                          graph_attrs = NULL,
+                          comp_attrs  = NULL,
+                          arrow_attrs = NULL,
+                          directed    = TRUE,
+                          graph_name  = NULL,
+                          graph_time  = NULL,
+                          graph_tz    = NULL) {
+
+  # Equivalence to modelviz
+  if(is.list(pbpk)) {
+    nodes_df <- pbpk$comp
+    edges_df <- pbpk$arrow
+  } else {
+    nodes_df <- comp
+    edges_df <- arrow
+  }
+  node_attrs <- comp_attrs
+  edge_attrs <- arrow_attrs
+
+  # Code starts here
   graph_attributes <- c("bgcolor", "layout", "overlap", "fixedsize",
                         "mindist", "nodesep", "outputorder", "ranksep", "rankdir",
                         "stylesheet")
@@ -214,16 +267,15 @@ define_graph <- function (nodes_df = NULL, edges_df = NULL, graph_attrs = NULL,
 
     #####################################EDIT#######################################
     if('rank' %in% colnames(nodes_df)){
-
-    node_block <- tapply(node_block,nodes_df$rank,FUN=function(x){
-      if(length(x)>1){
-        x <- paste0('subgraph{rank = same\n',paste0(x,collapse='\n'),'}\n')
-      }
-      return(x)
-    })
-
+      node_block <- tapply(node_block, nodes_df$rank, FUN = function(x){
+        if(length(x) > 1){
+          x <- paste0('subgraph{rank = same\n',
+                      paste0(x, collapse = '\n'),
+                      '}\n')
+        }
+        return(x)
+      })
     } # End Ranking
-
 
     node_block <- paste(node_block, collapse = "\n")
 
@@ -424,4 +476,4 @@ define_graph <- function (nodes_df = NULL, edges_df = NULL, graph_attrs = NULL,
                     edge_attrs = edge_attrs, directed = directed, dot_code = dot_code)
   attr(dgr_graph, "class") <- "dgr_graph"
   return(dgr_graph)
-}
+} # End define_graph

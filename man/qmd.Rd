@@ -4,14 +4,20 @@
 \alias{qmd}
 \title{Create and render QMD}
 \usage{
-qmd(qmd_info = NULL, horizontal = TRUE, shiny = FALSE, output = "graph",
-  width = NULL, height = NULL, ...)
+qmd(qmd_info = NULL, horizontal = TRUE, rank = NULL,
+  pbpk_layout = FALSE, color_scaling = NULL, shiny = FALSE,
+  output = "graph", width = NULL, height = NULL, ...)
 }
 \arguments{
 \item{qmd_info}{a \code{list} containing the parameters, their RSE and the
 nonmem subroutine ADVAN value}
 
 \item{horizontal}{logical if \code{TRUE} the layout will be horizontal}
+
+\item{rank}{integer vertor assigning a rank for each compartment. Can be used
+to obtain a specific layout}
+
+\item{pbpk_layout}{logical if \code{TRUE} a PBPK layout will be applied}
 
 \item{shiny}{logical if \code{TRUE} output will be formated for shiny output}
 
@@ -21,8 +27,8 @@ nonmem subroutine ADVAN value}
 
 \item{height}{height of the resulting graphic in pixels}
 
-\item{...}{other arguments passed to \code{\link{define_comp_layout}}
-and \code{\link{define_arrow_layout}} see details below for
+\item{...}{other arguments passed to \code{\link{define_comp_layout}},
+\code{\link{define_arrow_layout}} and \code{\link{define_pbpk_layout}} see details below for
 a list of the available options}
 }
 \value{
@@ -35,13 +41,20 @@ for NONMEM models
 \details{
 \itemize{
  \item{scaling}
- \item{scale.fun}
- \item{font}
- \item{comp.fontsize}
- \item{arrow.fontsize}
- \item{box.ratio}
+ \item{comp_scale_fun}
+ \item{arrow_scale_fun}
+ \item{color_scaling}
+ \item{color_cutoff}
+ \item{pbpk_color}
  \item{filled}
- \item{clearance}
+ \item{labels}
+ \item{alpha}
+ \item{font}
+ \item{comp_fontsize}
+ \item{arrow_fontsize}
+ \item{clearance_mode}
+ \item{vein_comp_label}
+ \item{artery_comp_label}
 }
 }
 \examples{

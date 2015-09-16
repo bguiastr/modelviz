@@ -5,9 +5,10 @@
 #' @param help logical if \code{TRUE} help will be added in the \code{qmd_info} skeleton.
 #'
 #' @seealso \code{\link{import_qmd_info}}, \code{\link{read_nmtab}}, \code{\link{parse_nommem_model}}
-#' @return A list containing the individuals (\code{tvprm}) and population (\code{data}) parameters,
-#' parameter uncertainty (\code{rse}) the nonmem ADVAN (\code{advan}) and TRANS (\code{trans})
-#' as well as the parsed differencial equation (\code{des_info}).
+#' @return A list containing the fixed effect (\code{theta}), random effect variance (\code{omega})
+#' typical values along with their uncertainty, the indivudual parameters (\code{data})
+#' the nonmem ADVAN (\code{advan}), the parsed compartment information (\code{parsed_comp}),
+#' and the parsed arrow information (\code{parsed_arrow}).
 #' @examples
 #' \dontrun{
 #' qmd_info <- skeleton_qmd_info()
@@ -16,20 +17,28 @@
 skeleton_qmd_info <- function(help = TRUE) {
 
   if(help) {
-    out <- list(tvprm    = 'Parameter typical values [named vector, required]',
-                rse      = 'Parameter uncertainty in % [named vector, optional]',
-                data     = 'Individual parameter values [data.frame, optional]',
-                advan    = 'Value of the nonmem ADVAN [integer, required]',
-                trans    = 'Value of the nonmem TRANS [integer, required with advan 1-4 or 11-12]',
-                des_info = 'Parsed $DES block [vector of strings, required when advan is not 1-4 or 11-12]'
+    out <- list(descr        = 'Model description [character string, optional]',
+                theta        = 'Theta typical values and RSE (%) [data.frame, required]',
+                omega        = 'Omega typical values (%) and RSE (%) [data.frame, optional]',
+                data         = 'Individual parameter values [data.frame, optional]',
+                advan        = 'Nonmem ADVAN subroutine [integer, required]',
+                parsed_comp  = 'Parsed compartment information [data.frame, required]',
+                parsed_arrow = 'Parsed arrow information [data.frame, required]'
     )
   } else {
-    out <- list(tvprm    = NULL,
-                rse      = NULL,
-                data     = NULL,
-                advan    = NULL,
-                trans    = NULL,
-                des_info = NULL)
+    out <- list(descr        = NULL,
+                theta        = NULL,
+                omega        = NULL,
+                data         = NULL,
+                advan        = NULL,
+                parsed_comp  = data.frame(label  = as.character(),
+                                          prm    = as.character(),
+                                          output = as.character()),
+                parsed_arrow = data.frame(from = as.character(),
+                                          to   = as.character(),
+                                          prm  = as.character(),
+                                          dir  = as.character())
+                )
   }
   return(out)
 

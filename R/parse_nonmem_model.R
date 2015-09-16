@@ -83,12 +83,6 @@ parse_nonmem_model <- function(dir = NULL,
   mod_file$COMMENT <- gsub('\\s+$|^\\s+', '', mod_file$COMMENT)
   mod_file$CODE <- gsub('\\s*;.*', '', mod_file$CODE)
 
-  # extract $DES and parse
-  ## will fix later
-#   des_block <- mod_file[mod_file$SUB == 'DES', 'CODE']
-#   des_info  <- NULL
-#   if(!is.null(des_block)) { des_info <- parse_des_block(des_block) }
-
   # Sort columns
   mod_file <- mod_file[, c('LEVEL', 'SUB', 'ABREV', 'CODE', 'COMMENT')]
 

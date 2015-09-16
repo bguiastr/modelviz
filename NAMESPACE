@@ -2,9 +2,11 @@
 
 export(define_arrow_layout)
 export(define_comp_layout)
+export(define_graph)
+export(define_pbpk_layout)
 export(format_qmd_info)
+export(hex_color)
 export(import_qmd_info)
-export(parse_des_block)
 export(parse_nonmem_model)
 export(qmd)
 export(read_nmtab)

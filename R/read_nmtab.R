@@ -17,7 +17,6 @@
 #'
 #' @seealso \code{\link{parse_nonmem_model}}, \code{\link{import_qmd_info}}
 #' @return A \code{data.frame}
-#' (\code{LEVEL}) and character (\code{SUB}) indexing for subroutines.
 #' @examples
 #' \dontrun{
 #' data <- read_nmtab(file = '../models/pk/sdtab101')

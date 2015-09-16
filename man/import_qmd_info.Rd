@@ -19,16 +19,17 @@ import_qmd_info(dir = NULL, prefix = "run", runno = NULL, ext = ".mod",
 \item{file}{full file name as an alternative to \code{dir}, \code{prefix},
 \code{runno} and \code{ext}}
 
-\item{interactive}{if \code{TRUE} parameter labels can not be matched with their thetas, omega
+\item{interactive}{if \code{TRUE} parameter labels can not be associated with their thetas, omega
 and sigma, the user will be asked to manually provide labels. If \code{FALSE} an error will be
 returned instead}
 
 \item{verbose}{if \code{TRUE} messages are printed to the console}
 }
 \value{
-A list containing the individuals (\code{tvprm}) and population (\code{data}) parameters,
-parameter uncertainty (\code{rse}) the nonmem ADVAN (\code{advan}) and TRANS (\code{trans})
-as well as the parsed differencial equation (\code{des_info}).
+A list containing the fixed effect (\code{theta}), random effect variance (\code{omega})
+typical values along with their uncertainty, the indivudual parameters (\code{data})
+the nonmem ADVAN (\code{advan}), the parsed compartment information (\code{parsed_comp}),
+and the parsed arrow information (\code{parsed_arrow}).
 }
 \description{
 Import model parameters from NONMEM run

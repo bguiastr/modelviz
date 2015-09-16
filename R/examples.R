@@ -1,8 +1,9 @@
 #' QMD Examples
 #'
-#' @description A list of 3 \code{qmd_info} examples on the pharmacokinetic models for
-#' nevirapine (\code{onecomp}), miltefosine (\code{twocomp}) and
-#' ciclosporin (\code{threecomp}).
+#' @description A list of 4 \code{qmd_info} examples on the pharmacokinetic
+#' models for nevirapine (\code{onecomp}), miltefosine (\code{twocomp}),
+#' ciclosporin (\code{threecomp}, felodipine (\code{gitt}) and
+#' theophylline (\code{pbpk}).
 #'
 #' @details
 #' The \code{examples} file contains the following:
@@ -10,19 +11,23 @@
 #' \item \code{examples$onecomp} nevirapine PK model \code{qmd_info}
 #' \item \code{examples$twocomp} miltefosine PK model \code{qmd_info}
 #' \item \code{examples$threecomp} ciclosporin PK model \code{qmd_info}
+#' \item \code{examples$gitt} felodipine PK model \code{qmd_info}
+#' \item \code{examples$pbpk} theophylline PBPK model \code{qmd_info}
 #' }
 #'
-#' Each of these three examples contain the following:
+#' Each of these examples contain the following:
 #' \itemize{
-#'   \item tvprm. the model parameters typical values eg. KA (h-1), CL (L/h) and V (L)
-#'   \item rse. the model parameters uncertainty as relative standard error (%)
-#'   \item data. the individual model parameter read from a patab file
-#'   \item advan. the nonmem subroutine ADVAN defining the structural model
-#'   \item trans. the nonmem subroutine TRANS defining the parametrization
-#'   \item des_info. the parsed differencial equations
+#'   \item descr model description
+#'   \item theta theta typical values and RSE (\%) for fixed effects
+#'   \item omega omega typical values (\%) and RSE (\%) for inter subject variability
+#'   \item data individual model parameter read from a patab file
+#'   \item advan nonmem ADVAN subroutine
+#'   \item parsed_comp the parsed compartment information
+#'   \item parsed_arrow the parsed arrow information
 #' }
 #'
-#' @format A list of 3 levels: \code{onecomp}, \code{twocomp} and \code{threecomp}
+#' @format A list of 5 levels: \code{onecomp}, \code{twocomp}, \code{threecomp},
+#' \code{gitt} and \code{pbpk}.
 #'
 #' @source \href{http://www.ncbi.nlm.nih.gov/pubmed/18751690}{onecomp}: D. Elsherbiny et al.
 #' Population pharmacokinetics of nevirapine in combination with rifampicin-based short
@@ -38,6 +43,15 @@
 #' in paediatric renal transplant candidates. British Journal of Clinical Pharmacology.
 #' 64:6, 772–784. (2007)
 #'
+#' @source \href{}{gitt}: E. Hénin et al.
+#' A mechanism-Based Approach for Absorption Modeling: The Gastro-Intestinal Transit Time
+#' (GITT) Model. The AAPS Journal, 14:2, 155-163. (2012)
+#'
+#' @source \href{http://www.ncbi.nlm.nih.gov/pubmed/15948934}{pbpk}: S. Björkman.
+#' Prediction of drug disposition in infants and children by means of physiologically based
+#' pharmacokinetic (PBPK) modelling: theophylline and midazolam as model drugs. British Journal
+#' of Clinical Pharmacology. 59:6, 691–704. (2004)
+#'
 #' @examples
 #' # One-compartment model
 #' qmd(examples$onecomp)
@@ -47,6 +61,12 @@
 #'
 #' # Three-compartment model
 #' qmd(examples$threecomp)
+#'
+#' # GITT model
+#' qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3))
+#'
+#' # PBPK model
+#' qmd(examples$pbpk, pbpk_mode = TRUE)
 #'
 #' @name examples
 NULL

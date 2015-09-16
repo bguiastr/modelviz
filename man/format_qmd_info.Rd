@@ -4,14 +4,14 @@
 \alias{format_qmd_info}
 \title{Parameter translator}
 \usage{
-format_qmd_info(qmd_info = NULL, verbose = FALSE)
+format_qmd_info(qmd_info = NULL, verbose = TRUE)
 }
 \arguments{
 \item{qmd_info}{a \code{qmd_info} object generated with \code{import_qmd_info}
 or \code{skeleton_qmd_info}}
 }
 \value{
-A \code{data.frame} \code{qmd_info} object
+A \code{qmd_info} object
 }
 \description{
 Translate clearances into rate constant or rate constant into

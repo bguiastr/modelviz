@@ -10,9 +10,10 @@ skeleton_qmd_info(help = TRUE)
 \item{help}{logical if \code{TRUE} help will be added in the \code{qmd_info} skeleton.}
 }
 \value{
-A list containing the individuals (\code{tvprm}) and population (\code{data}) parameters,
-parameter uncertainty (\code{rse}) the nonmem ADVAN (\code{advan}) and TRANS (\code{trans})
-as well as the parsed differencial equation (\code{des_info}).
+A list containing the fixed effect (\code{theta}), random effect variance (\code{omega})
+typical values along with their uncertainty, the indivudual parameters (\code{data})
+the nonmem ADVAN (\code{advan}), the parsed compartment information (\code{parsed_comp}),
+and the parsed arrow information (\code{parsed_arrow}).
 }
 \description{
 Create skeleton for \code{qmd_info} as a manual alternative to \code{import_qmd_info}

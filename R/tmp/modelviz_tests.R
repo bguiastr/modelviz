@@ -1,12 +1,11 @@
 library(modelviz)
 
 # Test parse_nonmem_model -------------------------------------------------
-
 ## No input
-P1 <- parse_nonmem_model()
+#P1 <- parse_nonmem_model()
 
 ## Wrong input
-P2 <- parse_nonmem_model(file = 'run999.mod')
+#P2 <- parse_nonmem_model(file = 'run999.mod')
 
 ## Use file
 P3 <- parse_nonmem_model(file = 'inst/models/run101.mod')
@@ -16,16 +15,15 @@ P4 <- parse_nonmem_model(dir = 'inst/models/', runno = '101')
 
 ## More complicated parsing
 P5 <- parse_nonmem_model(file='inst/models/run201.mod')
-
 P6 <- parse_nonmem_model(file='inst/models/run202.mod')
 
-# Test read_nmtab ---------------------------------------------------------
 
+# Test read_nmtab ---------------------------------------------------------
 ## No input
-R1 <- read_nmtab()
+#R1 <- read_nmtab()
 
 ## Wrong input
-R2 <- read_nmtab(file = 'run999.mod')
+#R2 <- read_nmtab(file = 'run999.mod')
 
 ## Read tab test
 R3 <- read_nmtab(file = 'inst/models/patab101')
@@ -36,21 +34,21 @@ R4 <- read_nmtab(file = 'inst/models/run101.ext', nonmem_tab = FALSE)
 ## Multi file test
 R5 <- read_nmtab(file = paste0('inst/models/',c('sdtab','patab','covtab','simtab'),'101'))
 
-## More complicated tab test
-R6 <- read_nmtab(file = paste0('/Users/bengu839/Farmbio/projects/cph/cph-ge-1/Analysis/Model/Para2/',
-                               c('sdtab','patab','simtab'),'039b'))
 
-## More complicated ext test
-R7 <- read_nmtab(file = '/Users/bengu839/Farmbio/projects/cph/cph-ge-1/Analysis/Model/Para2/run039b.ext', nonmem_tab = FALSE)
+# Test skeleton_qmd_info --------------------------------------------------
+## With help
+S1 <- skeleton_qmd_info()
+
+## Without help
+S2 <- skeleton_qmd_info(help = FALSE)
 
 
 # Test import_qmd_info ----------------------------------------------------
-
 ## No input
-I1 <- import_qmd_info(file = NULL, dir = NULL, verbose = TRUE)
+#I1 <- import_qmd_info(file = NULL, dir = NULL, verbose = TRUE)
 
 ## Wrong input
-I2 <- import_qmd_info(file = 'run999.mod', verbose = TRUE)
+#I2 <- import_qmd_info(file = 'run999.mod', verbose = TRUE)
 
 ## Use file
 I3 <- import_qmd_info(file = 'inst/models/run101.mod', verbose = TRUE)
@@ -61,33 +59,140 @@ I4 <- import_qmd_info(dir = 'inst/models/', runno = '101', verbose = TRUE)
 ## Test verbose
 I5 <- import_qmd_info(dir = 'inst/models/', runno = '101', verbose = FALSE)
 
-## More complicated parsing
-I6 <- import_qmd_info(file = '/Users/bengu839/Farmbio/projects/cph/cph-ge-1/Analysis/Model/Para2/run039b.mod', verbose = TRUE)
+
+# Test format_qmd_info ----------------------------------------------------
+## No input
+F1 <- format_qmd_info()
+
+## Default test
+F2 <- format_qmd_info(qmd_info = examples$threecomp)
+
+## DES test
+F3 <- format_qmd_info(qmd_info = I6)
+
+
+# Test define_comp_layout -------------------------------------------------
+## No input
+#C1 <- define_comp_layout()
+
+## Default test
+C2 <- define_comp_layout(qmd_info = examples$threecomp)
+
+## Scaling == False
+C3 <- define_comp_layout(qmd_info = examples$threecomp, scaling = FALSE)
+
+## Filled == False
+C4 <- define_comp_layout(qmd_info = examples$threecomp, filled = FALSE)
+
+## color_scaling == IIV
+C5 <- define_comp_layout(qmd_info = examples$threecomp, color_scaling = 'IIV')
+
+## More complicated example
+C6 <- define_comp_layout(qmd_info = import_qmd_info(file = 'inst/models/run101.mod', verbose = TRUE), color_scaling = 'RSE')
+
+## color_scaling == NONE
+C7 <- define_comp_layout(qmd_info = examples$threecomp, color_scaling = 'NONE')
+
+## pbpk model
+C8 <- define_comp_layout(qmd_info = examples$pbpk, color_scaling = 'NONE')
+
+
+# Test define_arrow_layout -----------------------------------------------
+## No input
+#A1 <- define_arrow_layout()
+
+## Default test
+A2 <- define_arrow_layout(qmd_info = examples$threecomp)
+
+## Scaling == False
+A3 <- define_arrow_layout(qmd_info = examples$threecomp, scaling = FALSE)
+
+## Label == False
+A4 <- define_arrow_layout(qmd_info = examples$threecomp, label = FALSE)
+
+## color_scaling == IIV
+A5 <- define_arrow_layout(qmd_info = examples$threecomp, color_scaling = 'IIV')
+
+## More complicated example
+A6 <- define_arrow_layout(qmd_info = import_qmd_info(file = 'inst/models/run101.mod', verbose = TRUE), color_scaling = 'RSE')
+
+## color_scaling == NONE
+A7 <- define_arrow_layout(qmd_info = examples$threecomp, color_scaling = 'NONE')
+
+## pbpk model
+A8 <- define_arrow_layout(qmd_info = examples$pbpk, color_scaling = 'NONE')
 
 # Test qmd ----------------------------------------------------------------
-
-## Using built-in examples
+## One compartment
+qmd(examples$onecomp, scaling = FALSE, filled = FALSE)
+qmd(examples$onecomp, scaling = FALSE)
 qmd(examples$onecomp)
+
+## Two compartment
+qmd(examples$twocomp, scaling = FALSE, filled = FALSE)
+qmd(examples$twocomp, scaling = FALSE)
 qmd(examples$twocomp)
-qmd(examples$threecomp)
 
-## Scaling test
+## Three compartment
+qmd(examples$threecomp, scaling = FALSE, filled = FALSE)
 qmd(examples$threecomp, scaling = FALSE)
+qmd(examples$threecomp)
+qmd(examples$threecomp, color_scaling = 'iiv', color_cutoff = c(15, 30))
 
-## Horizontal test
-qmd(examples$threecomp, horizontal = FALSE)
+## GITT model
+qmd(examples$gitt, scaling = FALSE, filled = FALSE)
+qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3), scaling = FALSE, filled = FALSE)
+qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3), scaling = FALSE)
+qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3), arrow_scale_fun = function(x){sqrt(x)})
 
-## shiny test
-qmd(examples$threecomp, shiny = TRUE)
+## PBPK model
+qmd(examples$pbpk, pbpk_layout = TRUE, scaling = FALSE, filled = FALSE, unscaled_color = 'black')
+qmd(examples$pbpk, pbpk_layout = TRUE, scaling = TRUE, filled = FALSE, scaled_shape = 'circle',
+    arrow_fontsize = 0.8, comp_fontsize = 1.2, arrow_scale_fun = function(x) { 1.5*x + 1 },
+    unscaled_color = 'black')
 
-## output test
+## Save plot test
+sink('~/Desktop/gitt_3_comp.svg')
+cat(qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3), arrow_scale_fun = function(x){sqrt(x)},
+        color_scaling = 'iiv', color_cutoff = c(20, 40), unscaled_color = 'grey80',
+        output = 'SVG'))
+sink()
+
+## Shiny test
+qmd(examples$threecomp, shiny = TRUE, comp_fontsize = 1)
+
+## Output test
 qmd(examples$threecomp, output = 'vivagraph')
 
-## width and height
+## Width and height
 qmd(examples$threecomp, width = 640, height = 480)
 
-## Using example run
-qmd(I3)
-qmd(I4)
-qmd(I5)
-qmd(I6)
+
+
+# To do -------------------------------------------------------------------
+# Arrow shape
+arrow_data$style     <- c('normal','tapered','tapered')
+arrow_data$arrowhead <- c('normal','none','none')
+arrow_data$arrowtail <- 'none'
+
+# Test define_comp_layout -------------------------------------------------
+library(modelviz)
+#library(DiagrammeR)
+
+qmd_info      = examples$gitt
+rank          = NULL
+pbpk_layout   = FALSE
+color_scaling = 'RSE'
+
+comp_data  <- define_comp_layout(qmd_info, color_scaling = 'none')
+arrow_data <- define_arrow_layout(qmd_info, color_scaling = 'none')
+
+sort(unique(arrow_data$from))
+table(arrow_data$from)
+
+
+
+
+
+
+

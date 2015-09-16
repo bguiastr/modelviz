@@ -1,197 +1,180 @@
 #' Create arrow connections between compartments
 #'
-#' @description Combine information for each arrow (origin, destination, label,
-#' witdh, color, scaling and more) into a dataframe
+#' @description Combine information for each arrow's origin, destination, label,
+#' width, color and scaling into a \code{data.frame}.
 #'
 #' @param qmd_info a \code{qmd_info} object generated with \code{import_qmd_info} or
 #' \code{skeleton_qmd_info}
 #' @param scaling logical, if \code{TRUE} arrow width and colors will be scaled.
 #' If \code{FALSE} standard model diagram will be created
-#' @param scale.fun a function to be used for arrow width scaling
-#' @param clearance logical, if \code{TRUE} arrows will be scaled to their available
-#'       clearance value. If \code{FALSE} arrows will be scaled to their available
-#'       rate constant value
+#' @param arrow_scale_fun a function to be used for arrow width scaling
+#' @param clearance_mode logical if \code{TRUE} clearances will be represented by triangles
+#'  and their surface area will be proportional to the volume cleared per unit of time
+#' @param color_scaling can be 'iiv', 'rse', 'none' or 'pbpk'
+#' @param color_cutoff numeric vector of length 2 setting the cutoff limits in color coding
+#' for RSE (\%) or IIV (\%)
+#' @param labels logical if \code{TRUE} labels are added to arrows
+#' @param alpha transparency factor
+#' @param unscaled_color color of the unscaled compartments
 #' @param font font name of arrow labels
-#' @param arrow.fontsize font size of the arrow labels in point size
+#' @param arrow_fontsize font size expansion factor
 
-#' @details The default \code{scaling.fun} argument is set to \code{cubic}, to match
-#'  each the method used on volumes. Arrow will be sized to the cubic root of the
-#'  clearance or rate constant value.
+#' @details The default \code{scaling_fun} argument is set to scale the arrow width proportionally to the
+#' square root of the parameter value, to match the method used on volumes.
 #
 #' @seealso \code{\link{define_comp_layout}}, \code{\link{import_qmd_info}}, \code{\link{qmd}}
 #' @return A \code{data.frame}
 #' @examples
 #' \dontrun{
 #' qmd_info <- import_qmd_info(dir = '../models/pk/', runno = '001')
-#' arrows   <- define_arrow_layout(qmd_info)
+#' arrow    <- define_arrow_layout(qmd_info)
 #' }
 #' @export
-define_arrow_layout <- function(qmd_info = NULL,
-                                scaling = TRUE,
-                                scale.fun = function(x) { x^(1/3) },
-                                font = 'Avenir',
-                                clearance = TRUE,
-                                arrow.fontsize = 12,
+define_arrow_layout <- function(qmd_info        = NULL,
+                                scaling         = TRUE,
+                                arrow_scale_fun = function(x) { x },
+                                clearance_mode  = FALSE,
+                                color_scaling   = 'RSE',
+                                color_cutoff    = c(25, 50),
+                                labels          = TRUE,
+                                alpha           = 1,
+                                unscaled_color  = 'grey50',
+                                font            = 'Avenir',
+                                arrow_fontsize  = 1,
                                 ...) {
 
-  # Check inputs
+  # Create key variables ----------------------------------------------------
+  arrow <- qmd_info$parsed_arrow
+
+  # Check inputs ------------------------------------------------------------
   if(is.null(qmd_info)) {
     stop('Argument \"qmd_info\" required.')
   }
 
-  # $DES parser placeholder
-  if(!qmd_info$advan %in% c(1:4, 11:12)) {
-    if(is.null(qmd_info$des_info)) {
-      stop('des_info level required in \"qmd_info\" when $DES used.')
-    }
-    # qmd_info$des_info to edge <- DiagrammeR::create_edges()
+  if(is.null(arrow)) {
+    stop('Level \"parsed_arrow\" required in \"qmd_info\".')
   }
 
-  # Create edges with templates
-  if(qmd_info$advan == 1) {
-    if(clearance) {
-      edge <- DiagrammeR::create_edges(from  = 'A1',
-                                       to    = 'A2',
-                                       label = 'CL',
-                                       dir   = 'forward')
-    }else{
-      edge <- DiagrammeR::create_edges(from  = 'A1',
-                                       to    = 'A2',
-                                       label = 'K',
-                                       dir   = 'forward')
+  if(qmd_info$advan == 10) {
+    stop('ADVAN 10 is not currently supported by modelviz.')
+  }
+
+  if(!is.null(arrow) && !all(c('from', 'to', 'prm') %in% colnames(arrow))){
+    stop('Incorrect format of \"parsed_arrow\" in \"qmd_info\", columns \"from\", \"to\" and \"prm\" required.')
+  }
+
+  # Start arrow data creation ------------------------------------------------
+  ## Ensure all prm exist
+  if(length(arrow$prm[!is.na(arrow$prm)]) == 0) {
+    msg('Warning: No parameter provided in \"qmd_info$parsed_arrow$prm\".', TRUE)
+    scaling <- FALSE
+  }else if(!all(arrow$prm[!is.na(arrow$prm)] %in% colnames(qmd_info$theta))) {
+    msg('Warning: Wrong parameter label provided in \"qmd_info$parsed_arrow$prm\".', TRUE)
+    scaling <- FALSE
+  }
+
+  ## Create arrow template structure
+  if(labels && all(!is.na(arrow$prm))){
+    arrow$label <- ifelse(is.na(arrow$prm),'', arrow$prm)
+  } else {
+    arrow$label <- ''
+    labels      <- FALSE
+  }
+  arrow[,c('value', 'rse', 'iiv')] <- NA
+
+
+  # Assign parameter values -------------------------------------------------
+  if(scaling) {
+    arrow[!is.na(arrow$prm), c('value', 'rse')] <- t(qmd_info$theta[, arrow[!is.na(arrow$prm), 'prm']])
+
+    ### iiv labels assumed to have properly been cleaned in parse_ext_file
+    if(length(intersect(colnames(qmd_info$omega), arrow$prm)) > 0) {
+      arrow$iiv[which(arrow$prm %in% colnames(qmd_info$omega))] <-
+        unlist(qmd_info$omega[1, intersect(colnames(qmd_info$omega), arrow$prm[!is.na(arrow$prm)])])
     }
   }
 
-  if(qmd_info$advan == 2) {
-    if(clearance) {
-      edge <- DiagrammeR::create_edges(from  = c('A1', 'A2'),
-                                       to    = c('A2', 'A3'),
-                                       label = c('KA', 'CL'),
-                                       dir   = 'forward')
+  # Handle output compartment -----------------------------------------------
+  if(any(is.na(arrow$to))){
+    if(is.null(qmd_info$parsed_comp)) {
+      stop('Level \"parsed_comp\" required in \"qmd_info\".')
+    }
+    output_comp <- as.numeric(gsub('\\D', '', arrow$from[is.na(arrow$to)]))
+    if(all(qmd_info$parsed_comp[output_comp, 'output'])) {
+      nodes <- paste0('A',nrow(qmd_info$parsed_comp)+(1:length(output_comp)))
+      arrow[is.na(arrow$to),'to'] <- nodes[order(output_comp)]
+
     } else {
-      edge <- DiagrammeR::create_edges(from  = c('A1', 'A2'),
-                                       to    = c('A2', 'A3'),
-                                       label = c('KA', 'K'),
-                                       dir   = 'forward')
+      stop('Could not match output compartment with arrows.')
     }
   }
 
-  if(qmd_info$advan == 3) {
-    if(clearance) {
-      edge <- DiagrammeR::create_edges(from  = c('A1', 'A1'),
-                                       to    = c('A3', 'A2'),
-                                       label = c('CL', 'Q'),
-                                       dir   = c('forward', 'both'))
-    } else {
-      edge <- DiagrammeR::create_edges(from  = c('A1', 'A1', 'A2'),
-                                       to    = c('A3', 'A2', 'A1'),
-                                       label = c('K', 'K12', 'K21'),
-                                       dir   = 'forward')
-    }
-  }
+  # Format arrows ------------------------------------------------------------
+  ## Special variables
+  arrow_scale     <- ifelse(scaling, 0.4 ,1)            # Reduce entire graph size due to issues with big arrows in graphviz
+  arrow_fontsize  <- arrow_scale * arrow_fontsize * 12  # Base size is 12
 
-  if(qmd_info$advan == 4) {
-    if(clearance) {
-      edge <- DiagrammeR::create_edges(from  = c('A1', 'A2', 'A2'),
-                                       to    = c('A2', 'A4', 'A3'),
-                                       label = c('KA', 'CL', 'Q'),
-                                       dir   = c('forward', 'forward', 'both'))
-    } else {
-      edge <- DiagrammeR::create_edges(from  = c('A1', 'A2', 'A2', 'A3'),
-                                       to    = c('A2', 'A4', 'A3', 'A2'),
-                                       label = c('KA', 'K', 'K23', 'K32'),
-                                       dir   = 'forward')
-    }
-  }
-
-  if(qmd_info$advan %in% c(6,9,13)) { # placeholder
-    edge <- DiagrammeR::create_edges(from  = c('A1','A2'),
-    to    = c('A2','A3'),
-    label = c('KA','KEL'),
-    dir   = c('forward','forward'))
-  }
-
-  if(qmd_info$advan == 11) {
-    if(clearance) {
-      edge <- DiagrammeR::create_edges(from  = c('A1', 'A1', 'A1'),
-                                       to    = c('A2', 'A3', 'A4'),
-                                       label = c('Q2', 'Q3', 'CL'),
-                                       dir   = c('both', 'both', 'forward'))
-    } else {
-      edge <- DiagrammeR::create_edges(from  = c('A1', 'A2', 'A1', 'A3', 'A1'),
-                                       to    = c('A2', 'A1', 'A3', 'A1', 'A4'),
-                                       label = c('K12', 'K21', 'K13', 'K31', 'K'),
-                                       dir   = 'forward')
-    }
-  }
-
-  if(qmd_info$advan == 12) {
-    if(clearance) {
-      edge <- DiagrammeR::create_edges(from  = c('A1', 'A2', 'A2', 'A2'),
-                                       to    = c('A2', 'A3', 'A4', 'A5'),
-                                       label = c('KA', 'Q2', 'Q3', 'CL'),
-                                       dir   = c('forward', 'both', 'both', 'forward'))
-    } else {
-      edge <- DiagrammeR::create_edges(from  = c('A1', 'A2', 'A3', 'A2', 'A4', 'A2'),
-                                       to    = c('A2', 'A3', 'A2', 'A4', 'A2', 'A5'),
-                                       label = c('KA', 'K23', 'K32', 'K24', 'K42', 'K'),
-                                       dir   = 'forward')
-    }
-  }
-
-  if(qmd_info$advan == 20) {
-    edge <- DiagrammeR::create_edges(from     = c('A1', 'A2', 'A1', 'A2', 'A1', 'A2'),
-                                     to       = c('A2', 'A1', 'A1', 'A2', 'A3', 'A3'),
-                                     label    = c('K10', 'K01', 'K00', 'K11', 'K20', 'K21'),
-                                     dir      = 'forward',
-                                     headport = c('_', '_', 'nw', 'ne', '_', '_'),
-                                     tailport = c('_', '_', '_', '_', '_', '_'))
-  }
-
-  # Additional formatting ---------------------------------------------------
-  tvprm <- qmd_info$tvprm
-  rse   <- qmd_info$rse
-
-  edge$prm <- NA
-  if(!is.null(tvprm)){
-    edge$prm[match(intersect(edge$label, names(tvprm)), edge$label, nomatch = 0)] <- c(tvprm[intersect(edge$label, names(tvprm))], recursive = TRUE)
-  }
-
-  edge$rse <- NA
-  if(!is.null(rse)){
-    edge$rse[match(intersect(edge$label, names(rse)), edge$label, nomatch = 0)] <- c(rse[intersect(edge$label, names(rse))], recursive = TRUE)
-  }
-
-  if(all(is.na(edge$rse)) | scaling == FALSE){
-    edge$color <- ifelse(!is.na(edge$prm), 'grey40', 'grey70')
+  ## Scaling factor
+  if(scaling) {
+    arrow$scale[!is.na(arrow$value)] <- arrow_scale_fun(arrow$value[!is.na(arrow$value)])
+    arrow$penwidth  <- ifelse(!is.na(arrow$scale), arrow$scale, 1)
+    arrow$arrowsize <- ifelse(!is.na(arrow$scale), (arrow$scale*0.005)^0.23, 0.8)
   }else{
-    edge$color[is.na(edge$prm) & is.na(edge$rse)]  <- 'grey70'
-    edge$color[!is.na(edge$prm) & is.na(edge$rse)] <- 'grey40'
-    edge$color[edge$rse <= 25]                     <- 'chartreuse3'
-    edge$color[edge$rse > 25 & edge$rse < 50]      <- 'orange2'
-    edge$color[edge$rse > 50]                      <- 'red'
+    arrow$scale     <- NA
+    arrow$penwidth  <- 1
+    arrow$arrowsize <- 0.8
   }
 
-  edge$fontcolor <- edge$color
+  ## Resolution adjustment
+  arrow$penwidth <- arrow$penwidth * arrow_scale
+  arrow$minlen   <- ifelse(scaling, 1, 2)
 
-  edge$scale <- NA
-  if(clearance){
-    edge$scale[grep('^[CL|Q]', toupper(edge$label))] <- scale.fun(edge$prm[grep('^[CL|Q]', toupper(edge$label))])
-  }else{
-    edge$scale[grep('^K', toupper(edge$label))] <- scale.fun(edge$prm[grep('^K', toupper(edge$label))])
-  }
-  edge$scale[is.na(edge$scale)] <- 1
-
-  if(scaling){
-    edge$penwidth  <- ifelse(!is.na(edge$scale), edge$scale, 1)
-    edge$arrowsize <- ifelse(!is.na(edge$scale), (edge$scale*0.005)^0.23, 0.8)
-  }else{
-    edge$penwidth  <- 1
-    edge$arrowsize <- 0.8
+  ## Colors
+  if(length(color_cutoff) != 2) {
+    msg('Argument \"color_cutoff\" must have length of 2, units are in %.', TRUE)
+    color_cutoff <- c(25, 50)
   }
 
-  edge$fontsize  <- arrow.fontsize*edge$penwidth
-  edge$fontname  <- font
+  if(scaling == FALSE | toupper(color_scaling) %in% c('NONE', 'PBPK')) {
+    arrow$color <- hex_color(unscaled_color, alpha)
 
-  return(edge)
-}
+  } else if ((toupper(color_scaling) == 'RSE' & all(is.na(arrow$rse))) |
+             (toupper(color_scaling) == 'IIV' & all(is.na(arrow$iiv)))) {
+    msg(paste('Warning: Not enough information available on', color_scaling, 'for color scaling.'), TRUE)
+    arrow$color <- hex_color(unscaled_color, alpha)
+
+  } else if(toupper(color_scaling) == 'RSE'){
+    arrow$color[is.na(arrow$rse)]              <- hex_color(unscaled_color, alpha)  # light grey
+    arrow$color[arrow$rse <= color_cutoff[1]]  <- hex_color('#B2E680', alpha)       # green
+    arrow$color[arrow$rse > color_cutoff[1] &
+                  arrow$rse < color_cutoff[2]] <- hex_color('#FFA366', alpha)       # orange
+    arrow$color[arrow$rse > color_cutoff[2]]   <- hex_color('#FF8080', alpha)       # red
+
+  } else if(toupper(color_scaling) == 'IIV'){
+    arrow$color[is.na(arrow$iiv)]              <- hex_color(unscaled_color, alpha)  # light grey
+    arrow$color[arrow$iiv <= color_cutoff[1]]  <- hex_color('#93D4EA', alpha)       # light blue
+    arrow$color[arrow$iiv > color_cutoff[1] &
+                  arrow$iiv < color_cutoff[2]] <- hex_color('#519BB4', alpha)       # blue
+    arrow$color[arrow$iiv > color_cutoff[2]]   <- hex_color('#5471B0', alpha)       # dark blue
+
+  }
+
+  ## Fonts
+  arrow$fontsize  <- arrow_fontsize
+  arrow$fontname  <- font
+  arrow$fontcolor <- hex_color('black', alpha)
+
+  ## Style
+  arrow$style <- 'bold'
+
+  ## Tooltip
+  if(labels != FALSE) {
+    arrow$tooltip[is.na(arrow$value)]  <- arrow$label[is.na(arrow$value)]
+  }
+  if(any(!is.na(arrow$value))) {
+    arrow$tooltip[!is.na(arrow$value)] <- paste0(arrow$prm[!is.na(arrow$value)],' = ', signif(arrow$value[!is.na(arrow$value)],4))
+    arrow$tooltip[!is.na(arrow$iiv)]   <- paste0(arrow$tooltip[!is.na(arrow$iiv)], ' (', signif(arrow$iiv[!is.na(arrow$iiv)],3), ' %IIV)')
+    arrow$tooltip[!is.na(arrow$rse)]   <- paste0(arrow$tooltip[!is.na(arrow$rse)], ' [', signif(arrow$rse[!is.na(arrow$rse)],3), ' %RSE]')
+  }
+  return(arrow)
+} # End define_arrow_layout
