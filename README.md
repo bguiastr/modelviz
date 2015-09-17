@@ -79,6 +79,10 @@ qmd(examples$onecomp, scaling = TRUE)
 ```
 <img src="inst/img/1_comp.png">
 
+#### Tooltip
+All values *(i.e parameters, RSE and IIV)* are embedded into the graph. Just pass the cursor on the compartments or arrows of the graph and the tooltip showing the numeric values will be displayed.
+<img src="inst/img/tooltip.png">
+
 ### Two-compartment model
 
 The example dataset ```twocomp``` contains typical pharmacokinetic parameters values and uncertainty for miltefosine _(Dorlo et al. 2008)_
