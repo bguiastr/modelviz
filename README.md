@@ -13,6 +13,15 @@ devtools::install_github("guiastrennec/modelviz")
 library(modelviz)
 ```
 
+## How to use
+```r
+# Import dataset from a NONMEM run
+qmd_info <- import_qmd_info(dir = '/nonmem/runs', runno = '101')
+
+# Generate QMD
+qmd(qmd_info)
+```
+
 ## Examples
 ### One-compartment model
 
@@ -59,10 +68,23 @@ qmd(examples$threecomp, scaling = FALSE)
 
 
 #### Scaled
+##### No color scale
+```r
+qmd(examples$threecomp, scaling = TRUE, color_scaling = 'none', unscaled_color = 'grey80')
+```
+<img src="inst/img/3_comp_none.png">
+
+##### RSE color scale [default]
 ```r
 qmd(examples$threecomp, scaling = TRUE)
 ```
 <img src="inst/img/3_comp.png">
+
+##### IIV color scale
+```r
+qmd(examples$threecomp, scaling = TRUE, color_scaling = 'iiv', color_cutoff = c(15, 30))
+```
+<img src="inst/img/3_comp_iiv.png">
 
 
 ### Gastro-Intestinal Tansit Time (GITT) model
@@ -103,15 +125,5 @@ qmd(examples$pbpk, pbpk_layout = TRUE, scaling = TRUE, filled = FALSE, scaled_sh
 ```
 <img src="inst/img/pbpk.png">
 
-
-## How to use
-```r
-# Import dataset from a NONMEM run
-qmd_info <- import_qmd_info(dir = '/nonmem/runs', runno = '101')
-
-# Generate QMD
-qmd(qmd_info)
-```
-
 ## In development
-Modelviz automatically handles outputs from NONMEM ADVAN 1-4, 11-12. A differencial equation translator will be implemented to make modelviz compatible with any model.
+Modelviz automatically handles outputs from NONMEM ADVAN 1-4, 11-12. Other ADVAN require minimal user input. A differential equation parser is being implemented to make modelviz automatically compatible with any model.
