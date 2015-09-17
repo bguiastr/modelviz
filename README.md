@@ -13,7 +13,7 @@ devtools::install_github("guiastrennec/modelviz")
 library(modelviz)
 ```
 
-## How to use
+## Workflow
 ```r
 # Import dataset from a NONMEM run
 qmd_info <- import_qmd_info(dir = '/nonmem/runs', runno = '101')
@@ -22,6 +22,46 @@ qmd_info <- import_qmd_info(dir = '/nonmem/runs', runno = '101')
 qmd(qmd_info)
 ```
 
+## qmd_info structure
+The **qmd_info** objects are lists of 7 levels:
+- **descr** : model description *[character string, optional]*
+- **theta** : theta typical values and RSE (%) *[data.frame, required]*
+- **omega** : typical values (%) and RSE (%) *[data.frame, optional]*
+- **data** : individual parameter values *[data.frame, optional]*
+- **advan** : nonmem ADVAN subroutine *[integer, required]*
+- **parsed_comp** : parsed compartment information *[data.frame, required]*
+- **parsed_arrow** : parsed arrow information *[data.frame, required]*
+
+``` r
+$descr
+[1] "Example 1-comp: Nevirapine in HIV- and TB-infected south african (day values w/o rifampicin)"
+
+$theta
+         KA   CL     V
+tvprm  3.57 2.76 137.0
+rse   61.00 5.70   7.2
+
+$omega
+           KA       CL
+tvprm 84.2615 55.40758
+rse    0.8500  0.27000
+
+$data
+NULL
+
+$advan
+[1] 2
+
+$parsed_comp
+    label  prm output
+1   Depot <NA>  FALSE
+2 Central    V   TRUE
+
+$parsed_arrow
+  from   to prm     dir
+1   A1   A2  KA forward
+2   A2 <NA>  CL forward
+```
 ## Examples
 ### One-compartment model
 
@@ -89,7 +129,7 @@ qmd(examples$threecomp, scaling = TRUE, color_scaling = 'iiv', color_cutoff = c(
 
 ### Gastro-Intestinal Tansit Time (GITT) model
 
-The example dataset ```gitt``` contains typical pharmacokinetic parameters values and uncertainty for felodipine gastro-intestinal transit time _(Hénin et al. 2007)_
+The example dataset ```gitt``` contains typical pharmacokinetic parameters values and uncertainty for felodipine gastro-intestinal transit time _(Hénin et al. 2012)_
 
 #### Unscaled
 ```r
@@ -110,7 +150,7 @@ qmd(examples$gitt, scaling = TRUE, rank = c(1,2,2,2,2,2,3,4,5,5,3)), arrow_scale
 
 ### PBPK model
 
-The example dataset ```pbpk``` contains typical pharmacokinetic parameters values for theophylline in adult male. _(Fanta et al. 2007)_
+The example dataset ```pbpk``` contains typical pharmacokinetic parameters values for theophylline in adult male. _(Björkman et al. 2004)_
 
 #### Unscaled
 ```r
