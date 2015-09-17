@@ -5,7 +5,7 @@
 #'
 #' @param qmd_info a \code{list} containing the parameters, their RSE and the
 #'  nonmem subroutine ADVAN value
-#' @param horizontal logical if \code{TRUE} the layout will be horizontal
+#' @param flipped logical if \code{TRUE} the layout will be flipped
 #' @param rank integer vertor assigning a rank for each compartment. Can be used
 #' to obtain a specific layout
 #' @param pbpk_layout logical if \code{TRUE} a PBPK layout will be applied
@@ -40,11 +40,11 @@
 #' @return A graphic object
 #' @examples
 #' \dontrun{
-#' qmd(qmd_info, horizontal = FALSE)
+#' qmd(qmd_info, flipped = FALSE)
 #' }
 #' @export
 qmd <- function(qmd_info      = NULL,
-                horizontal    = TRUE,
+                flipped       = FALSE,
                 rank          = NULL,
                 pbpk_layout   = FALSE,
                 color_scaling = NULL,
@@ -98,9 +98,9 @@ qmd <- function(qmd_info      = NULL,
                              graph_attrs = c('splines = true', # ortho for square
                                              'ranksep = 0',
                                              'nodesep = 0.15',
-                                             ifelse(horizontal,
-                                                    'rankdir = LR',
-                                                    'rankdir = TB')))
+                                             ifelse(flipped,
+                                                    'rankdir = TB',
+                                                    'rankdir = LR')))
 
   # Render graph ------------------------------------------------------------
   if(shiny) {

@@ -137,6 +137,7 @@ qmd(examples$twocomp)
 qmd(examples$threecomp, scaling = FALSE, filled = FALSE)
 qmd(examples$threecomp, scaling = FALSE)
 qmd(examples$threecomp)
+qmd(examples$threecomp, color_scaling = 'none', unscaled_color = 'grey80')
 qmd(examples$threecomp, color_scaling = 'iiv', color_cutoff = c(15, 30))
 
 ## GITT model
@@ -154,8 +155,14 @@ qmd(examples$pbpk, pbpk_layout = TRUE, scaling = TRUE, filled = FALSE, scaled_sh
 ## Save plot test
 sink('~/Desktop/gitt_3_comp.svg')
 cat(qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3), arrow_scale_fun = function(x){sqrt(x)},
-        color_scaling = 'iiv', color_cutoff = c(20, 40), unscaled_color = 'grey80',
+        comp_fontsize = 1.4, color_scaling = 'iiv', color_cutoff = c(20, 40), unscaled_color = 'grey80',
         output = 'SVG'))
+sink()
+
+sink('~/Desktop/pbpk.svg')
+cat(qmd(examples$pbpk, pbpk_layout = TRUE, scaling = TRUE, filled = FALSE, scaled_shape = 'circle',
+    arrow_fontsize = 1, comp_fontsize = 1.2, arrow_scale_fun = function(x) { 1.5*x + 1 },
+    unscaled_color = 'black', flipped = TRUE, output = 'SVG',width = 1200,height = 800))
 sink()
 
 ## Shiny test

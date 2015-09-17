@@ -4,15 +4,15 @@
 \alias{qmd}
 \title{Create and render QMD}
 \usage{
-qmd(qmd_info = NULL, horizontal = TRUE, rank = NULL,
-  pbpk_layout = FALSE, color_scaling = NULL, shiny = FALSE,
-  output = "graph", width = NULL, height = NULL, ...)
+qmd(qmd_info = NULL, flipped = FALSE, rank = NULL, pbpk_layout = FALSE,
+  color_scaling = NULL, shiny = FALSE, output = "graph", width = NULL,
+  height = NULL, ...)
 }
 \arguments{
 \item{qmd_info}{a \code{list} containing the parameters, their RSE and the
 nonmem subroutine ADVAN value}
 
-\item{horizontal}{logical if \code{TRUE} the layout will be horizontal}
+\item{flipped}{logical if \code{TRUE} the layout will be flipped}
 
 \item{rank}{integer vertor assigning a rank for each compartment. Can be used
 to obtain a specific layout}
@@ -59,7 +59,7 @@ for NONMEM models
 }
 \examples{
 \dontrun{
-qmd(qmd_info, horizontal = FALSE)
+qmd(qmd_info, flipped = FALSE)
 }
 }
 \seealso{
