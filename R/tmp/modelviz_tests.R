@@ -168,10 +168,11 @@ qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3), scaling = FALSE)
 qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3), arrow_scale_fun = function(x){sqrt(x)})
 
 ## PBPK model
-qmd(examples$pbpk, pbpk_layout = TRUE, scaling = FALSE, filled = FALSE, unscaled_color = 'black')
+qmd(examples$pbpk, pbpk_layout = TRUE, color_scaling = 'PBPK', scaling = FALSE, filled = FALSE, unscaled_color = 'black')
+
 qmd(examples$pbpk, pbpk_layout = TRUE, scaling = TRUE, filled = FALSE, scaled_shape = 'circle',
     arrow_fontsize = 0.8, comp_fontsize = 1.2, arrow_scale_fun = function(x) { 1.5*x + 1 },
-    unscaled_color = 'black')
+  unscaled_color = 'black', color_scaling = 'Pbpk', gv_options = 'ranksep = 0.5')
 
 ## Save plot test
 sink('~/Desktop/gitt_unscaled.svg')

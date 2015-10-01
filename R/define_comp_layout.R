@@ -38,7 +38,7 @@ define_comp_layout <- function(qmd_info       = NULL,
                                color_cutoff   = c(25, 50),
                                filled         = TRUE,
                                alpha          = 1,
-                               unscaled_color = 'grey60',
+                               unscaled_color = NULL,
                                unscaled_shape = 'circle',
                                scaled_shape   = 'square',
                                font           = 'Avenir',
@@ -146,8 +146,12 @@ define_comp_layout <- function(qmd_info       = NULL,
     color_cutoff <- c(25, 50)
   }
 
+  if(is.null(unscaled_color)) {
+    unscaled_color <- ifelse(filled, 'grey80', 'black')
+  }
+
   if(scaling == FALSE | toupper(color_scaling) %in% c('NONE', 'PBPK')) {
-    node$color <- hex_color(ifelse(filled, unscaled_color, 'black'), alpha)
+    node$color <- hex_color(unscaled_color, alpha)
 
   } else if ((toupper(color_scaling) == 'RSE' & all(is.na(node$rse))) |
              (toupper(color_scaling) == 'IIV' & all(is.na(node$iiv)))) {

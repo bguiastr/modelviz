@@ -7,8 +7,7 @@
 define_arrow_layout(qmd_info = NULL, scaling = TRUE,
   arrow_scale_fun = function(x) {     x }, clearance_mode = FALSE,
   color_scaling = "RSE", color_cutoff = c(25, 50), labels = TRUE,
-  alpha = 1, unscaled_color = "grey60", font = "Avenir",
-  arrow_fontsize = 1, ...)
+  alpha = 1, unscaled_color = NULL, font = "Avenir", arrow_fontsize = 1)
 }
 \arguments{
 \item{qmd_info}{a \code{qmd_info} object generated with \code{import_qmd_info} or

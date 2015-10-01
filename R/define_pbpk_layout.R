@@ -25,8 +25,7 @@ define_pbpk_layout <- function(comp              = NULL,
                                arrow             = NULL,
                                pbpk_color        = TRUE,
                                vein_comp_label   = 'venous',
-                               artery_comp_label = 'arterial',
-                               ...) {
+                               artery_comp_label = 'arterial') {
 
   # Check inputs ------------------------------------------------------------
   if(is.null(comp) | is.null(arrow)) {

@@ -4,20 +4,64 @@
 \alias{qmd}
 \title{Create and render QMD}
 \usage{
-qmd(qmd_info = NULL, flipped = FALSE, rank = NULL, pbpk_layout = FALSE,
-  color_scaling = NULL, shiny = FALSE, output = "graph", width = NULL,
-  height = NULL, ...)
+qmd(qmd_info = NULL, scaling = TRUE, comp_scale_fun = function(x) {    
+  sqrt(x) }, arrow_scale_fun = function(x) {     x }, labels = TRUE,
+  font = "Avenir", comp_fontsize = 1, arrow_fontsize = 1, filled = TRUE,
+  alpha = 1, color_scaling = "RSE", color_cutoff = c(25, 50),
+  unscaled_color = NULL, unscaled_shape = "circle",
+  scaled_shape = "square", flipped = FALSE, rank = NULL,
+  clearance_mode = FALSE, pbpk_layout = FALSE, vein_comp_label = "venous",
+  artery_comp_label = "arterial", shiny = FALSE, output = "graph",
+  width = NULL, height = NULL, gv_options = NULL)
 }
 \arguments{
 \item{qmd_info}{a \code{list} containing the parameters, their RSE and the
 nonmem subroutine ADVAN value}
+
+\item{scaling}{logical, if \code{TRUE} arrow width and colors will be scaled.
+If \code{FALSE} standard model diagram will be created}
+
+\item{comp_scale_fun}{a function to be used for compartment size scaling}
+
+\item{arrow_scale_fun}{a function to be used for arrow width scaling}
+
+\item{labels}{logical if \code{TRUE} labels are added to arrows}
+
+\item{font}{font name of the compartment label}
+
+\item{comp_fontsize}{font size expansion factor}
+
+\item{arrow_fontsize}{font size expansion factor}
+
+\item{filled}{logical if \code{TRUE} compartment will be filled
+If \code{FALSE} only the compartment edges will be drawn}
+
+\item{alpha}{transparency factor}
+
+\item{color_scaling}{can be 'iiv', 'rse', 'none' or 'pbpk'}
+
+\item{color_cutoff}{numeric vector of length 2 setting the cutoff limits in color coding
+for RSE (\%) or IIV (\%)}
+
+\item{unscaled_color}{color of the unscaled compartments}
+
+\item{unscaled_shape}{shape of the unscaled compartments. Can be square, circle or diamond}
+
+\item{scaled_shape}{shape of the scaled compartments. Can be square, circle or diamond}
 
 \item{flipped}{logical if \code{TRUE} the layout will be flipped}
 
 \item{rank}{integer vertor assigning a rank for each compartment. Can be used
 to obtain a specific layout}
 
+\item{clearance_mode}{logical if \code{TRUE} clearances will be represented by triangles
+and their surface area will be proportional to the volume cleared per unit of time}
+
 \item{pbpk_layout}{logical if \code{TRUE} a PBPK layout will be applied}
+
+\item{vein_comp_label}{label of the veinous compartment}
+
+\item{artery_comp_label}{label of the arterial compartment}
 
 \item{shiny}{logical if \code{TRUE} output will be formated for shiny output}
 
@@ -27,9 +71,7 @@ to obtain a specific layout}
 
 \item{height}{height of the resulting graphic in pixels}
 
-\item{...}{other arguments passed to \code{\link{define_comp_layout}},
-\code{\link{define_arrow_layout}} and \code{\link{define_pbpk_layout}} see details below for
-a list of the available options}
+\item{gv_options}{vector of options to be passed to Graphviz}
 }
 \value{
 A graphic object
@@ -38,28 +80,9 @@ A graphic object
 Create and renders Quantitative Model Diagrams (QMD)
 for NONMEM models
 }
-\details{
-\itemize{
- \item{scaling}
- \item{comp_scale_fun}
- \item{arrow_scale_fun}
- \item{color_scaling}
- \item{color_cutoff}
- \item{pbpk_color}
- \item{filled}
- \item{labels}
- \item{alpha}
- \item{font}
- \item{comp_fontsize}
- \item{arrow_fontsize}
- \item{clearance_mode}
- \item{vein_comp_label}
- \item{artery_comp_label}
-}
-}
 \examples{
 \dontrun{
-qmd(qmd_info, flipped = FALSE)
+qmd(qmd_info, scaling = FALSE)
 }
 }
 \seealso{

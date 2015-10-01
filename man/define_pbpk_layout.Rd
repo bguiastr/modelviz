@@ -5,7 +5,7 @@
 \title{Make proper PBPK layout}
 \usage{
 define_pbpk_layout(comp = NULL, arrow = NULL, pbpk_color = TRUE,
-  vein_comp_label = "venous", artery_comp_label = "arterial", ...)
+  vein_comp_label = "venous", artery_comp_label = "arterial")
 }
 \arguments{
 \item{comp}{a data.frame created by \code{define_comp_layout}}

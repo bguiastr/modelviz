@@ -5,68 +5,90 @@
 #'
 #' @param qmd_info a \code{list} containing the parameters, their RSE and the
 #'  nonmem subroutine ADVAN value
+#' @param scaling logical, if \code{TRUE} arrow width and colors will be scaled.
+#' If \code{FALSE} standard model diagram will be created
+#' @param comp_scale_fun a function to be used for compartment size scaling
+#' @param arrow_scale_fun a function to be used for arrow width scaling
+#' @param labels logical if \code{TRUE} labels are added to arrows
+#' @param font font name of the compartment label
+#' @param comp_fontsize font size expansion factor
+#' @param arrow_fontsize font size expansion factor
+#' @param filled logical if \code{TRUE} compartment will be filled
+#'  If \code{FALSE} only the compartment edges will be drawn
+#' @param alpha transparency factor
+#' @param color_scaling can be 'iiv', 'rse', 'none' or 'pbpk'
+#' @param color_cutoff numeric vector of length 2 setting the cutoff limits in color coding
+#' for RSE (\%) or IIV (\%)
+#' @param unscaled_color color of the unscaled compartments
+#' @param unscaled_shape shape of the unscaled compartments. Can be square, circle or diamond
+#' @param scaled_shape shape of the scaled compartments. Can be square, circle or diamond
 #' @param flipped logical if \code{TRUE} the layout will be flipped
 #' @param rank integer vertor assigning a rank for each compartment. Can be used
 #' to obtain a specific layout
+#' @param clearance_mode logical if \code{TRUE} clearances will be represented by triangles
+#'  and their surface area will be proportional to the volume cleared per unit of time
 #' @param pbpk_layout logical if \code{TRUE} a PBPK layout will be applied
+#' @param vein_comp_label label of the veinous compartment
+#' @param artery_comp_label label of the arterial compartment
 #' @param shiny logical if \code{TRUE} output will be formated for shiny output
 #' @param output format of the output to be returned by qmd ('graph', 'SVG', 'DOT' or 'vivagraph')
 #' @param width width of the resulting graphic in pixels
 #' @param height height of the resulting graphic in pixels
-#' @param ... other arguments passed to \code{\link{define_comp_layout}},
-#'  \code{\link{define_arrow_layout}} and \code{\link{define_pbpk_layout}} see details below for
-#'  a list of the available options
-
-#' @details
-#' \itemize{
-#'  \item{scaling}
-#'  \item{comp_scale_fun}
-#'  \item{arrow_scale_fun}
-#'  \item{color_scaling}
-#'  \item{color_cutoff}
-#'  \item{pbpk_color}
-#'  \item{filled}
-#'  \item{labels}
-#'  \item{alpha}
-#'  \item{font}
-#'  \item{comp_fontsize}
-#'  \item{arrow_fontsize}
-#'  \item{clearance_mode}
-#'  \item{vein_comp_label}
-#'  \item{artery_comp_label}
-#' }
+#' @param gv_options vector of options to be passed to Graphviz
 #'
 #' @seealso \code{\link{import_qmd_info}}, \code{\link{format_qmd_info}}
 #' @return A graphic object
 #' @examples
 #' \dontrun{
-#' qmd(qmd_info, flipped = FALSE)
+#' qmd(qmd_info, scaling = FALSE)
 #' }
 #' @export
-qmd <- function(qmd_info      = NULL,
-                flipped       = FALSE,
-                rank          = NULL,
-                pbpk_layout   = FALSE,
-                color_scaling = NULL,
-                shiny         = FALSE,
-                output        = 'graph',
-                width         = NULL,
-                height        = NULL,
-                ...) {
+qmd <- function(qmd_info          = NULL,
+                scaling           = TRUE,
+                comp_scale_fun    = function(x) { sqrt(x) },
+                arrow_scale_fun   = function(x) { x },
+                labels            = TRUE,
+                font              = 'Avenir',
+                comp_fontsize     = 1,
+                arrow_fontsize    = 1,
+                filled            = TRUE,
+                alpha             = 1,
+                color_scaling     = 'RSE',
+                color_cutoff      = c(25, 50),
+                unscaled_color    = NULL,
+                unscaled_shape    = 'circle',
+                scaled_shape      = 'square',
+                flipped           = FALSE,
+                rank              = NULL,
+                clearance_mode    = FALSE,
+                pbpk_layout       = FALSE,
+                vein_comp_label   = 'venous',
+                artery_comp_label = 'arterial',
+                shiny             = FALSE,
+                output            = 'graph',
+                width             = NULL,
+                height            = NULL,
+                gv_options        = NULL) {
 
   # Check inputs ------------------------------------------------------------
   if(is.null(qmd_info)) {
     stop('Argument \"qmd_info\" required.')
   }
 
-  if(is.null(color_scaling) && pbpk_layout) {
-    color_scaling <- 'pbpk'
-  } else if(is.null(color_scaling)){
-    color_scaling <- 'rse'
-  }
-
   # Create compartments -----------------------------------------------------
-  comp_data  <- define_comp_layout(qmd_info, color_scaling = color_scaling, ...)
+  comp_data  <- define_comp_layout(qmd_info,
+                                   scaling        = scaling,
+                                   comp_scale_fun = comp_scale_fun,
+                                   color_scaling  = color_scaling,
+                                   color_cutoff   = color_cutoff,
+                                   filled         = filled,
+                                   alpha          = alpha,
+                                   unscaled_color = unscaled_color,
+                                   unscaled_shape = unscaled_shape,
+                                   scaled_shape   = scaled_shape,
+                                   font           = font,
+                                   comp_fontsize  = comp_fontsize)
+
   if(is.integer(rank) || is.numeric(rank)) {
     if(length(rank) != nrow(comp_data)) {
       msg(paste0('Provide an integer rank for each of the following compartment\n',
@@ -79,28 +101,55 @@ qmd <- function(qmd_info      = NULL,
 
 
   # Create arrows -----------------------------------------------------------
-  arrow_data <- define_arrow_layout(qmd_info, color_scaling = color_scaling, ...)
-
+  arrow_data <- define_arrow_layout(qmd_info,
+                                    scaling         = scaling,
+                                    arrow_scale_fun = arrow_scale_fun,
+                                    clearance_mode  = clearance_mode,
+                                    color_scaling   = color_scaling,
+                                    color_cutoff    = color_cutoff,
+                                    labels          = labels,
+                                    alpha           = alpha,
+                                    unscaled_color  = unscaled_color,
+                                    font            = font,
+                                    arrow_fontsize  = arrow_fontsize)
 
 
   # PBPK layout -------------------------------------------------------------
   if(pbpk_layout) {
-    pbpk_data  <- define_pbpk_layout(comp  = comp_data,
-                                     arrow = arrow_data, ...)
+    pbpk_data  <- define_pbpk_layout(comp              = comp_data,
+                                     arrow             = arrow_data,
+                                     pbpk_color        = ifelse(toupper(color_scaling) == 'PBPK', TRUE, FALSE),
+                                     vein_comp_label   = vein_comp_label,
+                                     artery_comp_label = artery_comp_label)
   } else {
     pbpk_data  <- NULL
   }
 
+
   # Create graph ------------------------------------------------------------
-  graph      <- define_graph(comp    = comp_data,
-                             arrow   = arrow_data,
-                             pbpk    = pbpk_data,
-                             graph_attrs = c('splines = true', # ortho for square
-                                             'ranksep = 0', # Change for PBPK scaled
-                                             'nodesep = 0.15',
-                                             ifelse(flipped,
-                                                    'rankdir = TB',
-                                                    'rankdir = LR')))
+  ## Possibility to modify defaults
+  if(is.null(gv_options)) {
+    gv_options <- c('ranksep = 0', 'nodesep = 0.15',
+                    ifelse(flipped, 'rankdir = TB', 'rankdir = LR'))
+  } else {
+    gv_options <- c(
+      if(!any(grepl('ranksep', gv_options))) {
+        ifelse(pbpk_layout, 'ranksep = 0', 'ranksep = 0') # PBPK
+      },
+      if(!any(grepl('rankdir', gv_options))) {
+        ifelse(flipped, 'rankdir = TB', 'rankdir = LR')
+      },
+      if(!any(grepl('nodesep', gv_options))) {
+        'nodesep = 0.15'
+      },
+      gv_options)
+  }
+
+  graph      <- define_graph(comp        = comp_data,
+                             arrow       = arrow_data,
+                             pbpk        = pbpk_data,
+                             graph_attrs = gv_options)
+
 
   # Render graph ------------------------------------------------------------
   if(shiny) {

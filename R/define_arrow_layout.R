@@ -38,10 +38,9 @@ define_arrow_layout <- function(qmd_info        = NULL,
                                 color_cutoff    = c(25, 50),
                                 labels          = TRUE,
                                 alpha           = 1,
-                                unscaled_color  = 'grey60',
+                                unscaled_color  = NULL,
                                 font            = 'Avenir',
-                                arrow_fontsize  = 1,
-                                ...) {
+                                arrow_fontsize  = 1) {
 
   # Create key variables ----------------------------------------------------
   arrow <- qmd_info$parsed_arrow
@@ -133,6 +132,10 @@ define_arrow_layout <- function(qmd_info        = NULL,
   if(length(color_cutoff) != 2) {
     msg('Argument \"color_cutoff\" must have length of 2, units are in %.', TRUE)
     color_cutoff <- c(25, 50)
+  }
+
+  if(is.null(unscaled_color)) {
+    unscaled_color <- ifelse(scaling == FALSE, 'black', 'grey80')
   }
 
   if(scaling == FALSE | toupper(color_scaling) %in% c('NONE', 'PBPK')) {
