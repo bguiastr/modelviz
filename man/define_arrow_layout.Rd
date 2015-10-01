@@ -7,7 +7,7 @@
 define_arrow_layout(qmd_info = NULL, scaling = TRUE,
   arrow_scale_fun = function(x) {     x }, clearance_mode = FALSE,
   color_scaling = "RSE", color_cutoff = c(25, 50), labels = TRUE,
-  alpha = 1, unscaled_color = "grey50", font = "Avenir",
+  alpha = 1, unscaled_color = "grey60", font = "Avenir",
   arrow_fontsize = 1, ...)
 }
 \arguments{

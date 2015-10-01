@@ -96,7 +96,7 @@ qmd <- function(qmd_info      = NULL,
                              arrow   = arrow_data,
                              pbpk    = pbpk_data,
                              graph_attrs = c('splines = true', # ortho for square
-                                             'ranksep = 0',
+                                             'ranksep = 0', # Change for PBPK scaled
                                              'nodesep = 0.15',
                                              ifelse(flipped,
                                                     'rankdir = TB',

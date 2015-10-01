@@ -38,7 +38,7 @@ define_arrow_layout <- function(qmd_info        = NULL,
                                 color_cutoff    = c(25, 50),
                                 labels          = TRUE,
                                 alpha           = 1,
-                                unscaled_color  = 'grey50',
+                                unscaled_color  = 'grey60',
                                 font            = 'Avenir',
                                 arrow_fontsize  = 1,
                                 ...) {

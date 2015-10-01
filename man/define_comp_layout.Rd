@@ -7,7 +7,7 @@
 define_comp_layout(qmd_info = NULL, scaling = TRUE,
   comp_scale_fun = function(x) {     sqrt(x) }, color_scaling = "RSE",
   color_cutoff = c(25, 50), filled = TRUE, alpha = 1,
-  unscaled_color = "grey50", unscaled_shape = "circle",
+  unscaled_color = "grey60", unscaled_shape = "circle",
   scaled_shape = "square", font = "Avenir", comp_fontsize = 1, ...)
 }
 \arguments{

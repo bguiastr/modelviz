@@ -130,15 +130,36 @@ qmd(examples$onecomp)
 
 ## Two compartment
 qmd(examples$twocomp, scaling = FALSE, filled = FALSE)
-qmd(examples$twocomp, scaling = FALSE)
 qmd(examples$twocomp)
+
+sink('~/Desktop/2_comp_unscaled.svg')
+cat(qmd(examples$twocomp, scaling = FALSE, output = 'SVG'))
+sink()
+
+sink('~/Desktop/2_comp_uncolored.svg')
+cat(qmd(examples$twocomp, scaling = TRUE, color_scaling = 'none', output = 'SVG'))
+sink()
+
+sink('~/Desktop/2_comp_rse.svg')
+cat(qmd(examples$twocomp, scaling = TRUE, color_scaling = 'RSE', color_cutoff=c(10,20), output = 'SVG'))
+sink()
 
 ## Three compartment
 qmd(examples$threecomp, scaling = FALSE, filled = FALSE)
-qmd(examples$threecomp, scaling = FALSE)
-qmd(examples$threecomp)
+
+sink('~/Desktop/3_comp_unscaled.svg')
+cat(qmd(examples$threecomp, scaling = FALSE, output = 'SVG'))
+sink()
+
+sink('~/Desktop/3_comp_rse.svg')
+cat(qmd(examples$threecomp, comp_fontsize = 1.2, output = 'SVG'))
+sink()
+
+sink('~/Desktop/3_comp_iiv.svg')
+cat(qmd(examples$threecomp, color_scaling = 'iiv', color_cutoff = c(15, 30), comp_fontsize = 1.2, output = 'SVG'))
+sink()
+
 qmd(examples$threecomp, color_scaling = 'none', unscaled_color = 'grey80')
-qmd(examples$threecomp, color_scaling = 'iiv', color_cutoff = c(15, 30))
 
 ## GITT model
 qmd(examples$gitt, scaling = FALSE, filled = FALSE)
@@ -153,17 +174,26 @@ qmd(examples$pbpk, pbpk_layout = TRUE, scaling = TRUE, filled = FALSE, scaled_sh
     unscaled_color = 'black')
 
 ## Save plot test
-sink('~/Desktop/gitt_3_comp.svg')
+sink('~/Desktop/gitt_unscaled.svg')
 cat(qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3), arrow_scale_fun = function(x){sqrt(x)},
-        comp_fontsize = 1.4, color_scaling = 'iiv', color_cutoff = c(20, 40), unscaled_color = 'grey80',
+        comp_fontsize = 1.4, scaling = FALSE, color_scaling = 'iiv', color_cutoff = c(20, 40),
         output = 'SVG'))
 sink()
 
-sink('~/Desktop/pbpk.svg')
-cat(qmd(examples$pbpk, pbpk_layout = TRUE, scaling = TRUE, filled = FALSE, scaled_shape = 'circle',
-    arrow_fontsize = 1, comp_fontsize = 1.2, arrow_scale_fun = function(x) { 1.5*x + 1 },
-    unscaled_color = 'black', flipped = TRUE, output = 'SVG',width = 1200,height = 800))
+sink('~/Desktop/gitt_iiv.svg')
+cat(qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3), arrow_scale_fun = function(x){sqrt(x)},
+        comp_fontsize = 1.4, color_scaling = 'iiv', color_cutoff = c(20, 40),
+        output = 'SVG'))
 sink()
+
+
+sink('~/Desktop/pbpk_unscaled.svg')
+cat(
+  qmd(examples$pbpk, pbpk_layout = TRUE, scaling = FALSE, filled = FALSE,
+      arrow_fontsize = 1, comp_fontsize = 1.2, unscaled_color = 'black', output = 'SVG')
+)
+sink()
+
 
 ## Shiny test
 qmd(examples$threecomp, shiny = TRUE, comp_fontsize = 1)
