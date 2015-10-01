@@ -133,7 +133,10 @@ qmd(examples$twocomp, scaling = FALSE, filled = FALSE)
 qmd(examples$twocomp)
 
 sink('~/Desktop/2_comp_unscaled.svg')
-cat(qmd(examples$twocomp, scaling = FALSE, output = 'SVG'))
+cat(
+  qmd(examples$twocomp, scaling = FALSE, gv_options = c('size="20,5!"', 'ratio = compress'),output = 'graph')
+  )
+# gv_options = 'viewport="720,216,1,360,108"' c('size="20,5!"', 'ratio = compress')
 sink()
 
 sink('~/Desktop/2_comp_uncolored.svg')
@@ -191,10 +194,18 @@ sink()
 sink('~/Desktop/pbpk_unscaled.svg')
 cat(
   qmd(examples$pbpk, pbpk_layout = TRUE, scaling = FALSE, filled = FALSE,
-      arrow_fontsize = 1, comp_fontsize = 1.2, unscaled_color = 'black', output = 'SVG')
+      arrow_fontsize = 1, comp_fontsize = 1.2, unscaled_color = 'black')#, output = 'SVG')
 )
 sink()
 
+
+sink('~/Desktop/pbpk.svg')
+cat(
+    qmd(examples$pbpk, pbpk_layout = TRUE, color_scaling = 'PBPK',
+      arrow_fontsize = 1.2, comp_fontsize = 1.2,
+      arrow_scale_fun = function(x) { 1.5 * x + 1 }, output = 'SVG')
+  )
+sink()
 
 ## Shiny test
 qmd(examples$threecomp, shiny = TRUE, comp_fontsize = 1)
@@ -204,7 +215,6 @@ qmd(examples$threecomp, output = 'vivagraph')
 
 ## Width and height
 qmd(examples$threecomp, width = 640, height = 480)
-
 
 
 # To do -------------------------------------------------------------------

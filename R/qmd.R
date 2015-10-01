@@ -129,18 +129,21 @@ qmd <- function(qmd_info          = NULL,
   # Create graph ------------------------------------------------------------
   ## Possibility to modify defaults
   if(is.null(gv_options)) {
-    gv_options <- c('ranksep = 0', 'nodesep = 0.15',
-                    ifelse(flipped, 'rankdir = TB', 'rankdir = LR'))
+    gv_options <- c(
+      ifelse(flipped, 'rankdir = TB', 'rankdir = LR'),
+      ifelse(pbpk_layout, 'ranksep = 0.5', 'ranksep = 0'),
+      ifelse(pbpk_layout, 'nodesep = 0.25', 'nodesep = 0.15'))
+
   } else {
     gv_options <- c(
-      if(!any(grepl('ranksep', gv_options))) {
-        ifelse(pbpk_layout, 'ranksep = 0', 'ranksep = 0') # PBPK
-      },
       if(!any(grepl('rankdir', gv_options))) {
         ifelse(flipped, 'rankdir = TB', 'rankdir = LR')
       },
+      if(!any(grepl('ranksep', gv_options))) {
+        ifelse(pbpk_layout, 'ranksep = 0.5', 'ranksep = 0')
+      },
       if(!any(grepl('nodesep', gv_options))) {
-        'nodesep = 0.15'
+        ifelse(pbpk_layout, 'nodesep = 0.25', 'nodesep = 0.15')
       },
       gv_options)
   }
