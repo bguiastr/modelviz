@@ -8,6 +8,7 @@ qmd(qmd_info = NULL, scaling = TRUE, comp_scale_fun = function(x) {
   sqrt(x) }, arrow_scale_fun = function(x) {     x }, labels = TRUE,
   font = "Avenir", comp_fontsize = 1, arrow_fontsize = 1, filled = TRUE,
   alpha = 1, color_scaling = "RSE", color_cutoff = c(25, 50),
+  arrow_color_manual = NULL, comp_color_manual = NULL,
   unscaled_color = NULL, unscaled_shape = "circle",
   scaled_shape = "square", flipped = FALSE, rank = NULL,
   clearance_mode = FALSE, pbpk_layout = FALSE, vein_comp_label = "venous",
@@ -42,6 +43,10 @@ If \code{FALSE} only the compartment edges will be drawn}
 
 \item{color_cutoff}{numeric vector of length 2 setting the cutoff limits in color coding
 for RSE (\%) or IIV (\%)}
+
+\item{arrow_color_manual}{manually set color for each arrow}
+
+\item{comp_color_manual}{manually set color for each compartment}
 
 \item{unscaled_color}{color of the unscaled compartments}
 

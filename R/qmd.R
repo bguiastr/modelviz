@@ -19,6 +19,8 @@
 #' @param color_scaling can be 'iiv', 'rse', 'none' or 'pbpk'
 #' @param color_cutoff numeric vector of length 2 setting the cutoff limits in color coding
 #' for RSE (\%) or IIV (\%)
+#' @param arrow_color_manual manually set color for each arrow
+#' @param comp_color_manual manually set color for each compartment
 #' @param unscaled_color color of the unscaled compartments
 #' @param unscaled_shape shape of the unscaled compartments. Can be square, circle or diamond
 #' @param scaled_shape shape of the scaled compartments. Can be square, circle or diamond
@@ -43,32 +45,34 @@
 #' qmd(qmd_info, scaling = FALSE)
 #' }
 #' @export
-qmd <- function(qmd_info          = NULL,
-                scaling           = TRUE,
-                comp_scale_fun    = function(x) { sqrt(x) },
-                arrow_scale_fun   = function(x) { x },
-                labels            = TRUE,
-                font              = 'Avenir',
-                comp_fontsize     = 1,
-                arrow_fontsize    = 1,
-                filled            = TRUE,
-                alpha             = 1,
-                color_scaling     = 'RSE',
-                color_cutoff      = c(25, 50),
-                unscaled_color    = NULL,
-                unscaled_shape    = 'circle',
-                scaled_shape      = 'square',
-                flipped           = FALSE,
-                rank              = NULL,
-                clearance_mode    = FALSE,
-                pbpk_layout       = FALSE,
-                vein_comp_label   = 'venous',
-                artery_comp_label = 'arterial',
-                shiny             = FALSE,
-                output            = 'graph',
-                width             = NULL,
-                height            = NULL,
-                gv_options        = NULL) {
+qmd <- function(qmd_info           = NULL,
+                scaling            = TRUE,
+                comp_scale_fun     = function(x) { sqrt(x) },
+                arrow_scale_fun    = function(x) { x },
+                labels             = TRUE,
+                font               = 'Avenir',
+                comp_fontsize      = 1,
+                arrow_fontsize     = 1,
+                filled             = TRUE,
+                alpha              = 1,
+                color_scaling      = 'RSE',
+                color_cutoff       = c(25, 50),
+                arrow_color_manual = NULL,
+                comp_color_manual  = NULL,
+                unscaled_color     = NULL,
+                unscaled_shape     = 'circle',
+                scaled_shape       = 'square',
+                flipped            = FALSE,
+                rank               = NULL,
+                clearance_mode     = FALSE,
+                pbpk_layout        = FALSE,
+                vein_comp_label    = 'venous',
+                artery_comp_label  = 'arterial',
+                shiny              = FALSE,
+                output             = 'graph',
+                width              = NULL,
+                height             = NULL,
+                gv_options         = NULL) {
 
   # Check inputs ------------------------------------------------------------
   if(is.null(qmd_info)) {
@@ -77,17 +81,18 @@ qmd <- function(qmd_info          = NULL,
 
   # Create compartments -----------------------------------------------------
   comp_data  <- define_comp_layout(qmd_info,
-                                   scaling        = scaling,
-                                   comp_scale_fun = comp_scale_fun,
-                                   color_scaling  = color_scaling,
-                                   color_cutoff   = color_cutoff,
-                                   filled         = filled,
-                                   alpha          = alpha,
-                                   unscaled_color = unscaled_color,
-                                   unscaled_shape = unscaled_shape,
-                                   scaled_shape   = scaled_shape,
-                                   font           = font,
-                                   comp_fontsize  = comp_fontsize)
+                                   scaling           = scaling,
+                                   comp_scale_fun    = comp_scale_fun,
+                                   color_scaling     = color_scaling,
+                                   color_cutoff      = color_cutoff,
+                                   filled            = filled,
+                                   alpha             = alpha,
+                                   comp_color_manual = comp_color_manual,
+                                   unscaled_color    = unscaled_color,
+                                   unscaled_shape    = unscaled_shape,
+                                   scaled_shape      = scaled_shape,
+                                   font              = font,
+                                   comp_fontsize     = comp_fontsize)
 
   if(is.integer(rank) || is.numeric(rank)) {
     if(length(rank) != nrow(comp_data)) {
@@ -102,16 +107,17 @@ qmd <- function(qmd_info          = NULL,
 
   # Create arrows -----------------------------------------------------------
   arrow_data <- define_arrow_layout(qmd_info,
-                                    scaling         = scaling,
-                                    arrow_scale_fun = arrow_scale_fun,
-                                    clearance_mode  = clearance_mode,
-                                    color_scaling   = color_scaling,
-                                    color_cutoff    = color_cutoff,
-                                    labels          = labels,
-                                    alpha           = alpha,
-                                    unscaled_color  = unscaled_color,
-                                    font            = font,
-                                    arrow_fontsize  = arrow_fontsize)
+                                    scaling            = scaling,
+                                    arrow_scale_fun    = arrow_scale_fun,
+                                    clearance_mode     = clearance_mode,
+                                    color_scaling      = color_scaling,
+                                    color_cutoff       = color_cutoff,
+                                    labels             = labels,
+                                    alpha              = alpha,
+                                    arrow_color_manual = arrow_color_manual,
+                                    unscaled_color     = unscaled_color,
+                                    font               = font,
+                                    arrow_fontsize     = arrow_fontsize)
 
 
   # PBPK layout -------------------------------------------------------------

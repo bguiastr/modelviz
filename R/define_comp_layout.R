@@ -14,6 +14,7 @@
 #' @param filled logical if \code{TRUE} compartment will be filled
 #'  If \code{FALSE} only the compartment edges will be drawn
 #' @param alpha transparency factor
+#' @param comp_color_manual manually set color for each compartment
 #' @param unscaled_color color of the unscaled compartments
 #' @param unscaled_shape shape of the unscaled compartments. Can be square, circle or diamond
 #' @param scaled_shape shape of the scaled compartments. Can be square, circle or diamond
@@ -31,18 +32,19 @@
 #' comp     <- define_comp_layout(qmd_info)
 #' }
 #' @export
-define_comp_layout <- function(qmd_info       = NULL,
-                               scaling        = TRUE,
-                               comp_scale_fun = function(x) { sqrt(x) },
-                               color_scaling  = 'RSE',
-                               color_cutoff   = c(25, 50),
-                               filled         = TRUE,
-                               alpha          = 1,
-                               unscaled_color = NULL,
-                               unscaled_shape = 'circle',
-                               scaled_shape   = 'square',
-                               font           = 'Avenir',
-                               comp_fontsize  = 1,
+define_comp_layout <- function(qmd_info           = NULL,
+                               scaling            = TRUE,
+                               comp_scale_fun     = function(x) { sqrt(x) },
+                               color_scaling      = 'RSE',
+                               color_cutoff       = c(25, 50),
+                               filled             = TRUE,
+                               alpha              = 1,
+                               comp_color_manual  = NULL,
+                               unscaled_color     = NULL,
+                               unscaled_shape     = 'circle',
+                               scaled_shape       = 'square',
+                               font               = 'Avenir',
+                               comp_fontsize      = 1,
                                ...) {
 
 
@@ -121,7 +123,7 @@ define_comp_layout <- function(qmd_info       = NULL,
   # Format nodes ------------------------------------------------------------
   ## Special variables
   comp_scale    <- ifelse(scaling, 0.2 ,1)                # Reduce entire graph size due to issues with big arrows in graphviz
-  comp_fontsize <- comp_scale * comp_fontsize * 12        # Base size is 12
+  comp_fontsize <- comp_scale * comp_fontsize * 15.5      # Base size is 15.5
   node$fixedsize <- TRUE                                  # Forces nodes to respect defined size
 
   ## Scaling factor
@@ -150,7 +152,14 @@ define_comp_layout <- function(qmd_info       = NULL,
     unscaled_color <- ifelse(filled, 'grey80', 'black')
   }
 
-  if(scaling == FALSE | toupper(color_scaling) %in% c('NONE', 'PBPK')) {
+  if(!is.null(comp_color_manual)){
+    if(nrow(node[!grepl('Out_', node$label),]) %% length(comp_color_manual) > 0) {
+      stop('Inapropriate \"comp_color_manual\" provided.')
+    }
+    node$color <- 'black'
+    node$color[!grepl('Out_', node$label)] <- hex_color(comp_color_manual, alpha)
+
+  } else if(scaling == FALSE | toupper(color_scaling) %in% c('NONE', 'PBPK')) {
     node$color <- hex_color(unscaled_color, alpha)
 
   } else if ((toupper(color_scaling) == 'RSE' & all(is.na(node$rse))) |

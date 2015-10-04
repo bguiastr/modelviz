@@ -16,11 +16,13 @@ hex_color <- function(color = NULL, alpha = NULL) {
     stop('Missing the \"color\" argument.')
   }
 
-  if(!grepl('#', color, fixed = TRUE)) {
-    if(!color %in% x11_hex()[ , 1]) {
-      stop('Invalid \"color\" argument.')
-    } else {
-      color <- x11_hex()[which(color==x11_hex()[ , 1]), 2]
+  for(i in seq_along(color)) {
+    if(!grepl('#', color[i], fixed = TRUE)) {
+      if(!color[i] %in% x11_hex()[ , 1]) {
+        stop('Invalid \"color\" argument.')
+      } else {
+        color[i] <- x11_hex()[which(color[i]==x11_hex()[ , 1]), 2]
+      }
     }
   }
 
@@ -38,4 +40,5 @@ hex_color <- function(color = NULL, alpha = NULL) {
     color <- paste0(substr(color, 1, 7), alpha)
   }
   return(color)
+
 } # End hex_colors

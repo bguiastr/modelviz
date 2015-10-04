@@ -20,9 +20,14 @@ Developmental pharmacokinetics of ciclosporin – a population pharmacokinetic s
 in paediatric renal transplant candidates. British Journal of Clinical Pharmacology.
 64:6, 772–784. (2007)
 
-\href{}{gitt}: E. Hénin et al.
+\href{http://www.ncbi.nlm.nih.gov/pubmed/22286919}{gitt}: E. Hénin et al.
 A mechanism-Based Approach for Absorption Modeling: The Gastro-Intestinal Transit Time
 (GITT) Model. The AAPS Journal, 14:2, 155-163. (2012)
+
+\href{http://www.ncbi.nlm.nih.gov/pubmed/23571542}{metabolites}: E. Svensson et al.
+Model-Based Estimates of the Effects of Efavirenz on Bedaquiline Pharmacokinetics and
+Suggested Dose Adjustments for Patients Coinfected with HIV and Tuberculosis.
+Antimicrobial Agents and Chemotherapy, 57:6, 2780-2787. (2013)
 
 \href{http://www.ncbi.nlm.nih.gov/pubmed/15948934}{pbpk}: S. Björkman.
 Prediction of drug disposition in infants and children by means of physiologically based
@@ -30,9 +35,9 @@ pharmacokinetic (PBPK) modelling: theophylline and midazolam as model drugs. Bri
 of Clinical Pharmacology. 59:6, 691–704. (2004)
 }
 \description{
-A list of 4 \code{qmd_info} examples on the pharmacokinetic
+A list of 5 \code{qmd_info} examples on the pharmacokinetic
 models for nevirapine (\code{onecomp}), miltefosine (\code{twocomp}),
-ciclosporin (\code{threecomp}, felodipine (\code{gitt}) and
+ciclosporin (\code{threecomp}, felodipine (\code{gitt}), bedaquiline (\code{metabolite}) and
 theophylline (\code{pbpk}).
 }
 \details{
@@ -42,6 +47,7 @@ The \code{examples} file contains the following:
 \item \code{examples$twocomp} miltefosine PK model \code{qmd_info}
 \item \code{examples$threecomp} ciclosporin PK model \code{qmd_info}
 \item \code{examples$gitt} felodipine PK model \code{qmd_info}
+\item \code{examples$metabolite} bedaquiline PK model \code{qmd_info}
 \item \code{examples$pbpk} theophylline PBPK model \code{qmd_info}
 }
 

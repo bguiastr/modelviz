@@ -124,94 +124,156 @@ A8 <- define_arrow_layout(qmd_info = examples$pbpk, color_scaling = 'NONE')
 
 # Test qmd ----------------------------------------------------------------
 ## One compartment
-qmd(examples$onecomp, scaling = FALSE, filled = FALSE)
-qmd(examples$onecomp, scaling = FALSE)
-qmd(examples$onecomp)
-
-## Two compartment
-qmd(examples$twocomp, scaling = FALSE, filled = FALSE)
-qmd(examples$twocomp)
-
-sink('~/Desktop/2_comp_unscaled.svg')
-cat(
-  qmd(examples$twocomp, scaling = FALSE, gv_options = c('size="20,5!"', 'ratio = compress'),output = 'graph')
-  )
-# gv_options = 'viewport="720,216,1,360,108"' c('size="20,5!"', 'ratio = compress')
+sink('~/Desktop/1_comp_unfilled_unscaled.svg')
+cat( qmd(examples$onecomp, scaling = FALSE, filled = FALSE, output = 'SVG') )
 sink()
 
-sink('~/Desktop/2_comp_uncolored.svg')
-cat(qmd(examples$twocomp, scaling = TRUE, color_scaling = 'none', output = 'SVG'))
+sink('~/Desktop/1_comp_unscaled.svg')
+cat( qmd(examples$onecomp, scaling = FALSE, output = 'SVG') )
+sink()
+
+sink('~/Desktop/1_comp_rse.svg')
+cat( qmd(examples$onecomp, output = 'SVG') )
+sink()
+
+## Two compartment
+sink('~/Desktop/2_comp_unfilled_unscaled.svg')
+cat( qmd(examples$twocomp, scaling = FALSE, filled = FALSE, output = 'SVG') )
+sink()
+
+sink('~/Desktop/2_comp_unscaled.svg')
+cat( qmd(examples$twocomp, scaling = FALSE, output = 'SVG') )
 sink()
 
 sink('~/Desktop/2_comp_rse.svg')
-cat(qmd(examples$twocomp, scaling = TRUE, color_scaling = 'RSE', color_cutoff=c(10,20), output = 'SVG'))
+cat( qmd(examples$twocomp, output = 'SVG') )
 sink()
 
 ## Three compartment
-qmd(examples$threecomp, scaling = FALSE, filled = FALSE)
+sink('~/Desktop/3_comp_unscaled_unfilled.svg')
+cat( qmd(examples$threecomp, scaling = FALSE, filled = FALSE, output = 'SVG') )
+sink()
 
 sink('~/Desktop/3_comp_unscaled.svg')
-cat(qmd(examples$threecomp, scaling = FALSE, output = 'SVG'))
+cat( qmd(examples$threecomp, scaling = FALSE, output = 'SVG') )
 sink()
 
 sink('~/Desktop/3_comp_rse.svg')
-cat(qmd(examples$threecomp, comp_fontsize = 1.2, output = 'SVG'))
+cat( qmd(examples$threecomp, output = 'SVG') )
 sink()
 
 sink('~/Desktop/3_comp_iiv.svg')
-cat(qmd(examples$threecomp, color_scaling = 'iiv', color_cutoff = c(15, 30), comp_fontsize = 1.2, output = 'SVG'))
+cat( qmd(examples$threecomp, color_scaling = 'iiv',
+         color_cutoff = c(15, 30), output = 'SVG') )
 sink()
 
-qmd(examples$threecomp, color_scaling = 'none', unscaled_color = 'grey80')
-
 ## GITT model
-qmd(examples$gitt, scaling = FALSE, filled = FALSE)
-qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3), scaling = FALSE, filled = FALSE)
-qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3), scaling = FALSE)
-qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3), arrow_scale_fun = function(x){sqrt(x)})
+sink('~/Desktop/gitt_unscaled_unfilled.svg')
+cat( qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3),
+         scaling = FALSE, filled = FALSE, output = 'SVG') )
+sink()
 
-## PBPK model
-qmd(examples$pbpk, pbpk_layout = TRUE, color_scaling = 'PBPK', scaling = FALSE, filled = FALSE, unscaled_color = 'black')
-
-qmd(examples$pbpk, pbpk_layout = TRUE, scaling = TRUE, filled = FALSE, scaled_shape = 'circle',
-    arrow_fontsize = 0.8, comp_fontsize = 1.2, arrow_scale_fun = function(x) { 1.5*x + 1 },
-  unscaled_color = 'black', color_scaling = 'Pbpk', gv_options = 'ranksep = 0.5')
-
-## Save plot test
 sink('~/Desktop/gitt_unscaled.svg')
-cat(qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3), arrow_scale_fun = function(x){sqrt(x)},
-        comp_fontsize = 1.4, scaling = FALSE, color_scaling = 'iiv', color_cutoff = c(20, 40),
-        output = 'SVG'))
+cat( qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3),
+         scaling = FALSE, output = 'SVG') )
+sink()
+
+sink('~/Desktop/gitt_rse.svg')
+cat( qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3),
+         arrow_scale_fun = function(x){sqrt(x)}, output = 'SVG') )
 sink()
 
 sink('~/Desktop/gitt_iiv.svg')
-cat(qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3), arrow_scale_fun = function(x){sqrt(x)},
-        comp_fontsize = 1.4, color_scaling = 'iiv', color_cutoff = c(20, 40),
-        output = 'SVG'))
+cat( qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3),
+         color_scaling = 'iiv', color_cutoff = c(20,40),
+         arrow_scale_fun = function(x){sqrt(x)}, output = 'SVG') )
 sink()
 
+## PBPK model
+sink('~/Desktop/pbpk_unscaled_unfilled.svg')
+cat( qmd(examples$pbpk, pbpk_layout = TRUE, color_scaling = 'PBPK',
+         scaling = FALSE, filled = FALSE, output = 'SVG') )
+sink()
 
 sink('~/Desktop/pbpk_unscaled.svg')
-cat(
-  qmd(examples$pbpk, pbpk_layout = TRUE, scaling = FALSE, filled = FALSE,
-      arrow_fontsize = 1, comp_fontsize = 1.2, unscaled_color = 'black')#, output = 'SVG')
-)
+cat( qmd(examples$pbpk, pbpk_layout = TRUE, color_scaling = 'PBPK',
+         scaling = FALSE, output = 'SVG') )
+sink()
+
+sink('~/Desktop/pbpk_scaled.svg')
+cat( qmd(examples$pbpk, pbpk_layout = TRUE, color_scaling = 'PBPK',
+         arrow_scale_fun = function(x) { 1.5*x + 1 }, output = 'SVG') )
+sink()
+
+sink('~/Desktop/pbpk_unscaled_flipped.svg')
+cat( qmd(examples$pbpk, pbpk_layout = TRUE, color_scaling = 'PBPK',
+         scaling = FALSE, flipped = TRUE, output = 'SVG') )
+sink()
+
+sink('~/Desktop/pbpk_scaled_flipped.svg')
+cat( qmd(examples$pbpk, pbpk_layout = TRUE, color_scaling = 'PBPK',
+         flipped = TRUE, arrow_scale_fun = function(x) { 1.5*x + 1 }, output = 'SVG') )
+sink()
+
+# Bedaquiline
+sink('~/Desktop/bedaquiline_unscaled_unfilled.svg')
+cat( qmd(examples$metabolite,
+         rank = c(1,2,3,4,5,6,7,7,6,7,6,7,6),
+         scaling = FALSE, filled = FALSE, output = 'SVG') )
+sink()
+
+sink('~/Desktop/bedaquiline_unscaled.svg')
+cat( qmd(examples$metabolite,
+         rank = c(1,2,3,4,5,6,7,7,6,7,6,7,6),
+         scaling = FALSE, output = 'SVG') )
+sink()
+
+sink('~/Desktop/bedaquiline_rse.svg')
+cat( qmd(examples$metabolite,
+         rank = c(1,2,3,4,5,6,7,7,6,7,6,7,6),
+         comp_scale_fun  = function(x){sqrt(x/50)},
+         arrow_scale_fun = function(x){sqrt(x)},
+         color_scaling = 'rse', output = 'SVG') )
+sink()
+
+sink('~/Desktop/bedaquiline_iiv.svg')
+cat( qmd(examples$metabolite,
+         rank = c(1,2,3,4,5,6,7,7,6,7,6,7,6),
+         comp_scale_fun  = function(x){sqrt(x/50)},
+         arrow_scale_fun = function(x){sqrt(x)},
+         color_scaling = 'iiv', output = 'SVG') )
 sink()
 
 
-sink('~/Desktop/pbpk.svg')
-cat(
-    qmd(examples$pbpk, pbpk_layout = TRUE, color_scaling = 'PBPK',
-      arrow_fontsize = 1.2, comp_fontsize = 1.2,
-      arrow_scale_fun = function(x) { 1.5 * x + 1 }, output = 'SVG')
-  )
+sink('~/Desktop/bedaquiline_unscaled_manual_color.svg')
+cat( qmd(examples$metabolite,
+         rank = c(1,2,3,4,5,6,7,7,6,7,6,7,6),
+         alpha             = 0.6,
+         comp_color_manual = c(rep('coral2',5), rep('deepskyblue2',3), rep('chartreuse3',2), rep('violetred2',2)),
+         arrow_color_manual = c(rep('coral2',5), rep('deepskyblue2',3), rep('chartreuse3',2), rep('violetred2',2)),
+         scaling = FALSE, output = 'SVG') )
+sink()
+
+sink('~/Desktop/bedaquiline_manual_color.svg')
+cat( qmd(examples$metabolite,
+         rank = c(1,2,3,4,5,6,7,7,6,7,6,7,6),
+         comp_scale_fun    = function(x){sqrt(x/50)},
+         arrow_scale_fun   = function(x){sqrt(x)},
+         color_scaling     = 'none',
+         alpha             = 0.6,
+         comp_color_manual = c(rep('coral2',5), rep('deepskyblue2',3), rep('chartreuse3',2), rep('violetred2',2)),
+         arrow_color_manual = c(rep('coral2',5), rep('deepskyblue2',3), rep('chartreuse3',2), rep('violetred2',2)),
+         output = 'SVG') )
 sink()
 
 ## Shiny test
-qmd(examples$threecomp, shiny = TRUE, comp_fontsize = 1)
+qmd(examples$threecomp, shiny = TRUE)
 
 ## Output test
 qmd(examples$threecomp, output = 'vivagraph')
+
+qmd(examples$threecomp, output = 'vivagraph')
+
 
 ## Width and height
 qmd(examples$threecomp, width = 640, height = 480)

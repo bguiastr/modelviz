@@ -15,6 +15,7 @@
 #' for RSE (\%) or IIV (\%)
 #' @param labels logical if \code{TRUE} labels are added to arrows
 #' @param alpha transparency factor
+#' @param arrow_color_manual manually set color for each arrow
 #' @param unscaled_color color of the unscaled compartments
 #' @param font font name of arrow labels
 #' @param arrow_fontsize font size expansion factor
@@ -30,17 +31,18 @@
 #' arrow    <- define_arrow_layout(qmd_info)
 #' }
 #' @export
-define_arrow_layout <- function(qmd_info        = NULL,
-                                scaling         = TRUE,
-                                arrow_scale_fun = function(x) { x },
-                                clearance_mode  = FALSE,
-                                color_scaling   = 'RSE',
-                                color_cutoff    = c(25, 50),
-                                labels          = TRUE,
-                                alpha           = 1,
-                                unscaled_color  = NULL,
-                                font            = 'Avenir',
-                                arrow_fontsize  = 1) {
+define_arrow_layout <- function(qmd_info           = NULL,
+                                scaling            = TRUE,
+                                arrow_scale_fun    = function(x) { x },
+                                clearance_mode     = FALSE,
+                                color_scaling      = 'RSE',
+                                color_cutoff       = c(25, 50),
+                                labels             = TRUE,
+                                alpha              = 1,
+                                arrow_color_manual = NULL,
+                                unscaled_color     = NULL,
+                                font               = 'Avenir',
+                                arrow_fontsize     = 1) {
 
   # Create key variables ----------------------------------------------------
   arrow <- qmd_info$parsed_arrow
@@ -110,8 +112,8 @@ define_arrow_layout <- function(qmd_info        = NULL,
 
   # Format arrows ------------------------------------------------------------
   ## Special variables
-  arrow_scale     <- ifelse(scaling, 0.4 ,1)            # Reduce entire graph size due to issues with big arrows in graphviz
-  arrow_fontsize  <- arrow_scale * arrow_fontsize * 12  # Base size is 12
+  arrow_scale     <- ifelse(scaling, 0.4 ,1)             # Reduce entire graph size due to issues with big arrows in graphviz
+  arrow_fontsize  <- arrow_scale * arrow_fontsize * 15.5 # Base size is 15.5
 
   ## Scaling factor
   if(scaling) {
@@ -138,7 +140,13 @@ define_arrow_layout <- function(qmd_info        = NULL,
     unscaled_color <- ifelse(scaling == FALSE, 'black', 'grey80')
   }
 
-  if(scaling == FALSE | toupper(color_scaling) %in% c('NONE', 'PBPK')) {
+  if(!is.null(arrow_color_manual)){
+    if(nrow(arrow) %% length(arrow_color_manual) > 0) {
+      stop('Inapropriate \"arrow_color_manual\" provided.')
+    }
+    arrow$color <- hex_color(arrow_color_manual, alpha)
+
+  } else if(scaling == FALSE | toupper(color_scaling) %in% c('NONE', 'PBPK')) {
     arrow$color <- hex_color(unscaled_color, alpha)
 
   } else if ((toupper(color_scaling) == 'RSE' & all(is.na(arrow$rse))) |
