@@ -272,9 +272,6 @@ qmd(examples$threecomp, shiny = TRUE)
 ## Output test
 qmd(examples$threecomp, output = 'vivagraph')
 
-qmd(examples$threecomp, output = 'vivagraph')
-
-
 ## Width and height
 qmd(examples$threecomp, width = 640, height = 480)
 

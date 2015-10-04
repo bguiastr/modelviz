@@ -3,8 +3,8 @@
 \name{examples}
 \alias{examples}
 \title{QMD Examples}
-\format{A list of 5 levels: \code{onecomp}, \code{twocomp}, \code{threecomp},
-\code{gitt} and \code{pbpk}.}
+\format{A list of 6 levels: \code{onecomp}, \code{twocomp}, \code{threecomp},
+\code{gitt} \code{metabolite} and \code{pbpk}.}
 \source{
 \href{http://www.ncbi.nlm.nih.gov/pubmed/18751690}{onecomp}: D. Elsherbiny et al.
 Population pharmacokinetics of nevirapine in combination with rifampicin-based short
@@ -24,7 +24,7 @@ in paediatric renal transplant candidates. British Journal of Clinical Pharmacol
 A mechanism-Based Approach for Absorption Modeling: The Gastro-Intestinal Transit Time
 (GITT) Model. The AAPS Journal, 14:2, 155-163. (2012)
 
-\href{http://www.ncbi.nlm.nih.gov/pubmed/23571542}{metabolites}: E. Svensson et al.
+\href{http://www.ncbi.nlm.nih.gov/pubmed/23571542}{metabolite}: E. Svensson et al.
 Model-Based Estimates of the Effects of Efavirenz on Bedaquiline Pharmacokinetics and
 Suggested Dose Adjustments for Patients Coinfected with HIV and Tuberculosis.
 Antimicrobial Agents and Chemotherapy, 57:6, 2780-2787. (2013)
@@ -35,9 +35,9 @@ pharmacokinetic (PBPK) modelling: theophylline and midazolam as model drugs. Bri
 of Clinical Pharmacology. 59:6, 691–704. (2004)
 }
 \description{
-A list of 5 \code{qmd_info} examples on the pharmacokinetic
+A list of 6 \code{qmd_info} examples on the pharmacokinetic
 models for nevirapine (\code{onecomp}), miltefosine (\code{twocomp}),
-ciclosporin (\code{threecomp}, felodipine (\code{gitt}), bedaquiline (\code{metabolite}) and
+ciclosporin (\code{threecomp}), felodipine (\code{gitt}), bedaquiline (\code{metabolite}) and
 theophylline (\code{pbpk}).
 }
 \details{
@@ -75,7 +75,10 @@ qmd(examples$threecomp)
 # GITT model
 qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3))
 
+# Metabolite
+qmd(examples$metabolite, rank = c(1,2,3,4,5,6,7,7,6,7,6,7,6))
+
 # PBPK model
-qmd(examples$pbpk, pbpk_mode = TRUE)
+qmd(examples$pbpk, pbpk_layout = TRUE)
 }
 
