@@ -5,7 +5,7 @@
 #'
 #' @param comp a data.frame created by \code{define_comp_layout}
 #' @param arrow a data.frame created by \code{define_arrow_layout}
-#' @param pbpk_colors logical if \code{TRUE} oxygenated blood is represented in red
+#' @param pbpk_color logical if \code{TRUE} oxygenated blood is represented in red
 #' and deoxygenated blood is represented in blue. If \code{FALSE} previously defined
 #' color code in \code{define_comp_layout} and \code{define_arrow_layout} will be used
 #' @param vein_comp_label label of the veinous compartment

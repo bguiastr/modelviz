@@ -68,7 +68,7 @@ F1 <- format_qmd_info()
 F2 <- format_qmd_info(qmd_info = examples$threecomp)
 
 ## DES test
-F3 <- format_qmd_info(qmd_info = I6)
+F3 <- format_qmd_info(qmd_info = I5)
 
 
 # Test define_comp_layout -------------------------------------------------
@@ -180,13 +180,17 @@ sink()
 
 sink('~/Desktop/gitt_rse.svg')
 cat( qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3),
-         arrow_scale_fun = function(x){sqrt(x)}, output = 'SVG') )
+         arrow_scale_fun = function(x){sqrt(x)},
+         comp_scale_fun = function(x){sqrt(x/5)},
+         output = 'SVG') )
 sink()
 
 sink('~/Desktop/gitt_iiv.svg')
 cat( qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3),
          color_scaling = 'iiv', color_cutoff = c(20,40),
-         arrow_scale_fun = function(x){sqrt(x)}, output = 'SVG') )
+         arrow_scale_fun = function(x){sqrt(x)},
+         comp_scale_fun = function(x){sqrt(x/5)},
+         output = 'SVG') )
 sink()
 
 ## PBPK model
@@ -249,8 +253,8 @@ sink('~/Desktop/bedaquiline_unscaled_manual_color.svg')
 cat( qmd(examples$metabolite,
          rank = c(1,2,3,4,5,6,7,7,6,7,6,7,6),
          alpha             = 0.6,
-         comp_color_manual = c(rep('coral2',5), rep('deepskyblue2',3), rep('chartreuse3',2), rep('violetred2',2)),
-         arrow_color_manual = c(rep('coral2',5), rep('deepskyblue2',3), rep('chartreuse3',2), rep('violetred2',2)),
+         comp_color_manual = c(rep('deepskyblue2',5), rep('deepskyblue2',3), rep('chartreuse3',2), rep('violetred2',2)),
+         arrow_color_manual = c(rep('deepskyblue2',5), rep('deepskyblue2',3), rep('chartreuse3',2), rep('violetred2',2)),
          scaling = FALSE, output = 'SVG') )
 sink()
 
@@ -261,16 +265,22 @@ cat( qmd(examples$metabolite,
          arrow_scale_fun   = function(x){sqrt(x)},
          color_scaling     = 'none',
          alpha             = 0.6,
-         comp_color_manual = c(rep('coral2',5), rep('deepskyblue2',3), rep('chartreuse3',2), rep('violetred2',2)),
-         arrow_color_manual = c(rep('coral2',5), rep('deepskyblue2',3), rep('chartreuse3',2), rep('violetred2',2)),
+         comp_color_manual = c(rep('deepskyblue2',5), rep('deepskyblue2',3), rep('chartreuse3',2), rep('violetred2',2)),
+         arrow_color_manual = c(rep('deepskyblue2',5), rep('deepskyblue2',3), rep('chartreuse3',2), rep('violetred2',2)),
          output = 'SVG') )
 sink()
+
+## DES Parser TEST
+qmd(import_qmd_info(file = 'inst/models/run300.mod'),
+    color_scaling = 'IIV',
+    rank = c(1,2,3,4,5,6,6,7,6,7))
 
 ## Shiny test
 qmd(examples$threecomp, shiny = TRUE)
 
 ## Output test
 qmd(examples$threecomp, output = 'vivagraph')
+qmd(examples$threecomp, output = 'visnetwork')
 
 ## Width and height
 qmd(examples$threecomp, width = 640, height = 480)
@@ -298,8 +308,14 @@ sort(unique(arrow_data$from))
 table(arrow_data$from)
 
 
-
-
-
-
-
+file = 'inst/models/run101.mod'
+dir         = NULL
+prefix      = 'run'
+runno       = NULL
+ext         = '.mod'
+file        = NULL
+interactive = TRUE
+verbose     = FALSE
+source('R/msg.R')
+source('R/parse_patab.R')
+source('R/des_parser.R')

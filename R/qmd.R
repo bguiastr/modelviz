@@ -138,7 +138,8 @@ qmd <- function(qmd_info           = NULL,
     gv_options <- c(
       ifelse(flipped, 'rankdir = TB', 'rankdir = LR'),
       ifelse(pbpk_layout, 'ranksep = 0.5', 'ranksep = 0'),
-      ifelse(pbpk_layout, 'nodesep = 0.25', 'nodesep = 0.15'))
+      ifelse(pbpk_layout, 'nodesep = 0.25', 'nodesep = 0.15'),
+      ifelse(pbpk_layout, 'splines = ortho', 'splines = polyline'))
 
   } else {
     gv_options <- c(
@@ -150,6 +151,9 @@ qmd <- function(qmd_info           = NULL,
       },
       if(!any(grepl('nodesep', gv_options))) {
         ifelse(pbpk_layout, 'nodesep = 0.25', 'nodesep = 0.15')
+      },
+      if(!any(grepl('splines', gv_options))) {
+        ifelse(pbpk_layout, 'splines = ortho', 'splines = polyline')
       },
       gv_options)
   }

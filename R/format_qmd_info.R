@@ -5,6 +5,7 @@
 #'
 #' @param qmd_info a \code{qmd_info} object generated with \code{import_qmd_info}
 #' or \code{skeleton_qmd_info}
+#' @param verbose logical if \code{TRUE} warning and messages will be displayed to the console
 #' @seealso \code{\link{import_qmd_info}}, \code{\link{skeleton_qmd_info}}, \code{\link{qmd}}
 #' @return A \code{qmd_info} object
 #' @examples

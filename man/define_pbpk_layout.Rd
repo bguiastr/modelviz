@@ -12,13 +12,13 @@ define_pbpk_layout(comp = NULL, arrow = NULL, pbpk_color = TRUE,
 
 \item{arrow}{a data.frame created by \code{define_arrow_layout}}
 
+\item{pbpk_color}{logical if \code{TRUE} oxygenated blood is represented in red
+and deoxygenated blood is represented in blue. If \code{FALSE} previously defined
+color code in \code{define_comp_layout} and \code{define_arrow_layout} will be used}
+
 \item{vein_comp_label}{label of the veinous compartment}
 
 \item{artery_comp_label}{label of the arterial compartment}
-
-\item{pbpk_colors}{logical if \code{TRUE} oxygenated blood is represented in red
-and deoxygenated blood is represented in blue. If \code{FALSE} previously defined
-color code in \code{define_comp_layout} and \code{define_arrow_layout} will be used}
 }
 \value{
 A \code{list}

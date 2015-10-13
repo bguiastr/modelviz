@@ -9,7 +9,7 @@ define_comp_layout(qmd_info = NULL, scaling = TRUE,
   color_cutoff = c(25, 50), filled = TRUE, alpha = 1,
   comp_color_manual = NULL, unscaled_color = NULL,
   unscaled_shape = "circle", scaled_shape = "square", font = "Avenir",
-  comp_fontsize = 1, ...)
+  comp_fontsize = 1)
 }
 \arguments{
 \item{qmd_info}{a \code{qmd_info} object generated with \code{import_qmd_info} or

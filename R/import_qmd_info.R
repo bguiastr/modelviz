@@ -84,6 +84,13 @@ import_qmd_info <- function(dir         = NULL,
                                interactive = interactive)
 
 
+  # Parse arrow -------------------------------------------------------------
+  parsed_arrow <- parse_arrow_data(des_block = mod_file$CODE[mod_file$ABREV == 'DES'],
+                                   advan     = subr[1],
+                                   trans     = subr[2],
+                                   verbose   = verbose)
+
+
   # Parse comp --------------------------------------------------------------
   parsed_comp <- parse_comp_data(mod_file   = mod_file,
                                  parsed_ext = parsed_ext,
@@ -91,12 +98,14 @@ import_qmd_info <- function(dir         = NULL,
                                  trans      = subr[2],
                                  verbose    = verbose)
 
-
-  # Parse arrow -------------------------------------------------------------
-  parsed_arrow <- parse_arrow_data(des_block = mod_file$CODE[mod_file$ABREV == 'DES'],
-                                   advan     = subr[1],
-                                   trans     = subr[2],
-                                   verbose   = verbose)
+  ## Add output compartments
+  if(subr[1] %in% c(1:4, 11:12)) {
+    parsed_comp$output[parsed_comp$label == 'Central'] <- TRUE
+  } else {
+    # When DES is used
+    parsed_comp$output[as.numeric(
+      gsub('\\D','',parsed_arrow$from[is.na(parsed_arrow$to)]))] <- TRUE
+  }
 
 
   # Create the qmd_info object ----------------------------------------------

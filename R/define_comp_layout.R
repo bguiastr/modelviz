@@ -44,8 +44,7 @@ define_comp_layout <- function(qmd_info           = NULL,
                                unscaled_shape     = 'circle',
                                scaled_shape       = 'square',
                                font               = 'Avenir',
-                               comp_fontsize      = 1,
-                               ...) {
+                               comp_fontsize      = 1) {
 
 
   # Create key variables ----------------------------------------------------
@@ -116,7 +115,9 @@ define_comp_layout <- function(qmd_info           = NULL,
     ### iiv labels assumed to have properly been cleaned in parse_ext_file
     if(length(intersect(colnames(qmd_info$omega), node$prm)) > 0) {
       node$iiv[which(node$prm %in% colnames(qmd_info$omega))] <-
-        unlist(qmd_info$omega[1, intersect(colnames(qmd_info$omega), node$prm)])
+        t(qmd_info$omega)[match(node$prm[which(node$prm %in% colnames(qmd_info$omega))],
+                                    colnames(qmd_info$omega)),1]
+      node$iiv[node$iiv == 0] <- NA
     }
   }
 

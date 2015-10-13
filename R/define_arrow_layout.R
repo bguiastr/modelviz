@@ -69,9 +69,6 @@ define_arrow_layout <- function(qmd_info           = NULL,
   if(length(arrow$prm[!is.na(arrow$prm)]) == 0) {
     msg('Warning: No parameter provided in \"qmd_info$parsed_arrow$prm\".', TRUE)
     scaling <- FALSE
-  }else if(!all(arrow$prm[!is.na(arrow$prm)] %in% colnames(qmd_info$theta))) {
-    msg('Warning: Wrong parameter label provided in \"qmd_info$parsed_arrow$prm\".', TRUE)
-    scaling <- FALSE
   }
 
   ## Create arrow template structure
@@ -86,12 +83,18 @@ define_arrow_layout <- function(qmd_info           = NULL,
 
   # Assign parameter values -------------------------------------------------
   if(scaling) {
-    arrow[!is.na(arrow$prm), c('value', 'rse')] <- t(qmd_info$theta[, arrow[!is.na(arrow$prm), 'prm']])
+    arrow[!is.na(arrow$prm), c('value', 'rse')] <-
+      t(qmd_info$theta[, colnames(qmd_info$theta) %in% arrow$prm[!is.na(arrow$prm)]])[
+        match(arrow$prm[!is.na(arrow$prm)],
+              rownames(t(qmd_info$theta[, colnames(qmd_info$theta) %in% arrow$prm[!is.na(arrow$prm)]]))),]
 
     ### iiv labels assumed to have properly been cleaned in parse_ext_file
     if(length(intersect(colnames(qmd_info$omega), arrow$prm)) > 0) {
-      arrow$iiv[which(arrow$prm %in% colnames(qmd_info$omega))] <-
-        unlist(qmd_info$omega[1, intersect(colnames(qmd_info$omega), arrow$prm[!is.na(arrow$prm)])])
+      arrow$iiv[!is.na(arrow$prm)] <-
+        t(qmd_info$omega[, colnames(qmd_info$omega) %in% arrow$prm[!is.na(arrow$prm)]])[
+          match(arrow$prm[!is.na(arrow$prm)],
+                rownames(t(qmd_info$omega[, colnames(qmd_info$omega) %in% arrow$prm[!is.na(arrow$prm)]]))),1]
+      arrow$iiv[arrow$iiv == 0] <- NA
     }
   }
 
@@ -177,6 +180,9 @@ define_arrow_layout <- function(qmd_info           = NULL,
 
   ## Style
   arrow$style <- 'bold'
+  if(scaling == TRUE){
+    arrow$style[is.na(arrow$value)] <- 'dotted'
+  }
 
   ## Tooltip
   if(labels != FALSE) {
@@ -187,5 +193,10 @@ define_arrow_layout <- function(qmd_info           = NULL,
     arrow$tooltip[!is.na(arrow$iiv)]   <- paste0(arrow$tooltip[!is.na(arrow$iiv)], ' (', signif(arrow$iiv[!is.na(arrow$iiv)],3), ' %IIV)')
     arrow$tooltip[!is.na(arrow$rse)]   <- paste0(arrow$tooltip[!is.na(arrow$rse)], ' [', signif(arrow$rse[!is.na(arrow$rse)],3), ' %RSE]')
   }
+
+  ## Attribute scale to NA arrows
+  arrow$penwidth[is.na(arrow$scale)] <- min(arrow$penwidth, na.rm = TRUE)
+  arrow$arrowsize[is.na(arrow$scale)] <- min(arrow$arrowsize, na.rm = TRUE)
+
   return(arrow)
 } # End define_arrow_layout

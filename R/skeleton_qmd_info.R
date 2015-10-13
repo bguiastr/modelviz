@@ -4,7 +4,7 @@
 #'
 #' @param help logical if \code{TRUE} help will be added in the \code{qmd_info} skeleton.
 #'
-#' @seealso \code{\link{import_qmd_info}}, \code{\link{read_nmtab}}, \code{\link{parse_nommem_model}}
+#' @seealso \code{\link{import_qmd_info}}, \code{\link{read_nmtab}}, \code{\link{parse_nonmem_model}}
 #' @return A list containing the fixed effect (\code{theta}), random effect variance (\code{omega})
 #' typical values along with their uncertainty, the indivudual parameters (\code{data})
 #' the nonmem ADVAN (\code{advan}), the parsed compartment information (\code{parsed_comp}),

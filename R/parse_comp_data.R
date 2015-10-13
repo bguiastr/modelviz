@@ -67,7 +67,14 @@ parse_comp_data <- function(mod_file   = NULL,
 
   } else {
     # When DES is used
-    comp_prm <- NA
+    comp_prm <- do.call('rbind', lapply(mod_file$CODE[mod_file$ABREV == 'DES'], des_parser))
+    comp_prm$prm <- NA
+    comp_prm$prm[grepl('^\\(\\w+\\/\\w+\\)$', comp_prm$des)] <-
+      gsub('^\\(\\w+\\/(\\w+)\\)$','\\1', comp_prm$des[grepl('^\\(\\w+\\/\\w+\\)$', comp_prm$des)])
+    comp_prm <- data.frame(node = comp_prm$from, prm = comp_prm$prm, stringsAsFactors = FALSE)
+    comp_prm <- comp_prm[order(comp_prm$node, comp_prm$prm), ]
+    comp_prm <- comp_prm[!duplicated(comp_prm$node), ]
+    comp_prm <- comp_prm$prm
   }
 
   # Create parsed_comp ------------------------------------------------------
@@ -75,15 +82,6 @@ parse_comp_data <- function(mod_file   = NULL,
                             prm    = comp_prm,
                             output = FALSE,
                             stringsAsFactors = FALSE)
-
-
-  # Add output compartments -------------------------------------------------
-  if(advan %in% c(1:4, 11:12)) {
-    parsed_comp$output[which(comp_labels == 'Central')] <- TRUE
-  } else {
-    # When DES is used
-    parsed_comp$output <- parsed_comp$output
-  }
 
   return(parsed_comp)
 

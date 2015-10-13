@@ -9,6 +9,8 @@ format_qmd_info(qmd_info = NULL, verbose = TRUE)
 \arguments{
 \item{qmd_info}{a \code{qmd_info} object generated with \code{import_qmd_info}
 or \code{skeleton_qmd_info}}
+
+\item{verbose}{logical if \code{TRUE} warning and messages will be displayed to the console}
 }
 \value{
 A \code{qmd_info} object

@@ -118,7 +118,20 @@ parse_arrow_data <- function(des_block = NULL,
   }
 
   if(!advan %in% c(1:4,11:12)){
-    parsed_arrow <- NULL
+    parsed_arrow <- do.call('rbind', lapply(des_block, des_parser))
+    parsed_arrow <- parsed_arrow[, c('from', 'to', 'prm')]
+    parsed_arrow <- parsed_arrow[order(parsed_arrow$prm, parsed_arrow$to),]
+    parsed_arrow <- parsed_arrow[!(duplicated(parsed_arrow$prm) & is.na(parsed_arrow$to)), ]
+    parsed_arrow$from[!is.na(parsed_arrow$from)] <- paste0('A', parsed_arrow$from[!is.na(parsed_arrow$from)])
+    parsed_arrow$to[!is.na(parsed_arrow$to)]     <- paste0('A', parsed_arrow$to[!is.na(parsed_arrow$to)])
+
+    # Handle double arrows
+    parsed_arrow$dir <- 'forward'
+    double_arrow <- parsed_arrow[parsed_arrow$prm %in% unique(parsed_arrow$prm)[table(parsed_arrow$prm) == 2],]
+    parsed_arrow <- parsed_arrow[!parsed_arrow$prm %in% unique(parsed_arrow$prm)[table(parsed_arrow$prm) == 2],]
+    double_arrow <- by(double_arrow, double_arrow$prm, FUN = function(x){
+      if(x$from[1] == x$to[2]){ x$dir <- 'both' ; return(x[1,]) } })
+    parsed_arrow <- rbind(parsed_arrow,do.call('rbind',double_arrow))
   }
 
   return(parsed_arrow)
