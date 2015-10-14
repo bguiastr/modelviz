@@ -13,10 +13,6 @@ P3 <- parse_nonmem_model(file = 'inst/models/run101.mod')
 ## Use dir and runno
 P4 <- parse_nonmem_model(dir = 'inst/models/', runno = '101')
 
-## More complicated parsing
-P5 <- parse_nonmem_model(file='inst/models/run201.mod')
-P6 <- parse_nonmem_model(file='inst/models/run202.mod')
-
 
 # Test read_nmtab ---------------------------------------------------------
 ## No input
@@ -62,13 +58,13 @@ I5 <- import_qmd_info(dir = 'inst/models/', runno = '101', verbose = FALSE)
 
 # Test format_qmd_info ----------------------------------------------------
 ## No input
-F1 <- format_qmd_info()
+#F1 <- format_qmd_info()
 
 ## Default test
-F2 <- format_qmd_info(qmd_info = examples$threecomp)
+#F2 <- format_qmd_info(qmd_info = examples$threecomp)
 
 ## DES test
-F3 <- format_qmd_info(qmd_info = I5)
+#F3 <- format_qmd_info(qmd_info = I5)
 
 
 # Test define_comp_layout -------------------------------------------------
@@ -146,7 +142,7 @@ cat( qmd(examples$twocomp, scaling = FALSE, output = 'SVG') )
 sink()
 
 sink('~/Desktop/2_comp_rse.svg')
-cat( qmd(examples$twocomp, output = 'SVG') )
+cat( qmd(examples$twocomp, output = 'DOT') )
 sink()
 
 ## Three compartment
@@ -155,7 +151,7 @@ cat( qmd(examples$threecomp, scaling = FALSE, filled = FALSE, output = 'SVG') )
 sink()
 
 sink('~/Desktop/3_comp_unscaled.svg')
-cat( qmd(examples$threecomp, scaling = FALSE, output = 'SVG') )
+cat( qmd(examples$threecomp, scaling = FALSE, output = 'SVT') )
 sink()
 
 sink('~/Desktop/3_comp_rse.svg')
