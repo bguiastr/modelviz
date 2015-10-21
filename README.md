@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/guiastrennec/modelviz.svg?branch=master)](https://travis-ci.org/guiastrennec/modelviz)
+
 # modelviz
 Quantitative model diagrams (QMD) for NONMEM
 
