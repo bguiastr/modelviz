@@ -2,7 +2,7 @@ Package: modelviz
 Type: Package
 Title: Generation of QMD for NONMEM outputs
 Version: 0.1
-Date: 2015-09-04
+Date: 2015-10-30
 Author: Benjamin Guiastrennec
 Maintainer: Benjamin Guiastrennec <guiastrennec@gmail.com>
 Description: Generation of quantitative model diagrams (QMD) for evaluation of NONMEM outputs.
