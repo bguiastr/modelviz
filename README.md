@@ -185,3 +185,7 @@ Many more options can be used to change the aspect of the diagram via the argume
 - ```"nodesep = 1"``` will increase the space between compartments of different rank
 
 More options can be found [here](http://www.graphviz.org/doc/info/attrs.html)
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/guiastrennec/modelviz/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
