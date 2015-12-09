@@ -155,6 +155,9 @@ Unscaled                   |  Scaled
 ```qmd(examples$pbpk, pbpk_layout = TRUE, scaling = FALSE)``` | ```qmd(examples$pbpk, pbpk_layout = TRUE, arrow_scale_fun = function(x) { 1.5*x + 1 })```
 <img src="inst/img/pbpk_unscaled.jpg"> | <img src="inst/img/pbpk.jpg">
 
+### Animated model
+An example of animated QMD is available [here](https://guiastrennec.shinyapps.io/dQMD). Animated QMDs are currently not a built in feature of modelviz but will be coming soon.
+
 ## Advanced options
 ### Scaling options
 Model parameter can have extreme values and use different units (e.g volumes in mL or L), therefore the choice of the scaling function applied to compartment and arrows is open to the user. By default the compartment surface area is scaled proportionally to the volumes (```comp_scale_fun = function(x) { sqrt(x) }```) and arrows are scaled linearly to their rate or clearance (```arrow_scale_fun = function(x) { x }```). By customizing the ```comp_scale_fun``` and ```arrow_scale_fun``` the uses can use an infinite number of function that can be constant (eg. ```3```), linear (eg. ```2*x + 1```), non-linear (eg. ```sqrt(x)```), or complex (eg. logit transform).
