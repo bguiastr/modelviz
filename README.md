@@ -1,18 +1,22 @@
 [![Build Status](https://travis-ci.org/guiastrennec/modelviz.svg?branch=master)](https://travis-ci.org/guiastrennec/modelviz)
 
 # modelviz
-Quantitative model diagrams (QMD) for NONMEM
+Quantitative model diagrams (QMD) for NONMEM.
 
 ## Rationale
 To facilitate model communication and evaluation through intuitive visual representation of their structure, parameter estimates, uncertainty and variability.
 
 ## Standard model diagrams
-Models are commonly represented by their structural properties but lack any information on parameter and must therefore be used along with a parameter table.
+Models are commonly represented by their structural properties but lack any information on parameter and must therefore be used along with a parameter table. You can create SMD in the [modelviz app](https://guiastrennec.shinyapps.io/modelviz_app/).
 <img src="inst/img/smd_example.jpg">
 
 ## Quantitative model diagrams
-Quantitative model diagrams intuitively displays structural model properties as well as parameter properties.
+Quantitative model diagrams intuitively displays structural model properties as well as parameter properties. You can create QMD in the [modelviz app](https://guiastrennec.shinyapps.io/modelviz_app/).
 <img src="inst/img/qmd_example.jpg">
+
+## Dynamic QMD
+Dynamic QMD (dQMD) visually represent the dynamic processes proper to pharmacometric models. It allows to intuitively conceptualize complex processes such as feedback, non-linearity over time. Examples of dQMD are available on the [modelviz app](https://guiastrennec.shinyapps.io/modelviz_app/). dQMDs are currently just a concept and not a built in feature of modelviz but will be coming in future updates.
+
 
 ## Modelviz installation
 ```r
@@ -154,9 +158,6 @@ Unscaled                   |  Scaled
 :-------------------------:|:-------------------------:
 ```qmd(examples$pbpk, pbpk_layout = TRUE, scaling = FALSE)``` | ```qmd(examples$pbpk, pbpk_layout = TRUE, arrow_scale_fun = function(x) { 1.5*x + 1 })```
 <img src="inst/img/pbpk_unscaled.jpg"> | <img src="inst/img/pbpk.jpg">
-
-### Animated model
-An example of animated QMD is available [here](https://guiastrennec.shinyapps.io/dQMD). Animated QMDs are currently not a built in feature of modelviz but will be coming soon.
 
 ## Advanced options
 ### Scaling options
