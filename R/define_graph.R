@@ -21,7 +21,7 @@
 #' date or date-time string supplied as a value to graph_time. If no time zone is
 #' provided then it will be set to GMT.
 #'
-#' @description Function from package DiagrammeR edited to include ranking and
+#' @description Adapted from \code{DiagrammeR::create_graph} to include ranking and
 #' follow notation used by modelviz.
 #' @examples
 #' \dontrun{
@@ -35,19 +35,19 @@
 #' }
 #' @importFrom DiagrammeR x11_hex
 #' @export
-define_graph <- function (comp        = NULL,
-                          arrow       = NULL,
-                          pbpk        = NULL,
-                          graph_attrs = NULL,
-                          comp_attrs  = NULL,
-                          arrow_attrs = NULL,
-                          directed    = TRUE,
-                          graph_name  = NULL,
-                          graph_time  = NULL,
-                          graph_tz    = NULL) {
+define_graph <- function(comp        = NULL,
+                         arrow       = NULL,
+                         pbpk        = NULL,
+                         graph_attrs = NULL,
+                         comp_attrs  = NULL,
+                         arrow_attrs = NULL,
+                         directed    = TRUE,
+                         graph_name  = NULL,
+                         graph_time  = NULL,
+                         graph_tz    = NULL) {
 
   # Equivalence to modelviz
-  if(is.list(pbpk)) {
+  if (is.list(pbpk)) {
     nodes_df <- pbpk$comp
     edges_df <- pbpk$arrow
   } else {
@@ -65,7 +65,7 @@ define_graph <- function (comp        = NULL,
                        "fixedsize", "fontcolor", "fontname", "fontsize", "group",
                        "height", "label", "labelloc", "margin", "orientation",
                        "penwidth", "peripheries", "pos", "shape", "sides",
-                       "skew", "style", "tooltip", "width", "img", "icon")
+                       "skew", "style", "tooltip", "width", "img", "icon", "gradientangle")
   edge_attributes <- c("arrowhead", "arrowsize", "arrowtail",
                        "color", "constraint", "decorate", "dir", "edgeURL",
                        "edgehref", "edgetarget", "edgetooltip", "fontcolor",
@@ -265,10 +265,10 @@ define_graph <- function (comp        = NULL,
       node_block <- c(node_block, line)
     }
 
-    #####################################EDIT#######################################
-    if('rank' %in% colnames(nodes_df)){
+    # Start modelviz edit -----------------------------------------------------
+    if ('rank' %in% colnames(nodes_df)) {
       node_block <- tapply(node_block, nodes_df$rank, FUN = function(x){
-        if(length(x) > 1){
+        if (length(x) > 1) {
           x <- paste0('subgraph{rank = same\n',
                       paste0(x, collapse = '\n'),
                       '}\n')
@@ -279,8 +279,7 @@ define_graph <- function (comp        = NULL,
 
     node_block <- paste(node_block, collapse = "\n")
 
-    ################################################################################
-
+    # End modelviz edit -------------------------------------------------------
 
 
     if (exists("attr_string") == TRUE) {

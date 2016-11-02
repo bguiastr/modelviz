@@ -1,5 +1,5 @@
 # Differencial equation parser for arrows and comp
-des_parser <- function(des, ...) {
+des_parser <- function(des, verbose = TRUE, ...) {
 
   if(is.null(des)) {
     stop('Argument \"des\" required.')

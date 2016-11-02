@@ -10,6 +10,9 @@
 #' @param comp_scale_fun a function to be used for compartment size scaling
 #' @param arrow_scale_fun a function to be used for arrow width scaling
 #' @param labels logical if \code{TRUE} labels are added to arrows
+#' @param parse_labels logical if \code{TRUE} arrow labels will be parsed to use subscript the rate
+#' constant name (\deqn{KA} will become \deqn{K_A}) and the inter-compartmental clearance number
+#' (\deqn{Q2} would become \deqn{Q_2})
 #' @param font font name of the compartment label
 #' @param comp_fontsize font size expansion factor
 #' @param arrow_fontsize font size expansion factor
@@ -33,7 +36,12 @@
 #' @param vein_comp_label label of the veinous compartment
 #' @param artery_comp_label label of the arterial compartment
 #' @param shiny logical if \code{TRUE} output will be formated for shiny output
-#' @param output format of the output to be returned by qmd ('graph', 'SVG', 'DOT' or 'vivagraph')
+#' @param output format of the output to be returned by the qmd function ('graph', 'vivagraph',
+#' 'visNetwork'), or an output format to save the graph ('pdf', 'ps', 'jpeg',
+#' 'png', or 'svg')
+#' @param filename Name of the file to be created on the disk (without extension) when output is one
+#' of ('pdf', 'ps', 'jpeg', 'png', or 'svg')
+#' @param title A title to be added to the graph
 #' @param width width of the resulting graphic in pixels
 #' @param height height of the resulting graphic in pixels
 #' @param gv_options vector of options to be passed to Graphviz
@@ -50,6 +58,7 @@ qmd <- function(qmd_info           = NULL,
                 comp_scale_fun     = function(x) { sqrt(x) },
                 arrow_scale_fun    = function(x) { x },
                 labels             = TRUE,
+                parse_labels       = FALSE,
                 font               = 'Avenir',
                 comp_fontsize      = 1,
                 arrow_fontsize     = 1,
@@ -70,12 +79,14 @@ qmd <- function(qmd_info           = NULL,
                 artery_comp_label  = 'arterial',
                 shiny              = FALSE,
                 output             = 'graph',
+                filename           = 'qmd_graph',
+                title              = NULL,
                 width              = NULL,
                 height             = NULL,
                 gv_options         = NULL) {
 
   # Check inputs ------------------------------------------------------------
-  if(is.null(qmd_info)) {
+  if (is.null(qmd_info)) {
     stop('Argument \"qmd_info\" required.')
   }
 
@@ -94,10 +105,10 @@ qmd <- function(qmd_info           = NULL,
                                    font              = font,
                                    comp_fontsize     = comp_fontsize)
 
-  if(is.integer(rank) || is.numeric(rank)) {
-    if(length(rank) != nrow(comp_data)) {
+  if (is.integer(rank) || is.numeric(rank)) {
+    if (length(rank) != nrow(comp_data)) {
       msg(paste0('Provide an integer rank for each of the following compartment\n',
-                 paste(comp_data$label, collapse =', '), ':'), TRUE)
+                 paste(comp_data$label, collapse = ', '), ':'), TRUE)
       rank <- readline(prompt = '')
       rank <- as.numeric(unlist(strsplit(rank, '\\D+')))
     }
@@ -113,6 +124,7 @@ qmd <- function(qmd_info           = NULL,
                                     color_scaling      = color_scaling,
                                     color_cutoff       = color_cutoff,
                                     labels             = labels,
+                                    parse_labels       = parse_labels,
                                     alpha              = alpha,
                                     arrow_color_manual = arrow_color_manual,
                                     unscaled_color     = unscaled_color,
@@ -121,7 +133,7 @@ qmd <- function(qmd_info           = NULL,
 
 
   # PBPK layout -------------------------------------------------------------
-  if(pbpk_layout) {
+  if (pbpk_layout) {
     pbpk_data  <- define_pbpk_layout(comp              = comp_data,
                                      arrow             = arrow_data,
                                      pbpk_color        = ifelse(toupper(color_scaling) == 'PBPK', TRUE, FALSE),
@@ -134,26 +146,26 @@ qmd <- function(qmd_info           = NULL,
 
   # Create graph ------------------------------------------------------------
   ## Possibility to modify defaults
-  if(is.null(gv_options)) {
+  if (is.null(gv_options)) {
     gv_options <- c(
       ifelse(flipped, 'rankdir = TB', 'rankdir = LR'),
       ifelse(pbpk_layout, 'ranksep = 0.5', 'ranksep = 0'),
       ifelse(pbpk_layout, 'nodesep = 0.25', 'nodesep = 0.15'),
-      ifelse(pbpk_layout, 'splines = ortho', 'splines = polyline'))
+      ifelse(pbpk_layout, 'splines = true', 'splines = polyline'))
 
   } else {
     gv_options <- c(
-      if(!any(grepl('rankdir', gv_options))) {
+      if (!any(grepl('rankdir', gv_options))) {
         ifelse(flipped, 'rankdir = TB', 'rankdir = LR')
       },
-      if(!any(grepl('ranksep', gv_options))) {
+      if (!any(grepl('ranksep', gv_options))) {
         ifelse(pbpk_layout, 'ranksep = 0.5', 'ranksep = 0')
       },
-      if(!any(grepl('nodesep', gv_options))) {
+      if (!any(grepl('nodesep', gv_options))) {
         ifelse(pbpk_layout, 'nodesep = 0.25', 'nodesep = 0.15')
       },
-      if(!any(grepl('splines', gv_options))) {
-        ifelse(pbpk_layout, 'splines = ortho', 'splines = polyline')
+      if (!any(grepl('splines', gv_options))) {
+        ifelse(pbpk_layout, 'splines = true', 'splines = polyline')
       },
       gv_options)
   }
@@ -165,12 +177,20 @@ qmd <- function(qmd_info           = NULL,
 
 
   # Render graph ------------------------------------------------------------
-  if(shiny) {
+  if (shiny) {
     DiagrammeR::grViz(graph$dot_code)
-  } else {
+  } else if (output %in% c('graph', 'vivagraph', 'visNetwork')) {
     DiagrammeR::render_graph(graph,
                              output = output,
+                             #title  = title,
                              width  = width,
                              height = height)
+  } else {
+    save_qmd(qmd_graph = graph,
+             filename  = filename,
+             device    = output,
+             #title     = title,
+             width     = width,
+             height    = height)
   }
 } # End qmd

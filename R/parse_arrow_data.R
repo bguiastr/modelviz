@@ -118,7 +118,7 @@ parse_arrow_data <- function(des_block = NULL,
   }
 
   if(!advan %in% c(1:4,11:12)){
-    parsed_arrow <- do.call('rbind', lapply(des_block, des_parser))
+    parsed_arrow <- do.call('rbind', lapply(X = des_block, FUN = des_parser, verbose = verbose))
     parsed_arrow <- parsed_arrow[, c('from', 'to', 'prm')]
     parsed_arrow <- parsed_arrow[order(parsed_arrow$prm, parsed_arrow$to),]
     parsed_arrow <- parsed_arrow[!(duplicated(parsed_arrow$prm) & is.na(parsed_arrow$to)), ]

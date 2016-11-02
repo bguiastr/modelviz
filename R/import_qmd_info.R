@@ -16,7 +16,8 @@
 #' @seealso \code{\link{format_qmd_info}}, \code{\link{qmd}}
 #' @return A list containing the fixed effect (\code{theta}), random effect variance (\code{omega})
 #' typical values along with their uncertainty, the indivudual parameters (\code{data})
-#' the nonmem ADVAN (\code{advan}), the parsed compartment information (\code{parsed_comp}),
+#' the nonmem ADVAN (\code{advan}), the model differential equations (\code{des}),
+#' the parsed compartment information (\code{parsed_comp}),
 #' and the parsed arrow information (\code{parsed_arrow}).
 #' @examples
 #' \dontrun{
@@ -33,27 +34,27 @@ import_qmd_info <- function(dir         = NULL,
 
 
   # Check inputs ------------------------------------------------------------
-  if(is.null(runno) & is.null(file)) {
+  if (is.null(runno) & is.null(file)) {
     stop('Argument \"runno\" or \"file\" required.')
   }
 
-  if(!is.null(file)) {
+  if (!is.null(file)) {
     file_full <- file
     dir       <- paste0(dirname(file_full), '/')
   } else {
 
-    if(!is.null(dir) && !substr(dir, nchar(dir), nchar(dir)) == '/') {
+    if (!is.null(dir) && !substr(dir, nchar(dir), nchar(dir)) == '/') {
       dir <- paste0(dir, '/')
     }
 
-    if(!ext %in% paste0('.', c('ctl', 'mod', 'lst', 'txt'))) {
+    if (!ext %in% c('.ctl', '.mod', '.lst', '.txt')) {
       stop('Argument \"ext\" must be one of: \".ctl\", \".mod\", \".lst\" or \".txt\".')
     }
 
     file_full <- paste0(dir, prefix, runno, ext)
   }
 
-  if(!file.exists(file_full)) {
+  if (!file.exists(file_full)) {
     stop(paste('file', basename(file_full), 'not found.'))
   }
 
@@ -69,7 +70,7 @@ import_qmd_info <- function(dir         = NULL,
   # Grab ADVAN and TRANS ----------------------------------------------------
   subr <- as.numeric(sapply(unlist(strsplit(mod_file$CODE[mod_file$ABREV == 'SUB'], '\\s+')),
                             gsub, pattern = '\\D', replacement = ''))
-  if(!subr[1] %in% c(1:4, 11:12)) { subr[2] <- 1 } # Set TRANS to 1 when DES
+  if (!subr[1] %in% c(1:4, 11:12)) { subr[2] <- 1 } # Set TRANS to 1 when DES
 
 
   # Import parsed patab -----------------------------------------------------
@@ -84,11 +85,16 @@ import_qmd_info <- function(dir         = NULL,
                                interactive = interactive)
 
 
+  # Parse differential equations --------------------------------------------
+  des_block <- mod_file$CODE[mod_file$ABREV == 'DES'] # Place holder
+
+
   # Parse arrow -------------------------------------------------------------
-  parsed_arrow <- parse_arrow_data(des_block = mod_file$CODE[mod_file$ABREV == 'DES'],
+  parsed_arrow <- parse_arrow_data(des_block = des_block,
                                    advan     = subr[1],
                                    trans     = subr[2],
                                    verbose   = verbose)
+
 
 
   # Parse comp --------------------------------------------------------------
@@ -99,12 +105,13 @@ import_qmd_info <- function(dir         = NULL,
                                  verbose    = verbose)
 
   ## Add output compartments
-  if(subr[1] %in% c(1:4, 11:12)) {
+  if (subr[1] %in% c(1:4, 11:12)) {
     parsed_comp$output[parsed_comp$label == 'Central'] <- TRUE
   } else {
     # When DES is used
     parsed_comp$output[as.numeric(
-      gsub('\\D','',parsed_arrow$from[is.na(parsed_arrow$to)]))] <- TRUE
+      gsub('\\D', '', parsed_arrow$from[is.na(parsed_arrow$to)])
+    )] <- TRUE
   }
 
 
@@ -114,9 +121,10 @@ import_qmd_info <- function(dir         = NULL,
               omega          = parsed_ext$omega,  # Omega(%) and RSE (%)
               data           = tab_file,          # Individual parameter values
               advan          = subr[1],           # NONMEM ADVAN
+              des            = des_block,         # Differential equations
               parsed_comp    = parsed_comp,       # Parsed compartment info
               parsed_arrow   = parsed_arrow       # Parsed arrow info
   )
   return(out)
 
-} # End import_qmd_info
+}

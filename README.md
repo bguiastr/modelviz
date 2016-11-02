@@ -101,7 +101,7 @@ The example dataset ```onecomp``` contains typical pharmacokinetic parameters va
 
 Unscaled                   |  Scaled
 :-------------------------:|:-------------------------:
-``` qmd(examples$onecomp, scaling = FALSE)``` | ``` qmd(examples$onecomp)```
+``` qmd(examples$onecomp, scaling = FALSE)``` | ```qmd(examples$onecomp)```
 <img src="inst/img/1_comp_unscaled.jpg"> | <img src="inst/img/1_comp.jpg">
 
 
@@ -141,7 +141,7 @@ Note : In this case manual color scheme has been applied
 
 Unscaled                   |  Scaled
 :-------------------------:|:-------------------------:
-```qmd(examples$metabolite, scaling = FALSE, rank = c(1,2,3,4,5,6,7,7,6,7,6,7,6))``` | ```qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3)), arrow_scale_fun = function(x){sqrt(x)})```
+ ```qmd(examples$metabolite, scaling = FALSE, rank = c(1,2,3,4,5,6,7,7,6,7,6,7,6))``` | ```qmd(examples$metabolite, rank = c(1,2,3,4,5,6,7,7,6,7,6,7,6), comp_scale_fun = function(x){sqrt(x/50)}, arrow_scale_fun = function(x){sqrt(x)})```
 <img src="inst/img/metabolite_unscaled.jpg"> | <img src="inst/img/metabolite.jpg">
 
 

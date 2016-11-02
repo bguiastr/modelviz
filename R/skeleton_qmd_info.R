@@ -6,9 +6,10 @@
 #'
 #' @seealso \code{\link{import_qmd_info}}, \code{\link{read_nmtab}}, \code{\link{parse_nonmem_model}}
 #' @return A list containing the fixed effect (\code{theta}), random effect variance (\code{omega})
-#' typical values along with their uncertainty, the indivudual parameters (\code{data})
-#' the nonmem ADVAN (\code{advan}), the parsed compartment information (\code{parsed_comp}),
-#' and the parsed arrow information (\code{parsed_arrow}).
+#' typical values along with their uncertainty, the indivudual parameters (\code{data}),
+#' the nonmem ADVAN (\code{advan}), the model differential equations (\code{des}),
+#' the parsed compartment information (\code{parsed_comp}), and the parsed arrow
+#' information (\code{parsed_arrow}).
 #' @examples
 #' \dontrun{
 #' qmd_info <- skeleton_qmd_info()
@@ -16,12 +17,13 @@
 #' @export
 skeleton_qmd_info <- function(help = TRUE) {
 
-  if(help) {
+  if (help) {
     out <- list(descr        = 'Model description [character string, optional]',
                 theta        = 'Theta typical values and RSE (%) [data.frame, required]',
                 omega        = 'Omega typical values (%) and RSE (%) [data.frame, optional]',
                 data         = 'Individual parameter values [data.frame, optional]',
                 advan        = 'Nonmem ADVAN subroutine [integer, required]',
+                des          = 'Model Differential equations [integer, required if advan 6, 8 or 13]',
                 parsed_comp  = 'Parsed compartment information [data.frame, required]',
                 parsed_arrow = 'Parsed arrow information [data.frame, required]'
     )
@@ -31,6 +33,7 @@ skeleton_qmd_info <- function(help = TRUE) {
                 omega        = NULL,
                 data         = NULL,
                 advan        = NULL,
+                des          = NULL,
                 parsed_comp  = data.frame(label  = as.character(),
                                           prm    = as.character(),
                                           output = as.character()),
@@ -38,8 +41,8 @@ skeleton_qmd_info <- function(help = TRUE) {
                                           to   = as.character(),
                                           prm  = as.character(),
                                           dir  = as.character())
-                )
+    )
   }
   return(out)
 
-} # End skeleton_qmd_info
+}

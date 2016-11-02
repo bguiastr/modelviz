@@ -144,6 +144,9 @@ qmd(examples$threecomp, color_scaling = 'iiv', color_cutoff = c(15, 30))
 
 ## GITT model
 qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3),
+    scaling = FALSE, filled = FALSE, unscaled_color = 'dodgerblue3')
+
+qmd(examples$gitt,
     scaling = FALSE, filled = FALSE)
 
 qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3),
@@ -171,7 +174,7 @@ qmd(examples$pbpk, pbpk_layout = TRUE, color_scaling = 'PBPK',
 qmd(examples$pbpk, pbpk_layout = TRUE, color_scaling = 'PBPK',
     scaling = FALSE, flipped = TRUE)
 
-qmd(examples$pbpk, pbpk_layout = TRUE, color_scaling = 'PBPK',
+qmd(examples$pbpk, pbpk_layout = TRUE, color_scaling = 'none',
     flipped = TRUE, arrow_scale_fun = function(x) { 1.5*x + 1 })
 
 # Bedaquiline

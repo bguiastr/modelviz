@@ -67,7 +67,7 @@ parse_comp_data <- function(mod_file   = NULL,
 
   } else {
     # When DES is used
-    comp_prm <- do.call('rbind', lapply(mod_file$CODE[mod_file$ABREV == 'DES'], des_parser))
+    comp_prm <- do.call('rbind', lapply(X = mod_file$CODE[mod_file$ABREV == 'DES'], FUN = des_parser, verbose = verbose))
     comp_prm$prm <- NA
     comp_prm$prm[grepl('^\\(\\w+\\/\\w+\\)$', comp_prm$des)] <-
       gsub('^\\(\\w+\\/(\\w+)\\)$','\\1', comp_prm$des[grepl('^\\(\\w+\\/\\w+\\)$', comp_prm$des)])
