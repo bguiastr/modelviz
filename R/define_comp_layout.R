@@ -238,7 +238,6 @@ define_comp_layout <- function(qmd_info           = NULL,
     }
     node$fillcolor[!is.na(node$value) & node$value == 0] <- hex_color('white', 1)
     node$gradientangle <- 90
-    node$style[!is.na(node$value)] <- 'striped'
   }
 
   node$style[grepl('Out_', node$label)] <- 'invisible'
