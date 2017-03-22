@@ -10,7 +10,7 @@ Description: Generation of quantitative model diagrams (QMD) for evaluation of
 Depends:
     R (>= 3.0.2)
 Imports:
-    DiagrammeR (<= 0.8.4),
+    DiagrammeR (>= 0.9.1),
     DiagrammeRsvg,
     readr,
     rsvg,
