@@ -2,7 +2,6 @@
 
 export(define_arrow_layout)
 export(define_comp_layout)
-export(define_graph)
 export(define_pbpk_layout)
 export(format_qmd_info)
 export(hex_color)
@@ -12,4 +11,3 @@ export(qmd)
 export(read_nmtab)
 export(save_qmd)
 export(skeleton_qmd_info)
-importFrom(DiagrammeR,x11_hex)

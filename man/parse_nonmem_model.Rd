@@ -34,4 +34,3 @@ mod_file <- parse_nonmem_model(dir = '../models/pk/', runno = '101')
 \seealso{
 \code{\link{import_qmd_info}}, \code{\link{read_nmtab}}
 }
-

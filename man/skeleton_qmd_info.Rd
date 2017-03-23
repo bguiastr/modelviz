@@ -27,4 +27,3 @@ qmd_info <- skeleton_qmd_info()
 \seealso{
 \code{\link{import_qmd_info}}, \code{\link{read_nmtab}}, \code{\link{parse_nonmem_model}}
 }
-

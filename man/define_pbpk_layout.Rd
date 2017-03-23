@@ -38,4 +38,3 @@ pbpk     <- define_pbpk_layout(comp = comp, arrow = arrow)
 \seealso{
 \code{\link{define_comp_layout}}, \code{\link{define_arrow_layout}}, \code{\link{qmd}}
 }
-

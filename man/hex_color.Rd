@@ -19,4 +19,3 @@ Create hexadecimal type color name with transparency
 color <- hex_color(color = 'dodgerblue3', alpha = 0.5)
 }
 }
-

@@ -23,4 +23,3 @@ save_qmd(qmd_graph = NULL, title = NULL, filename = "qmd_graph",
 \description{
 Save QMD to different file formats
 }
-

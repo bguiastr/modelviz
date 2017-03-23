@@ -105,4 +105,3 @@ qmd(qmd_info, scaling = FALSE)
 \seealso{
 \code{\link{import_qmd_info}}, \code{\link{format_qmd_info}}
 }
-

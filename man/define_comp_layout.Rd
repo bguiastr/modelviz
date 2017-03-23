@@ -62,4 +62,3 @@ comp     <- define_comp_layout(qmd_info)
 \seealso{
 \code{\link{define_arrow_layout}}, \code{\link{import_qmd_info}}, \code{\link{qmd}}
 }
-

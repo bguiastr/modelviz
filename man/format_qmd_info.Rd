@@ -28,4 +28,3 @@ qmd_info_formatted <- format_qmd_info(qmd_info)
 \seealso{
 \code{\link{import_qmd_info}}, \code{\link{skeleton_qmd_info}}, \code{\link{qmd}}
 }
-

@@ -39,4 +39,3 @@ data <- read_nmtab(file = '../models/pk/sdtab101')
 \seealso{
 \code{\link{parse_nonmem_model}}, \code{\link{import_qmd_info}}
 }
-

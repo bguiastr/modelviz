@@ -43,4 +43,3 @@ qmd_info <- import_qmd_info(dir = '../models/pk/', runno = '001')
 \seealso{
 \code{\link{format_qmd_info}}, \code{\link{qmd}}
 }
-
