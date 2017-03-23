@@ -4,7 +4,7 @@
 \alias{hex_color}
 \title{Create color in hexadecimal}
 \usage{
-hex_color(color = NULL, alpha = NULL)
+hex_color(color = NULL, alpha = 1)
 }
 \arguments{
 \item{color}{a hexadecimal or named color e.g. '#1874CD' or 'dodgerblue3'}

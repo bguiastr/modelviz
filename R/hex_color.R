@@ -10,35 +10,19 @@
 #' color <- hex_color(color = 'dodgerblue3', alpha = 0.5)
 #' }
 #' @export
-hex_color <- function(color = NULL, alpha = NULL) {
+hex_color <- function(color = NULL, alpha = 1) {
 
-  if(is.null(color)) {
-    stop('Missing the \"color\" argument.')
+  if (!is.numeric(alpha) || alpha > 1 || alpha < 0) {
+    stop('Argument \"alpha\" must be a number between 0 and 1')
   }
 
-  for(i in seq_along(color)) {
-    if(!grepl('#', color[i], fixed = TRUE)) {
-      if(!color[i] %in% x11_hex()[ , 1]) {
-        stop('Invalid \"color\" argument.')
-      } else {
-        color[i] <- x11_hex()[which(color[i]==x11_hex()[ , 1]), 2]
-      }
-    }
-  }
+  color <- col2rgb(col = color)
+  color <- rgb(red   = color[1, ],
+               green = color[2, ],
+               blue  = color[3, ],
+               alpha = 255*alpha,
+               maxColorValue = 255)
 
-  alpha <- suppressWarnings(as.numeric(alpha))
-
-  if(length(alpha) != 0 && (is.na(alpha) | alpha > 1 | alpha < 0)) {
-    stop('Invalid \"alpha\" argument. Must be within 0 - 1.')
-  }
-
-  if(!is.null(alpha)) {
-    alpha <- as.hexmode(round(as.numeric(alpha)*255, digits = 0))
-    alpha <- gsub(' ', 0, format(alpha, width = 2), fixed = TRUE)
-
-
-    color <- paste0(substr(color, 1, 7), alpha)
-  }
   return(color)
 
 } # End hex_colors
