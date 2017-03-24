@@ -4,7 +4,7 @@
 \alias{define_comp_layout}
 \title{Create compartment layout}
 \usage{
-define_comp_layout(qmd_info = NULL, scaling = TRUE,
+define_comp_layout(qmd_info = NULL, scaling = TRUE, rank = NULL,
   comp_scale_fun = function(x) {     sqrt(x) }, color_scaling = "RSE",
   color_cutoff = c(25, 50), filled = TRUE, alpha = 1,
   comp_color_manual = NULL, unscaled_color = NULL,
@@ -17,6 +17,9 @@ define_comp_layout(qmd_info = NULL, scaling = TRUE,
 
 \item{scaling}{logical if \code{TRUE} compartment size and colors will be scaled.
 If \code{FALSE} standard model diagram will be created}
+
+\item{rank}{integer vertor assigning a rank for each compartment. Can be used
+to obtain a specific layout}
 
 \item{comp_scale_fun}{a function to be used for compartment size scaling}
 
