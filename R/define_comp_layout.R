@@ -62,14 +62,14 @@ define_comp_layout <- function(qmd_info           = NULL,
 
 
   # Create key variables ----------------------------------------------------
-  parsed_comp <- qmd_info$parsed_comp
+  node <- qmd_info$parsed_comp
 
   # Dynamic QMDs
   if (toupper(color_scaling) == 'DQMD') {
     scaling <- TRUE
     dqmd    <- TRUE
   } else {
-    dqmd <- FALSE
+    dqmd    <- FALSE
   }
 
   # Check inputs ------------------------------------------------------------
@@ -77,7 +77,7 @@ define_comp_layout <- function(qmd_info           = NULL,
     stop('Argument \"qmd_info\" required.')
   }
 
-  if (is.null(parsed_comp)) {
+  if (is.null(node)) {
     stop('Level \"parsed_comp\" required in \"qmd_info\".')
   }
 
@@ -85,53 +85,52 @@ define_comp_layout <- function(qmd_info           = NULL,
     stop('ADVAN 10 is not currently supported by modelviz.')
   }
 
-  if (!is.null(parsed_comp) && !all(c('label', 'prm', 'output') %in% colnames(parsed_comp))) {
+  if (!is.null(node) && !all(c('label', 'prm', 'output') %in% colnames(node))) {
     stop('Incorrect format of \"parsed_comp\" in \"qmd_info\", columns \"label\", \"prm\" and \"output\" required.')
   }
 
-  if (scaling == FALSE) { parsed_comp$prm <- NA }
-
-  # Create output compartment -----------------------------------------------
-  if (any(parsed_comp$output)) {
-    out_comp       <- parsed_comp[parsed_comp$output, ]
-    out_comp$prm   <- NA
-    out_comp$label <- paste0('Out_', out_comp$label)
-    parsed_comp    <- rbind(parsed_comp, out_comp)
-  }
+  if (scaling == FALSE) { node$prm <- NA }
 
   # Start node data creation ------------------------------------------------
-  ## Create node data.frame template
-  node <- as.data.frame(rep(NA, nrow(parsed_comp)) %o% rep(NA, 7))
-  colnames(node) <- c('nodes', 'label', 'rank', 'prm', 'value', 'rse', 'iiv')
+  node$rank  <- 1:nrow(node)
 
-  ## Fill node and label rows
-  node$nodes <- paste0('A', 1:nrow(node))
-  node$label <- parsed_comp$label
+  if (any(node$output)) {
+    ## Create output compartment
+    out_comp       <- node[node$output, ]
+    out_comp$prm   <- NA
+    out_comp$label <- paste0('Out_', out_comp$label)
+    node           <- rbind(node, out_comp)
+  }
 
-  ## Rank compartments
-  node$rank <- 1:nrow(node)
-  node$rank[grepl('^Out_', node$label)] <-
-    node$rank[node$label %in% gsub('Out_', '', node$label[grepl('^Out_', node$label)], fixed = TRUE)]
+  node$id    <- 1:nrow(node)
+  node       <- node[, c('id', 'label', 'rank', 'prm')]
+  node[, c('value', 'rse', 'iiv')] <- NA
 
   ## Ensure all prm exist
-  if (length(parsed_comp$prm[!is.na(parsed_comp$prm)]) == 0) {
+  if (all(is.na(node$prm))) {
     msg('Warning: No parameter provided in \"qmd_info$parsed_comp$prm\".', ifelse(scaling, TRUE, FALSE))
     scaling <- FALSE
-  } else if (!all(parsed_comp$prm[!is.na(parsed_comp$prm)] %in% colnames(qmd_info$theta))) {
+  } else if (!all(node$prm[!is.na(node$prm)] %in% colnames(qmd_info$theta))) {
     msg('Warning: Wrong parameter label provided in \"qmd_info$parsed_comp$prm\".', TRUE)
     scaling <- FALSE
   }
 
-
   # Assign parameter values -------------------------------------------------
   if (scaling | toupper(color_scaling) == 'DQMD') {
-    ### Add F1 scaling if possible
-    if (!dqmd && 'F1' %in% colnames(qmd_info$theta) && is.na(parsed_comp[1, 'prm']) && qmd_info$theta[1, 'F1'] < 1) {
-      parsed_comp[1, 'prm'] <- 'F1'
+
+    ### Add bioavailability scaling if possible
+    if (!dqmd && grepl('^F\\d$', colnames(qmd_info$theta))) {
+      ba_prm  <- qmd_info$theta[1, grep('^F\\d$', colnames(qmd_info$theta)), drop = FALSE]
+      ba_comp <- as.numeric(gsub('\\D', '', colnames(ba_prm)))
+
+      if (!all(is.na(node$prm[node$id %in% ba_comp])) | any(ba_prm > 1)) {
+        msg('Warning: Any of the F (e.g. F1) parameters were either not accessible or >1.', TRUE)
+      } else {
+        node$prm[node$id %in% ba_comp] <- paste0('F', node$id[node$id %in% ba_comp])
+      }
     }
 
     ### Assign all prm, rse, iiv
-    node$prm  <- parsed_comp$prm
     node[!is.na(node$prm), c('value', 'rse')] <- t(qmd_info$theta[, node[!is.na(node$prm), 'prm']])
 
     ### iiv labels assumed to have properly been cleaned in parse_ext_file
@@ -152,7 +151,7 @@ define_comp_layout <- function(qmd_info           = NULL,
 
   ## Scaling factor
   if (scaling & !dqmd) {
-    node$scale[!is.na(node$value) & !grepl('F1', node$prm)] <- comp_scale_fun(node$value[!is.na(node$value) & !grepl('F1', node$prm)])
+    node$scale[!is.na(node$value) & !grepl('^F\\d$', node$prm)] <- comp_scale_fun(node$value[!is.na(node$value) & !grepl('^F\\d$', node$prm)])
     node$width  <- ifelse(!is.na(node$scale), node$scale, 1)
   } else {
     node$scale  <- NA
@@ -168,9 +167,9 @@ define_comp_layout <- function(qmd_info           = NULL,
   node$height <- node$width
 
   ## Colors
-  if (length(color_cutoff) != 2) {
-    msg('Argument \"color_cutoff\" must have length of 2, units are in %.', TRUE)
-    color_cutoff <- c(25, 50)
+  if (!is.numeric(color_cutoff) || length(color_cutoff) != 2) {
+    msg('Argument \"color_cutoff\" must be a numeric vector of length of 2, units are in %.', TRUE)
+    color_scaling <- 'NONE'
   }
 
   if (is.null(unscaled_color)) {
@@ -213,7 +212,7 @@ define_comp_layout <- function(qmd_info           = NULL,
 
   ## Shapes
   node$shape <- scaled_shape
-  node$shape[is.na(node$value) | grepl('F1', node$prm)] <- unscaled_shape
+  node$shape[is.na(node$value) | grepl('^F\\d$', node$prm)] <- unscaled_shape
 
   ## Style
   if (filled | dqmd) {
@@ -244,28 +243,27 @@ define_comp_layout <- function(qmd_info           = NULL,
   node$penwidth    <- ifelse(node$style %in% c('filled', 'invisible') & !dqmd, 0, ifelse(scaling, 1, 2))
 
   ## Bioavailability
-  if (any(grepl('F1', node$prm))) {
-    node$style[1]    <- ifelse(unscaled_shape %in% c('circle','oval','ellipse'),
+  if (any(grepl('^F\\d$', node$prm))) {
+    node$style[grepl('^F\\d$', node$prm)] <- ifelse(unscaled_shape %in% c('circle', 'oval', 'ellipse'),
                                'wedged', 'striped')
-    node$penwidth[1] <- 1.5
+    node$penwidth[grepl('^F\\d$', node$prm)] <- 1.5
 
     if (filled == FALSE) {
       node$fillcolor    <- hex_color('white', 1)
-      node$fontcolor[1] <- hex_color('black', 1)
+      node$fontcolor[grepl('^F\\d$', node$prm)] <- hex_color('black', 1)
     }
-    node$fillcolor[1]   <-
-      paste0(node$color[1], ';', node$value[1], ':', hex_color('white', 1))
-    node$color[1] <- hex_color(node$color[1], 1)
-
+    node$fillcolor[grepl('^F\\d$', node$prm)]   <-
+      paste0(node$color[grepl('^F\\d$', node$prm)], ';', node$value[grepl('^F\\d$', node$prm)], ':', hex_color('white', 1))
+    node$color[grepl('^F\\d$', node$prm)] <- hex_color(node$color[grepl('^F\\d$', node$prm)], 1)
   }
 
   ## Tooltip
   node$tooltip[is.na(node$value)]  <- node$label[is.na(node$value)]
-  node$tooltip[!is.na(node$value)] <- paste0(node$prm[!is.na(node$value)],' = ', signif(node$value[!is.na(node$value)],4))
+  node$tooltip[!is.na(node$value)] <- paste0(node$prm[!is.na(node$value)],' = ', signif(node$value[!is.na(node$value)], 4))
 
   if (!dqmd) {
-    node$tooltip[!is.na(node$iiv)]   <- paste0(node$tooltip[!is.na(node$iiv)], ' (', signif(node$iiv[!is.na(node$iiv)],3), '% IIV)')
-    node$tooltip[!is.na(node$rse)]   <- paste0(node$tooltip[!is.na(node$rse)], ' [', signif(node$rse[!is.na(node$rse)],3), '% RSE]')
+    node$tooltip[!is.na(node$iiv)] <- paste0(node$tooltip[!is.na(node$iiv)], ' (', signif(node$iiv[!is.na(node$iiv)], 3), '% IIV)')
+    node$tooltip[!is.na(node$rse)] <- paste0(node$tooltip[!is.na(node$rse)], ' [', signif(node$rse[!is.na(node$rse)], 3), '% RSE]')
   }
 
   return(node)
