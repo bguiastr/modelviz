@@ -83,7 +83,6 @@ define_arrow_layout <- function(qmd_info           = NULL,
   }
   arrow[,c('value', 'rse', 'iiv')] <- NA
 
-
   # Assign parameter values -------------------------------------------------
   if (scaling) {
     arrow[!is.na(arrow$prm), c('value', 'rse')] <-
@@ -106,11 +105,11 @@ define_arrow_layout <- function(qmd_info           = NULL,
     if (is.null(qmd_info$parsed_comp)) {
       stop('Level \"parsed_comp\" required in \"qmd_info\".')
     }
-    output_comp <- as.numeric(gsub('\\D', '', arrow$from[is.na(arrow$to)]))
-    if (all(qmd_info$parsed_comp[output_comp, 'output'])) {
-      nodes <- paste0('A',nrow(qmd_info$parsed_comp) + (1:length(output_comp)))
-      arrow[is.na(arrow$to),'to'] <- nodes[order(output_comp)]
 
+    output_comp <- arrow$from[is.na(arrow$to)]
+    if (all(qmd_info$parsed_comp[output_comp, 'output'])) {
+      nodes <- nrow(qmd_info$parsed_comp) + (1:length(output_comp))
+      arrow[is.na(arrow$to) ,'to'] <- nodes[order(output_comp)]
     } else {
       stop('Could not match output compartment with arrows.')
     }
@@ -137,9 +136,9 @@ define_arrow_layout <- function(qmd_info           = NULL,
   arrow$minlen   <- ifelse(scaling, 1, 2)
 
   ## Colors
-  if (length(color_cutoff) != 2) {
-    msg('Argument \"color_cutoff\" must have length of 2, units are in %.', TRUE)
-    color_cutoff <- c(25, 50)
+  if (!is.numeric(color_cutoff) || length(color_cutoff) != 2) {
+    msg('Argument \"color_cutoff\" must be a numeric vector of length of 2, units are in %.', TRUE)
+    color_scaling <- 'NONE'
   }
 
   if (is.null(unscaled_color)) {
