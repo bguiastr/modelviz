@@ -216,5 +216,8 @@ define_arrow_layout <- function(qmd_info           = NULL,
   arrow$penwidth[is.na(arrow$scale)] <- min(arrow$penwidth, na.rm = TRUE)
   arrow$arrowsize[is.na(arrow$scale)] <- min(arrow$arrowsize, na.rm = TRUE)
 
+  ## Required by DiagrammeR (v.9.1)
+  arrow$rel <- NA
+
   return(arrow)
 }
