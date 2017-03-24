@@ -120,7 +120,7 @@ define_comp_layout <- function(qmd_info           = NULL,
   if (scaling | toupper(color_scaling) == 'DQMD') {
 
     ### Add bioavailability scaling if possible
-    if (!dqmd && grepl('^F\\d$', colnames(qmd_info$theta))) {
+    if (!dqmd && any(grepl('^F\\d$', colnames(qmd_info$theta)))) {
       ba_prm  <- qmd_info$theta[1, grep('^F\\d$', colnames(qmd_info$theta)), drop = FALSE]
       ba_comp <- as.numeric(gsub('\\D', '', colnames(ba_prm)))
 
