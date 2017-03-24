@@ -33,19 +33,6 @@
 #' }
 #' @export
 #'
-# qmd_info           = qmd_bile
-# scaling            = FALSE
-# comp_scale_fun     = function(x) { x / 2.9 }
-# color_scaling      = 'dQMD'
-# color_cutoff       = c(25, 50)
-# filled             = TRUE
-# alpha              = 1
-# comp_color_manual  = c(rep('dodgerblue3', 2), rep('yellowgreen', 6))
-# unscaled_color     = NULL
-# unscaled_shape     = 'circle'
-# scaled_shape       = 'square'
-# font               = 'Avenir'
-# comp_fontsize      = 1
 define_comp_layout <- function(qmd_info           = NULL,
                                scaling            = TRUE,
                                comp_scale_fun     = function(x) { sqrt(x) },
