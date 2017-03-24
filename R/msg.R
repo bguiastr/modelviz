@@ -1,6 +1,6 @@
 # Function from github.com/ronkeizer/vpc
 msg <- function(txt, verbose = FALSE) {
-  if(verbose) {
+  if (verbose) {
     message(txt)
   }
 }
