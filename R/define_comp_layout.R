@@ -7,6 +7,8 @@
 #' \code{skeleton_qmd_info}
 #' @param scaling logical if \code{TRUE} compartment size and colors will be scaled.
 #'  If \code{FALSE} standard model diagram will be created
+#' @param rank integer vertor assigning a rank for each compartment. Can be used
+#' to obtain a specific layout
 #' @param comp_scale_fun a function to be used for compartment size scaling
 #' @param color_scaling can be 'iiv', 'rse', 'none' or 'pbpk'
 #' @param color_cutoff numeric vector of length 2 setting the cutoff limits in color coding
@@ -35,6 +37,7 @@
 #'
 define_comp_layout <- function(qmd_info           = NULL,
                                scaling            = TRUE,
+                               rank               = NULL,
                                comp_scale_fun     = function(x) { sqrt(x) },
                                color_scaling      = 'RSE',
                                color_cutoff       = c(25, 50),
@@ -79,16 +82,27 @@ define_comp_layout <- function(qmd_info           = NULL,
   if (scaling == FALSE) { node$prm <- NA }
 
   # Start node data creation ------------------------------------------------
-  node$rank  <- 1:nrow(node)
+  ## Set node ranking
+  if (!is.null(rank)) {
+    if (all(is.numeric(rank)) && length(rank) == nrow(node)) {
+      node$rank <- rank
+    } else {
+      msg(paste0('Argument \"rank\" must be a numeric vector of length ', nrow(node), '.'), TRUE)
+      node$rank  <- 1:nrow(node)
+    }
+  } else {
+    node$rank  <- 1:nrow(node)
+  }
 
+  ## Create output compartment
   if (any(node$output)) {
-    ## Create output compartment
     out_comp       <- node[node$output, ]
     out_comp$prm   <- NA
     out_comp$label <- paste0('Out_', out_comp$label)
     node           <- rbind(node, out_comp)
   }
 
+  ## Create node data.frame template
   node$id    <- 1:nrow(node)
   node       <- node[, c('id', 'label', 'rank', 'prm')]
   node[, c('value', 'rse', 'iiv')] <- NA
