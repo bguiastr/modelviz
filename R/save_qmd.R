@@ -32,7 +32,7 @@ save_qmd <- function(qmd_graph = NULL,
 
 
   # Prepare raw output ------------------------------------------------------
-  raw <- DiagrammeR::render_graph(qmd_graph)#, title = title)
+  raw <- DiagrammeR::render_graph(qmd_graph, title = title)
   raw <- DiagrammeRsvg::export_svg(raw)
   raw <- charToRaw(raw)
 
