@@ -2,7 +2,7 @@
 % Please edit documentation in R/qmd.R
 \name{qmd}
 \alias{qmd}
-\title{Create and render QMD}
+\title{Automated creation and rendering of QMD graphs}
 \usage{
 qmd(qmd_info = NULL, scaling = TRUE, comp_scale_fun = function(x) {    
   sqrt(x) }, arrow_scale_fun = function(x) {     x }, labels = TRUE,
@@ -11,10 +11,11 @@ qmd(qmd_info = NULL, scaling = TRUE, comp_scale_fun = function(x) {
   color_cutoff = c(25, 50), arrow_color_manual = NULL,
   comp_color_manual = NULL, unscaled_color = NULL,
   unscaled_shape = "circle", scaled_shape = "square", flipped = FALSE,
-  rank = NULL, clearance_mode = FALSE, pbpk_layout = FALSE,
-  vein_comp_label = "venous", artery_comp_label = "arterial",
-  shiny = FALSE, output = "graph", filename = "qmd_graph", title = NULL,
-  width = NULL, height = NULL, gv_options = NULL)
+  rank = NULL, title = NULL, clearance_mode = FALSE,
+  pbpk_layout = FALSE, vein_comp_label = "venous",
+  artery_comp_label = "arterial", format = "graph",
+  filename = "qmd_graph", width = NULL, height = NULL,
+  graph_attrs = NULL)
 }
 \arguments{
 \item{qmd_info}{a \code{list} containing the parameters, their RSE and the
@@ -64,6 +65,8 @@ for RSE (\%) or IIV (\%)}
 \item{rank}{integer vertor assigning a rank for each compartment. Can be used
 to obtain a specific layout}
 
+\item{title}{A title to be added to the graph}
+
 \item{clearance_mode}{logical if \code{TRUE} clearances will be represented by triangles
 and their surface area will be proportional to the volume cleared per unit of time}
 
@@ -73,22 +76,18 @@ and their surface area will be proportional to the volume cleared per unit of ti
 
 \item{artery_comp_label}{label of the arterial compartment}
 
-\item{shiny}{logical if \code{TRUE} output will be formated for shiny output}
+\item{format}{file format when save is \code{TRUE}. Must be one of 'pdf', 'ps', 'jpeg', 'png', or 'svg'}
 
-\item{output}{format of the output to be returned by the qmd function ('graph', 'vivagraph',
-'visNetwork'), or an output format to save the graph ('pdf', 'ps', 'jpeg',
-'png', or 'svg')}
-
-\item{filename}{Name of the file to be created on the disk (without extension) when output is one
-of ('pdf', 'ps', 'jpeg', 'png', or 'svg')}
-
-\item{title}{A title to be added to the graph}
+\item{filename}{name of the file to be created on the disk (without extension) when save is \code{TRUE}}
 
 \item{width}{width of the resulting graphic in pixels}
 
 \item{height}{height of the resulting graphic in pixels}
 
-\item{gv_options}{vector of options to be passed to Graphviz}
+\item{graph_attrs}{an optional data.frame of graph attribute statements that can
+serve as defaults for the graph.}
+
+\item{save}{save the graph into a file (default \code{FALSE})}
 }
 \value{
 A graphic object
