@@ -45,7 +45,6 @@
 #' serve as defaults for the graph.
 #'
 #' @seealso \code{\link{import_qmd_info}}, \code{\link{format_qmd_info}}
-#' @return A graphic object
 #' @examples
 #' \dontrun{
 #' qmd(qmd_info, scaling = FALSE)

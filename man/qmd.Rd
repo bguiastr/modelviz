@@ -89,9 +89,6 @@ serve as defaults for the graph.}
 
 \item{save}{save the graph into a file (default \code{FALSE})}
 }
-\value{
-A graphic object
-}
 \description{
 Create and renders Quantitative Model Diagrams (QMD)
 for NONMEM models
