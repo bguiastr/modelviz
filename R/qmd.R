@@ -1,4 +1,4 @@
-#' Create and render QMD
+#' Automated creation and rendering of QMD graphs
 #'
 #' @description Create and renders Quantitative Model Diagrams (QMD)
 #' for NONMEM models
@@ -30,21 +30,19 @@
 #' @param flipped logical if \code{TRUE} the layout will be flipped
 #' @param rank integer vertor assigning a rank for each compartment. Can be used
 #' to obtain a specific layout
+#' @param title A title to be added to the graph
 #' @param clearance_mode logical if \code{TRUE} clearances will be represented by triangles
 #'  and their surface area will be proportional to the volume cleared per unit of time
 #' @param pbpk_layout logical if \code{TRUE} a PBPK layout will be applied
 #' @param vein_comp_label label of the veinous compartment
 #' @param artery_comp_label label of the arterial compartment
-#' @param shiny logical if \code{TRUE} output will be formated for shiny output
-#' @param output format of the output to be returned by the qmd function ('graph', 'vivagraph',
-#' 'visNetwork'), or an output format to save the graph ('pdf', 'ps', 'jpeg',
-#' 'png', or 'svg')
-#' @param filename Name of the file to be created on the disk (without extension) when output is one
-#' of ('pdf', 'ps', 'jpeg', 'png', or 'svg')
-#' @param title A title to be added to the graph
+#' @param save save the graph into a file (default \code{FALSE})
+#' @param filename name of the file to be created on the disk (without extension) when save is \code{TRUE}
+#' @param format file format when save is \code{TRUE}. Must be one of 'pdf', 'ps', 'jpeg', 'png', or 'svg'
 #' @param width width of the resulting graphic in pixels
 #' @param height height of the resulting graphic in pixels
-#' @param gv_options vector of options to be passed to Graphviz
+#' @param graph_attrs	an optional data.frame of graph attribute statements that can
+#' serve as defaults for the graph.
 #'
 #' @seealso \code{\link{import_qmd_info}}, \code{\link{format_qmd_info}}
 #' @return A graphic object
@@ -73,17 +71,16 @@ qmd <- function(qmd_info           = NULL,
                 scaled_shape       = 'square',
                 flipped            = FALSE,
                 rank               = NULL,
+                title              = NULL,
                 clearance_mode     = FALSE,
                 pbpk_layout        = FALSE,
                 vein_comp_label    = 'venous',
                 artery_comp_label  = 'arterial',
-                shiny              = FALSE,
-                output             = 'graph',
+                format             = 'graph',
                 filename           = 'qmd_graph',
-                title              = NULL,
                 width              = NULL,
                 height             = NULL,
-                gv_options         = NULL) {
+                graph_attrs        = NULL) {
 
   # Check inputs ------------------------------------------------------------
   if (is.null(qmd_info)) {
@@ -93,6 +90,7 @@ qmd <- function(qmd_info           = NULL,
   # Create compartments -----------------------------------------------------
   comp_data  <- define_comp_layout(qmd_info,
                                    scaling           = scaling,
+                                   rank              = rank,
                                    comp_scale_fun    = comp_scale_fun,
                                    color_scaling     = color_scaling,
                                    color_cutoff      = color_cutoff,
@@ -104,16 +102,6 @@ qmd <- function(qmd_info           = NULL,
                                    scaled_shape      = scaled_shape,
                                    font              = font,
                                    comp_fontsize     = comp_fontsize)
-
-  if (is.integer(rank) || is.numeric(rank)) {
-    if (length(rank) != nrow(comp_data)) {
-      msg(paste0('Provide an integer rank for each of the following compartment\n',
-                 paste(comp_data$label, collapse = ', '), ':'), TRUE)
-      rank <- readline(prompt = '')
-      rank <- as.numeric(unlist(strsplit(rank, '\\D+')))
-    }
-    comp_data$rank <- rank
-  }
 
 
   # Create arrows -----------------------------------------------------------
@@ -144,53 +132,17 @@ qmd <- function(qmd_info           = NULL,
   }
 
 
-  # Create graph ------------------------------------------------------------
-  ## Possibility to modify defaults
-  if (is.null(gv_options)) {
-    gv_options <- c(
-      ifelse(flipped, 'rankdir = TB', 'rankdir = LR'),
-      ifelse(pbpk_layout, 'ranksep = 0.5', 'ranksep = 0'),
-      ifelse(pbpk_layout, 'nodesep = 0.25', 'nodesep = 0.15'),
-      ifelse(pbpk_layout, 'splines = true', 'splines = polyline'))
+  # Create QMD graph --------------------------------------------------------
+  create_qmd(comp        = comp_data,
+             arrow       = arrow_data,
+             pbpk        = pbpk_data,
+             graph_attrs = graph_attrs,
+             flipped     = flipped,
+             title       = title,
+             save        = save,
+             filename    = filename,
+             format      = format,
+             width       = width,
+             height      = height)
 
-  } else {
-    gv_options <- c(
-      if (!any(grepl('rankdir', gv_options))) {
-        ifelse(flipped, 'rankdir = TB', 'rankdir = LR')
-      },
-      if (!any(grepl('ranksep', gv_options))) {
-        ifelse(pbpk_layout, 'ranksep = 0.5', 'ranksep = 0')
-      },
-      if (!any(grepl('nodesep', gv_options))) {
-        ifelse(pbpk_layout, 'nodesep = 0.25', 'nodesep = 0.15')
-      },
-      if (!any(grepl('splines', gv_options))) {
-        ifelse(pbpk_layout, 'splines = true', 'splines = polyline')
-      },
-      gv_options)
-  }
-
-  graph      <- define_graph(comp        = comp_data,
-                             arrow       = arrow_data,
-                             pbpk        = pbpk_data,
-                             graph_attrs = gv_options)
-
-
-  # Render graph ------------------------------------------------------------
-  if (shiny) {
-    DiagrammeR::grViz(graph$dot_code)
-  } else if (output %in% c('graph', 'vivagraph', 'visNetwork')) {
-    DiagrammeR::render_graph(graph,
-                             output = output,
-                             #title  = title,
-                             width  = width,
-                             height = height)
-  } else {
-    save_qmd(qmd_graph = graph,
-             filename  = filename,
-             device    = output,
-             #title     = title,
-             width     = width,
-             height    = height)
-  }
 } # End qmd
