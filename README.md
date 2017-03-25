@@ -4,8 +4,6 @@ modelviz <img src="logo.png" align="right" />
 
 [![build\_status](https://travis-ci.org/guiastrennec/modelviz.svg?branch=master)](https://travis-ci.org/guiastrennec/modelviz) ![cran\_version](http://www.r-pkg.org/badges/version/modelviz) [![codecov](https://codecov.io/gh/guiastrennec/modelviz/branch/master/graph/badge.svg)](https://codecov.io/gh/guiastrennec/modelviz)
 
-------------------------------------------------------------------------
-
 Overview
 --------
 
