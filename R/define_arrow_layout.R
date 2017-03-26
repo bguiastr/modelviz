@@ -106,7 +106,7 @@ define_arrow_layout <- function(qmd_info           = NULL,
       stop('Level \"parsed_comp\" required in \"qmd_info\".')
     }
 
-    output_comp <- arrow$from[is.na(arrow$to)]
+    output_comp <- as.numeric(arrow$from[is.na(arrow$to)])
     if (all(qmd_info$parsed_comp[output_comp, 'output'])) {
       nodes <- nrow(qmd_info$parsed_comp) + (1:length(output_comp))
       arrow[is.na(arrow$to) ,'to'] <- nodes[order(output_comp)]
