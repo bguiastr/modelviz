@@ -1,2 +1,6 @@
+^\.travis\.yml$
+^_config\.yml$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^logo\.png$
+^README\.Rmd$
