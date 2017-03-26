@@ -17,28 +17,28 @@
 #' mod_file <- parse_nonmem_model(dir = '../models/pk/', runno = '101')
 #' }
 #' @export
-parse_nonmem_model <- function(dir = NULL,
-                               runno = NULL,
+parse_nonmem_model <- function(dir    = NULL,
+                               runno  = NULL,
                                prefix = 'run',
-                               ext = '.mod',
-                               file = NULL) {
+                               ext    = '.mod',
+                               file   = NULL) {
 
   # Check inputs
-  if(is.null(runno) & is.null(file)) {
+  if (is.null(runno) & is.null(file)) {
     stop('Argument \"runno\" or \"file\" required.')
   }
 
-  if(!is.null(dir) && !substr(dir, nchar(dir), nchar(dir)) == '/') {
+  if (!is.null(dir) && !substr(dir, nchar(dir), nchar(dir)) == '/') {
     dir <- paste0(dir, '/')
   }
 
-  if(!is.null(file)) {
+  if (!is.null(file)) {
     file_full <- file
   } else {
     file_full <- paste0(dir, prefix, runno, ext)
   }
 
-  if(!file.exists(file_full)) { stop(paste('file', file_full, 'not found.')) }
+  if (!file.exists(file_full)) { stop(paste('file', file_full, 'not found.')) }
 
   # Import mod_file
   mod_file <- readLines(file_full)
@@ -62,7 +62,7 @@ parse_nonmem_model <- function(dir = NULL,
   mod_file <- do.call('rbind', mod_file)
 
   # If lst file index lst rows
-  if(any(grepl('NM-TRAN MESSAGES', mod_file[, 1], fixed = TRUE))) {
+  if (any(grepl('NM-TRAN MESSAGES', mod_file[, 1], fixed = TRUE))) {
     lst <- grep('NM-TRAN MESSAGES', mod_file[, 1], fixed = TRUE):nrow(mod_file)
     mod_file[lst, 'LEVEL'] <- mod_file[lst, 'LEVEL'] + 1
     mod_file[c(1,lst), 'SUB']   <- '$LST'

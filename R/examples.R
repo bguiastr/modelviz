@@ -59,6 +59,7 @@
 #' of Clinical Pharmacology. 59:6, 691–704. (2004)
 #'
 #' @examples
+#' \dontrun{
 #' # One-compartment model
 #' qmd(examples$onecomp)
 #'
@@ -69,13 +70,14 @@
 #' qmd(examples$threecomp)
 #'
 #' # GITT model
-#' qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5,3))
+#' qmd(examples$gitt, rank = c(1,2,2,2,2,2,3,4,5,5))
 #'
 #' # Metabolite
-#' qmd(examples$metabolite, rank = c(1,2,3,4,5,6,7,7,6,7,6,7,6))
+#' qmd(examples$metabolite, rank = c(1,2,3,4,5,6,7,7,6,7,6,7))
 #'
 #' # PBPK model
 #' qmd(examples$pbpk, pbpk_layout = TRUE)
+#' }
 #'
 #' @name examples
 NULL

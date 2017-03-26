@@ -16,12 +16,12 @@ hex_color <- function(color = NULL, alpha = 1) {
     stop('Argument \"alpha\" must be a number between 0 and 1')
   }
 
-  color <- col2rgb(col = color)
-  color <- rgb(red   = color[1, ],
-               green = color[2, ],
-               blue  = color[3, ],
-               alpha = 255*alpha,
-               maxColorValue = 255)
+  color <- grDevices::col2rgb(col = color)
+  color <- grDevices::rgb(red   = color[1, ],
+                          green = color[2, ],
+                          blue  = color[3, ],
+                          alpha = 255 * alpha,
+                          maxColorValue = 255)
 
   return(color)
 

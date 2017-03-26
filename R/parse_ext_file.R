@@ -1,14 +1,14 @@
-parse_ext_file <- function(ext_file = NULL,
-                           mod_file = NULL,
-                           verbose = TRUE,
+parse_ext_file <- function(ext_file    = NULL,
+                           mod_file    = NULL,
+                           verbose     = TRUE,
                            interactive = TRUE) {
 
   # Check inputs
-  if(is.null(ext_file) | is.null(mod_file)) {
+  if (is.null(ext_file) | is.null(mod_file)) {
     stop('Both arguments \"ext_file\" and \"mod_file\" required.')
   }
 
-  if(!file.exists(ext_file)) {
+  if (!file.exists(ext_file)) {
     stop('Parameter file \".ext\" not found.')
   }
 
@@ -21,7 +21,7 @@ parse_ext_file <- function(ext_file = NULL,
 
   tvprm    <- ext_file[ext_file$ITERATION == -1000000000, -1]
 
-  if(-1000000001 %in% ext_file$ITERATION) {
+  if (-1000000001 %in% ext_file$ITERATION) {
     rse     <- ext_file[ext_file$ITERATION == -1000000001, -1]
     rse     <- abs(100 * rse / tvprm)
     rse[tvprm == 0] <- 0
@@ -50,11 +50,11 @@ parse_ext_file <- function(ext_file = NULL,
   omega_prm['tvprm',] <- sqrt(omega_prm['tvprm',])*100
 
   # Assign names to parameters
-  if(n_theta != length(theta_names)) {
-    if(interactive) {
-      while(n_theta != length(theta_names)) {
-        theta_names <- readline(prompt = paste('Enter the', n_theta, 'names for the thetas in',
-                                               basename(file_full),' separated by commas: '))
+  if (n_theta != length(theta_names)) {
+    if (interactive) {
+      while (n_theta != length(theta_names)) {
+        theta_names <- readline(prompt = paste('Enter the', n_theta, 'names for the thetas in the',
+                                               basename(mod_file),'model file separated by commas: '))
         theta_names <- unlist(strsplit(x = theta_names, split = '\\s*,\\s*'))
       }
     } else {
@@ -64,13 +64,13 @@ parse_ext_file <- function(ext_file = NULL,
 
   colnames(theta_prm) <- toupper(theta_names)
 
-  if(n_omega == length(omega_names)) {
+  if (n_omega == length(omega_names)) {
     colnames(omega_prm) <- toupper(omega_names)
   } else {
     msg('Warning: names could not be attributed to omegas.', verbose)
   }
 
-  if(n_sigma == length(sigma_names)) {
+  if (n_sigma == length(sigma_names)) {
     colnames(sigma_prm) <- toupper(sigma_names)
   } else {
     msg('Warning: names could not be attributed to sigmas.', FALSE) # Not used for now
@@ -80,6 +80,8 @@ parse_ext_file <- function(ext_file = NULL,
   colnames(omega_prm) <- gsub(paste0('.*(', paste0(colnames(theta_prm), collapse = '|'),
                                      ').*'), '\\1', colnames(omega_prm))
 
-  return(list(theta = theta_prm, omega = omega_prm, sigma = sigma_prm))
+  return(list(theta = theta_prm,
+              omega = omega_prm,
+              sigma = sigma_prm))
 
 } # End parse_ext_file
