@@ -24,7 +24,7 @@ BugReports: https://github.com/guiastrennec/modelviz/issues
 Depends:
     R (>= 3.0.2)
 Imports:
-    DiagrammeR (>= 0.9.1),
+    DiagrammeR (>= 0.9),
     readr,
     utils,
     stats
