@@ -5,7 +5,7 @@
 \title{Creation and rendering of QMD graphs}
 \usage{
 create_qmd(comp = NULL, arrow = NULL, pbpk = NULL, graph_attrs = NULL,
-  flipped = FALSE, title = NULL, save = FALSE, filename = "qmd_graph",
+  flipped = FALSE, title = NULL, save_qmd = FALSE, file_name = NULL,
   format = "svg", width = NULL, height = NULL)
 }
 \arguments{
@@ -16,15 +16,17 @@ create_qmd(comp = NULL, arrow = NULL, pbpk = NULL, graph_attrs = NULL,
 \item{pbpk}{a list created by \code{define_pbpk_layout}}
 
 \item{graph_attrs}{an optional data.frame of graph attribute statements that can
-serve as defaults for the graph.}
+serve as defaults for the graph}
+
+\item{flipped}{logical if \code{TRUE} the layout will be flipped}
 
 \item{title}{a title to be added to the graph}
 
-\item{save}{save the graph into a file (default \code{FALSE})}
+\item{save_qmd}{save the graph into a file (default \code{FALSE})}
 
-\item{filename}{name of the file to be created on the disk (without extension) when save is \code{TRUE}}
+\item{file_name}{name of the file to be created on the disk (without extension) when save_qmd is \code{TRUE}}
 
-\item{format}{file format when save is \code{TRUE}. Must be one of 'pdf', 'ps', 'jpeg', 'png', or 'svg'}
+\item{format}{file format when save_qmd is \code{TRUE}. Must be one of "png", "pdf", "svg" or "ps"}
 
 \item{width}{width of the resulting graphic in pixels}
 

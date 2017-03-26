@@ -36,9 +36,9 @@
 #' @param pbpk_layout logical if \code{TRUE} a PBPK layout will be applied
 #' @param vein_comp_label label of the veinous compartment
 #' @param artery_comp_label label of the arterial compartment
-#' @param save save the graph into a file (default \code{FALSE})
-#' @param filename name of the file to be created on the disk (without extension) when save is \code{TRUE}
-#' @param format file format when save is \code{TRUE}. Must be one of 'pdf', 'ps', 'jpeg', 'png', or 'svg'
+#' @param save_qmd save the QMD graph into a file (default \code{FALSE})
+#' @param file_name name of the file to be created on the disk (without extension) when save_qmd is \code{TRUE}
+#' @param format file format when save_qmd is \code{TRUE}. Must be one of "png", "pdf", "svg" or "ps"
 #' @param width width of the resulting graphic in pixels
 #' @param height height of the resulting graphic in pixels
 #' @param graph_attrs	an optional data.frame of graph attribute statements that can
@@ -75,8 +75,9 @@ qmd <- function(qmd_info           = NULL,
                 pbpk_layout        = FALSE,
                 vein_comp_label    = 'venous',
                 artery_comp_label  = 'arterial',
-                format             = 'graph',
-                filename           = 'qmd_graph',
+                save_qmd           = FALSE,
+                file_name          = NULL,
+                format             = 'svg',
                 width              = NULL,
                 height             = NULL,
                 graph_attrs        = NULL) {
@@ -138,8 +139,8 @@ qmd <- function(qmd_info           = NULL,
              graph_attrs = graph_attrs,
              flipped     = flipped,
              title       = title,
-             save        = save,
-             filename    = filename,
+             save_qmd    = save_qmd,
+             file_name   = file_name,
              format      = format,
              width       = width,
              height      = height)

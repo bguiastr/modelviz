@@ -13,9 +13,8 @@ qmd(qmd_info = NULL, scaling = TRUE, comp_scale_fun = function(x) {
   unscaled_shape = "circle", scaled_shape = "square", flipped = FALSE,
   rank = NULL, title = NULL, clearance_mode = FALSE,
   pbpk_layout = FALSE, vein_comp_label = "venous",
-  artery_comp_label = "arterial", format = "graph",
-  filename = "qmd_graph", width = NULL, height = NULL,
-  graph_attrs = NULL)
+  artery_comp_label = "arterial", save_qmd = FALSE, file_name = NULL,
+  format = "svg", width = NULL, height = NULL, graph_attrs = NULL)
 }
 \arguments{
 \item{qmd_info}{a \code{list} containing the parameters, their RSE and the
@@ -76,9 +75,11 @@ and their surface area will be proportional to the volume cleared per unit of ti
 
 \item{artery_comp_label}{label of the arterial compartment}
 
-\item{format}{file format when save is \code{TRUE}. Must be one of 'pdf', 'ps', 'jpeg', 'png', or 'svg'}
+\item{save_qmd}{save the QMD graph into a file (default \code{FALSE})}
 
-\item{filename}{name of the file to be created on the disk (without extension) when save is \code{TRUE}}
+\item{file_name}{name of the file to be created on the disk (without extension) when save_qmd is \code{TRUE}}
+
+\item{format}{file format when save_qmd is \code{TRUE}. Must be one of "png", "pdf", "svg" or "ps"}
 
 \item{width}{width of the resulting graphic in pixels}
 
@@ -86,8 +87,6 @@ and their surface area will be proportional to the volume cleared per unit of ti
 
 \item{graph_attrs}{an optional data.frame of graph attribute statements that can
 serve as defaults for the graph.}
-
-\item{save}{save the graph into a file (default \code{FALSE})}
 }
 \description{
 Create and renders Quantitative Model Diagrams (QMD)

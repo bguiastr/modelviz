@@ -6,11 +6,12 @@
 #' @param arrow a data.frame created by \code{define_arrow_layout}
 #' @param pbpk a list created by \code{define_pbpk_layout}
 #' @param graph_attrs	an optional data.frame of graph attribute statements that can
-#' serve as defaults for the graph.
+#' serve as defaults for the graph
+#' @param flipped logical if \code{TRUE} the layout will be flipped
 #' @param title a title to be added to the graph
-#' @param save save the graph into a file (default \code{FALSE})
-#' @param filename name of the file to be created on the disk (without extension) when save is \code{TRUE}
-#' @param format file format when save is \code{TRUE}. Must be one of 'pdf', 'ps', 'jpeg', 'png', or 'svg'
+#' @param save_qmd save the graph into a file (default \code{FALSE})
+#' @param file_name name of the file to be created on the disk (without extension) when save_qmd is \code{TRUE}
+#' @param format file format when save_qmd is \code{TRUE}. Must be one of "png", "pdf", "svg" or "ps"
 #' @param width width of the resulting graphic in pixels
 #' @param height height of the resulting graphic in pixels
 #'
@@ -26,8 +27,8 @@ create_qmd <- function(comp        = NULL,
                        graph_attrs = NULL,
                        flipped     = FALSE,
                        title       = NULL,
-                       save        = FALSE,
-                       filename    = 'qmd_graph',
+                       save_qmd    = FALSE,
+                       file_name   = NULL,
                        format      = 'svg',
                        width       = NULL,
                        height      = NULL) {
@@ -77,13 +78,12 @@ create_qmd <- function(comp        = NULL,
                                               attr_type = graph_attrs[, 'type'])
 
   # Render graph ------------------------------------------------------------
-  if (save) {
-    save_qmd(qmd_graph = graph,
-             filename  = filename,
-             device    = format,
-             title     = title,
-             width     = width,
-             height    = height)
+  if (save_qmd) {
+    DiagrammeR::export_graph(graph,
+                             file_name = file_name,
+                             file_type = format,
+                             width     = width,
+                             height    = height)
   } else {
     DiagrammeR::render_graph(graph,
                              output = 'graph',
