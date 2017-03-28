@@ -7,8 +7,8 @@
 #' \code{skeleton_qmd_info}
 #' @param scaling logical if \code{TRUE} compartment size and colors will be scaled.
 #'  If \code{FALSE} standard model diagram will be created
-#' @param rank integer vertor assigning a rank for each compartment. Can be used
-#' to obtain a specific layout
+#' @param rank integer vertor assigning a rank to each compartment. Can be used
+#' to obtain a specific layout. The ranks must be greater or equal to 1.
 #' @param comp_scale_fun a function to be used for compartment size scaling
 #' @param color_scaling can be 'iiv', 'rse', 'none' or 'pbpk'
 #' @param color_cutoff numeric vector of length 2 setting the cutoff limits in color coding
@@ -90,6 +90,10 @@ define_comp_layout <- function(qmd_info           = NULL,
       msg(paste0('Argument \"rank\" must be a numeric vector of length ', nrow(node), '.'), TRUE)
       node$rank  <- 1:nrow(node)
     }
+  } else if (qmd_info$advan == 11) {
+    node$rank <- c(1, 2, 2)
+  } else if (qmd_info$advan == 12) {
+    node$rank <- c(1, 2, 3, 3)
   } else {
     node$rank  <- 1:nrow(node)
   }

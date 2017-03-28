@@ -28,8 +28,8 @@
 #' @param unscaled_shape shape of the unscaled compartments. Can be square, circle or diamond
 #' @param scaled_shape shape of the scaled compartments. Can be square, circle or diamond
 #' @param flipped logical if \code{TRUE} the layout will be flipped
-#' @param rank integer vertor assigning a rank for each compartment. Can be used
-#' to obtain a specific layout
+#' @param rank integer vertor assigning a rank to each compartment. Can be used
+#' to obtain a specific layout. The ranks must be greater or equal to 1.
 #' @param title A title to be added to the graph
 #' @param clearance_mode logical if \code{TRUE} clearances will be represented by triangles
 #'  and their surface area will be proportional to the volume cleared per unit of time

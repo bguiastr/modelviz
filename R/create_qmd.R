@@ -61,27 +61,29 @@ create_qmd <- function(comp        = NULL,
   # Add invisible nodes and arrows to force layout when using rank ----------
   # Create hidden nodes
   max_rank    <- max(nodes_df$rank, na.rm = TRUE)
-  hidden_ndf  <- DiagrammeR::create_node_df(n      = max_rank,
-                                            rank   = 1:max_rank,
-                                            style  = 'invis',
-                                            shape  = 'point',
-                                            width  = 0,
-                                            heigth = 0)
-  # Renumber nodes_df id and combine with hidden nodes
-  nodes_df$id <- as.numeric(nodes_df$id) + max_rank
-  nodes_df    <- DiagrammeR::combine_ndfs(hidden_ndf, nodes_df)
+  if (max_rank > 1) {
+    hidden_ndf  <- DiagrammeR::create_node_df(n      = max_rank,
+                                              rank   = 1:max_rank,
+                                              style  = 'invis',
+                                              shape  = 'point',
+                                              width  = 0,
+                                              heigth = 0)
 
-  # Create hidden edges
-  hidden_edf  <- data.frame(from  = 2:max_rank - 1,
-                            to    = 2:max_rank,
-                            style = 'invis',
-                            stringsAsFactors = FALSE)
+    # Renumber nodes_df id and combine with hidden nodes
+    nodes_df$id <- as.numeric(nodes_df$id) + max_rank
+    nodes_df    <- DiagrammeR::combine_ndfs(hidden_ndf, nodes_df)
 
-  # Renumber edges_df connections and combine with hidden edges
-  edges_df$from <- as.numeric(edges_df$from) + max_rank
-  edges_df$to   <- as.numeric(edges_df$to) + max_rank
-  edges_df <- DiagrammeR::combine_edfs(hidden_edf, edges_df)
+    # Create hidden edges
+    hidden_edf  <- data.frame(from  = 2:max_rank - 1,
+                              to    = 2:max_rank,
+                              style = 'invis',
+                              stringsAsFactors = FALSE)
 
+    # Renumber edges_df connections and combine with hidden edges
+    edges_df$from <- as.numeric(edges_df$from) + max_rank
+    edges_df$to   <- as.numeric(edges_df$to) + max_rank
+    edges_df <- DiagrammeR::combine_edfs(hidden_edf, edges_df)
+  }
 
   # create graph ------------------------------------------------------------
   graph <- DiagrammeR::create_graph(nodes_df = nodes_df,
