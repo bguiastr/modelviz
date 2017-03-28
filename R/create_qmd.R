@@ -60,7 +60,7 @@ create_qmd <- function(comp        = NULL,
 
   # Add invisible nodes and arrows to force layout when using rank ----------
   # Create hidden nodes
-  max_rank    <- max(nodes_df$rank, na.rm = TRUE)
+  max_rank <- max(nodes_df$rank, na.rm = TRUE)
   if (max_rank > 1) {
     hidden_ndf  <- DiagrammeR::create_node_df(n      = max_rank,
                                               rank   = 1:max_rank,
@@ -80,9 +80,14 @@ create_qmd <- function(comp        = NULL,
                               stringsAsFactors = FALSE)
 
     # Renumber edges_df connections and combine with hidden edges
-    edges_df$from <- as.numeric(edges_df$from) + max_rank
-    edges_df$to   <- as.numeric(edges_df$to) + max_rank
-    edges_df <- DiagrammeR::combine_edfs(hidden_edf, edges_df)
+    if (!is.null(edges_df)) {
+      edges_df$from <- as.numeric(edges_df$from) + max_rank
+      edges_df$to   <- as.numeric(edges_df$to) + max_rank
+      edges_df      <- DiagrammeR::combine_edfs(hidden_edf, edges_df)
+    } else {
+      edges_df      <- hidden_edf
+      edges_df$rel  <- NA # Required by DiagrammeR (v.9.1)
+    }
   }
 
   # create graph ------------------------------------------------------------
