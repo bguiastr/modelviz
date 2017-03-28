@@ -77,7 +77,7 @@ and their surface area will be proportional to the volume cleared per unit of ti
 
 \item{save_qmd}{save the QMD graph into a file (default \code{FALSE})}
 
-\item{file_name}{name of the file to be created on the disk (without extension) when save_qmd is \code{TRUE}}
+\item{file_name}{name of the file to be created on the disk when save_qmd is \code{TRUE}}
 
 \item{format}{file format when save_qmd is \code{TRUE}. Must be one of "png", "pdf", "svg" or "ps"}
 

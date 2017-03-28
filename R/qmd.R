@@ -37,7 +37,7 @@
 #' @param vein_comp_label label of the veinous compartment
 #' @param artery_comp_label label of the arterial compartment
 #' @param save_qmd save the QMD graph into a file (default \code{FALSE})
-#' @param file_name name of the file to be created on the disk (without extension) when save_qmd is \code{TRUE}
+#' @param file_name name of the file to be created on the disk when save_qmd is \code{TRUE}
 #' @param format file format when save_qmd is \code{TRUE}. Must be one of "png", "pdf", "svg" or "ps"
 #' @param width width of the resulting graphic in pixels
 #' @param height height of the resulting graphic in pixels
