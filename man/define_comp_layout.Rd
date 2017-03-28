@@ -18,8 +18,8 @@ define_comp_layout(qmd_info = NULL, scaling = TRUE, rank = NULL,
 \item{scaling}{logical if \code{TRUE} compartment size and colors will be scaled.
 If \code{FALSE} standard model diagram will be created}
 
-\item{rank}{integer vertor assigning a rank for each compartment. Can be used
-to obtain a specific layout}
+\item{rank}{integer vertor assigning a rank to each compartment. Can be used
+to obtain a specific layout. The ranks must be greater or equal to 1.}
 
 \item{comp_scale_fun}{a function to be used for compartment size scaling}
 

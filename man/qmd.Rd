@@ -61,8 +61,8 @@ for RSE (\%) or IIV (\%)}
 
 \item{flipped}{logical if \code{TRUE} the layout will be flipped}
 
-\item{rank}{integer vertor assigning a rank for each compartment. Can be used
-to obtain a specific layout}
+\item{rank}{integer vertor assigning a rank to each compartment. Can be used
+to obtain a specific layout. The ranks must be greater or equal to 1.}
 
 \item{title}{A title to be added to the graph}
 
