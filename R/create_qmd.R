@@ -62,8 +62,11 @@ create_qmd <- function(comp        = NULL,
   # Create hidden nodes
   max_rank    <- max(nodes_df$rank, na.rm = TRUE)
   hidden_ndf  <- DiagrammeR::create_node_df(n      = max_rank,
-                                            rank  = 1:max_rank,
-                                            style = 'invis')
+                                            rank   = 1:max_rank,
+                                            style  = 'invis',
+                                            shape  = 'point',
+                                            width  = 0,
+                                            heigth = 0)
   # Renumber nodes_df id and combine with hidden nodes
   nodes_df$id <- as.numeric(nodes_df$id) + max_rank
   nodes_df    <- DiagrammeR::combine_ndfs(hidden_ndf, nodes_df)
