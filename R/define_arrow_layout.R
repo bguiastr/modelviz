@@ -202,13 +202,17 @@ define_arrow_layout <- function(qmd_info           = NULL,
 
   ## Parse labels
   if (labels && parse_labels) {
-    # Ks
+    # Rate constant (Ks)
     Ks <- arrow$label[grep('^K+', arrow$label)]
     arrow$label[grep('^K+', arrow$label)] <- paste0('K@_{', substr(Ks, 2, nchar(Ks)), '}')
 
-    # Qs
-    Qs <- arrow$label[grep('^Q+', arrow$label)] # Restrict to '^Q\\d+' ?
+    # Intercompartmental clearances (Qs)
+    Qs <- arrow$label[grep('^Q+', arrow$label)] # Restrict to '^Q\\d+'?
     arrow$label[grep('^Q+', arrow$label)] <- paste0('Q@_{', substr(Qs, 2, nchar(Qs)), '}')
+
+    # Elimination clearances (CL)
+    CLs <- arrow$label[grep('^CL+', arrow$label)] # Restrict to '^CL\\d+'?
+    arrow$label[grep('^CL+', arrow$label)] <- paste0('CL@_{', substr(CLs, 3, nchar(CLs)), '}')
   }
 
   ## Attribute scale to NA arrows
