@@ -207,8 +207,8 @@ define_arrow_layout <- function(qmd_info           = NULL,
     arrow$label[grep('^K+', arrow$label)] <- paste0('K@_{', substr(Ks, 2, nchar(Ks)), '}')
 
     # Qs
-    Qs <- arrow$label[grep('^Q\\d+', arrow$label)]
-    arrow$label[grep('^Q\\d+', arrow$label)] <- paste0('Q@_{', substr(Qs, 2, nchar(Qs)), '}')
+    Qs <- arrow$label[grep('^Q+', arrow$label)] # Restrict to '^Q\\d+' ?
+    arrow$label[grep('^Q+', arrow$label)] <- paste0('Q@_{', substr(Qs, 2, nchar(Qs)), '}')
   }
 
   ## Attribute scale to NA arrows
