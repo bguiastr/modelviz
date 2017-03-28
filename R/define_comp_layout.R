@@ -240,7 +240,7 @@ define_comp_layout <- function(qmd_info           = NULL,
     node$gradientangle <- 90
   }
 
-  node$style[grepl('Out_', node$label)] <- 'invisible'
+  node$style[grepl('Out_', node$label)] <- 'invis'
   node$penwidth    <- ifelse(node$style %in% c('filled', 'invisible') & !dqmd, 0, ifelse(scaling, 1, 2))
 
   ## Bioavailability
