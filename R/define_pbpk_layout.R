@@ -43,8 +43,8 @@ define_pbpk_layout <- function(comp              = NULL,
 
   # Reasign rank
   comp$rank[comp$id == vein_comp]   <- 1
-  comp$rank[comp$id == artery_comp] <- 9999
-  comp$rank[!comp$rank %in% c(1, 9999)] <- 2
+  comp$rank[comp$id == artery_comp] <- 4
+  comp$rank[!comp$id %in% c(vein_comp, artery_comp)] <- 2
 
   # Set pbpk color mode
   if (pbpk_color == TRUE) {
@@ -62,26 +62,16 @@ define_pbpk_layout <- function(comp              = NULL,
           c('color', 'fontcolor')] <- 'deepskyblue3' # blue
   }
 
-  # Handle intermediary comp
-  out_comp  <- comp$id[comp$style == 'invisible']
-  move_comp <- arrow[!arrow$from %in% c(vein_comp, artery_comp) &
-                       !arrow$to %in% c(vein_comp, artery_comp, out_comp), c('from', 'to')]
-  comp$rank[comp$id %in% move_comp$from] <- comp$rank[comp$id %in% move_comp$to] + 1
+  # Move pre-hepatic compartments
+  liver_comp <- comp$id[toupper(comp$label) == 'LIVER']
+  move_comp  <- arrow[!arrow$from %in% c(vein_comp, artery_comp) &
+                        arrow$to == liver_comp, c('from', 'to')]
+  comp$rank[comp$id %in% move_comp$from] <- 3
   ## Add: if parent move the out_comp will also move
 
-  # Add invisible nodes and arrows to force layout
-  hidden_nodes <- 1:length(unique(comp$rank)) + max(comp$id)
-  comp_edit <- DiagrammeR::combine_ndfs(comp,
-                                        data.frame(id  = hidden_nodes,
-                                                   rank  = sort(unique(comp$rank)),
-                                                   style = 'invisible'))
-
-  arrow_edit <- DiagrammeR::combine_edfs(arrow,
-                                         data.frame(from  = hidden_nodes[1:(length(hidden_nodes) - 1)],
-                                                    to    = hidden_nodes[2:length(hidden_nodes)],
-                                                    style = 'invis'))
-
-  pbpk <- list(comp  = comp_edit, arrow = arrow_edit)
+  pbpk <- list(comp  = comp,
+               arrow = arrow)
 
   return(pbpk)
+
 } # End define_pbpk_layout

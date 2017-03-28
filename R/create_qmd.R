@@ -58,6 +58,29 @@ create_qmd <- function(comp        = NULL,
     pbpk_layout <- FALSE
   }
 
+  # Add invisible nodes and arrows to force layout when using rank ----------
+  # Create hidden nodes
+  max_rank    <- max(nodes_df$rank, na.rm = TRUE)
+  hidden_ndf  <- DiagrammeR::create_node_df(n      = max_rank,
+                                            rank  = 1:max_rank,
+                                            style = 'invis')
+  # Renumber nodes_df id and combine with hidden nodes
+  nodes_df$id <- as.numeric(nodes_df$id) + max_rank
+  nodes_df    <- DiagrammeR::combine_ndfs(hidden_ndf, nodes_df)
+
+  # Create hidden edges
+  hidden_edf  <- data.frame(from  = 2:max_rank - 1,
+                            to    = 2:max_rank,
+                            style = 'invis',
+                            stringsAsFactors = FALSE)
+
+  # Renumber edges_df connections and combine with hidden edges
+  edges_df$from <- as.numeric(edges_df$from) + max_rank
+  edges_df$to   <- as.numeric(edges_df$to) + max_rank
+  edges_df <- DiagrammeR::combine_edfs(hidden_edf, edges_df)
+
+
+  # create graph ------------------------------------------------------------
   graph <- DiagrammeR::create_graph(nodes_df = nodes_df,
                                     edges_df = edges_df)
 
@@ -65,7 +88,7 @@ create_qmd <- function(comp        = NULL,
   if (is.null(graph_attrs)) {
     graph_attrs <- data.frame(attr  = c('layout', 'rankdir', 'ranksep', 'nodesep', 'splines'),
                               value = c('dot', ifelse(flipped, 'TB', 'LR'),
-                                        ifelse(pbpk_layout, '0.5', '0'),
+                                        ifelse(pbpk_layout, '0.25', '0'),
                                         ifelse(pbpk_layout, '0.25', '0.15'),
                                         ifelse(pbpk_layout, 'true', 'polyline')),
                               type  = 'graph')
