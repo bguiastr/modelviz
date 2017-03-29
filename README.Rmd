@@ -350,7 +350,7 @@ qmd(examples$pbpk, scaling = TRUE,
     arrow_scale_fun = function(x){sqrt(1.5*x + 1)},
     pbpk_layout = TRUE, color_scaling = 'PBPK',
     save_qmd = TRUE,
-    format = 'png', width = 800,
+    format = 'png', width = 600,
     file_name = 'inst/img/pbpk.png')
 ```
 
