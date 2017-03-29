@@ -19,7 +19,7 @@ Standard model diagrams
 
 Models are commonly represented as standard model diagrams (SMD) showing their structural properties but lacking any information on parameter and must therefore be used along with a parameter table.
 
-<img src="inst/img/smd_example.png">
+<img src="inst/img/smd_example.png" align="center" />
 
 Examples of SMD can be viewed on the [modelviz app](https://guiastrennec.shinyapps.io/modelviz_app/).
 
@@ -183,7 +183,7 @@ The example dataset `onecomp` contains typical pharmacokinetic parameters values
 qmd(examples$onecomp, scaling = FALSE)
 ```
 
-<img src="inst/img/1_comp_unscaled.png">
+<img src="inst/img/1_comp_unscaled.png" align="center" />
 
 #### QMD
 
@@ -191,7 +191,7 @@ qmd(examples$onecomp, scaling = FALSE)
 qmd(examples$onecomp, color_scaling = 'RSE')
 ```
 
-<img src="inst/img/1_comp.png">
+<img src="inst/img/1_comp.png" align="center" />
 
 ### Two-compartment model
 

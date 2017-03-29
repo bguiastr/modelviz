@@ -27,7 +27,7 @@ qmd(examples$threecomp, scaling = FALSE,
     file_name = 'inst/img/smd_example.png')
 ```
 
-<img src="inst/img/smd_example.png">
+<img src="inst/img/smd_example.png" align="center" />
 
 Examples of SMD can be viewed on the [modelviz app](https://guiastrennec.shinyapps.io/modelviz_app/).
 
@@ -154,7 +154,7 @@ qmd(examples$onecomp, scaling = FALSE,
 qmd(examples$onecomp, scaling = FALSE)
 ```
 
-<img src="inst/img/1_comp_unscaled.png">
+<img src="inst/img/1_comp_unscaled.png" align="center" />
 
 #### QMD
 ```{r onecomp file, eval = TRUE, echo = FALSE}
@@ -168,7 +168,7 @@ qmd(examples$onecomp, scaling = TRUE,
 qmd(examples$onecomp, color_scaling = 'RSE')
 ```
 
-<img src="inst/img/1_comp.png">
+<img src="inst/img/1_comp.png" align="center" />
 
 
 ### Two-compartment model
@@ -350,7 +350,7 @@ qmd(examples$pbpk, scaling = TRUE,
     arrow_scale_fun = function(x){sqrt(1.5*x + 1)},
     pbpk_layout = TRUE, color_scaling = 'PBPK',
     save_qmd = TRUE,
-    format = 'png', width = 800,
+    format = 'png', width = 800, height = 500,
     file_name = 'inst/img/pbpk.png')
 ```
 
