@@ -6,7 +6,7 @@
 \usage{
 qmd(qmd_info = NULL, scaling = TRUE, comp_scale_fun = function(x) {    
   sqrt(x) }, arrow_scale_fun = function(x) {     x }, labels = TRUE,
-  parse_labels = FALSE, font = "Avenir", comp_fontsize = 1,
+  parse_labels = TRUE, font = "Avenir", comp_fontsize = 1,
   arrow_fontsize = 1, filled = TRUE, alpha = 1, color_scaling = "RSE",
   color_cutoff = c(25, 50), arrow_color_manual = NULL,
   comp_color_manual = NULL, unscaled_color = NULL,
@@ -29,8 +29,8 @@ If \code{FALSE} standard model diagram will be created}
 
 \item{labels}{logical if \code{TRUE} labels are added to arrows}
 
-\item{parse_labels}{logical if \code{TRUE} labels will be parsed to use subscript the rate constant name (KA will become K subscript A)
-and the inter-compartmental clearance number (Q2 would become Q subscript 2)}
+\item{parse_labels}{logical if \code{TRUE} labels will be parsed to use subscript for the rate constant,
+clearances and inter-compartmental clearances index}
 
 \item{font}{font name of the compartment label}
 

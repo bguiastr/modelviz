@@ -14,8 +14,8 @@
 #' @param color_cutoff numeric vector of length 2 setting the cutoff limits in color coding
 #' for RSE (\%) or IIV (\%)
 #' @param labels logical if \code{TRUE} labels are added to arrows
-#' @param parse_labels logical if \code{TRUE} labels will be parsed to use subscript the rate constant name (KA will become K subscript A)
-#' and the inter-compartmental clearance number (Q2 would become Q subscript 2)
+#' @param parse_labels logical if \code{TRUE} labels will be parsed to use subscript for the rate constant,
+#' clearances and inter-compartmental clearances index
 #' @param alpha transparency factor
 #' @param arrow_color_manual manually set color for each arrow
 #' @param unscaled_color color of the unscaled compartments
@@ -40,7 +40,7 @@ define_arrow_layout <- function(qmd_info           = NULL,
                                 color_scaling      = 'RSE',
                                 color_cutoff       = c(25, 50),
                                 labels             = TRUE,
-                                parse_labels       = FALSE,
+                                parse_labels       = TRUE,
                                 alpha              = 1,
                                 arrow_color_manual = NULL,
                                 unscaled_color     = NULL,

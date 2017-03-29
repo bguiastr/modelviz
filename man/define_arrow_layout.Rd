@@ -7,7 +7,7 @@
 define_arrow_layout(qmd_info = NULL, scaling = TRUE,
   arrow_scale_fun = function(x) {     x }, clearance_mode = FALSE,
   color_scaling = "RSE", color_cutoff = c(25, 50), labels = TRUE,
-  parse_labels = FALSE, alpha = 1, arrow_color_manual = NULL,
+  parse_labels = TRUE, alpha = 1, arrow_color_manual = NULL,
   unscaled_color = NULL, font = "Avenir", arrow_fontsize = 1)
 }
 \arguments{
@@ -29,8 +29,8 @@ for RSE (\%) or IIV (\%)}
 
 \item{labels}{logical if \code{TRUE} labels are added to arrows}
 
-\item{parse_labels}{logical if \code{TRUE} labels will be parsed to use subscript the rate constant name (KA will become K subscript A)
-and the inter-compartmental clearance number (Q2 would become Q subscript 2)}
+\item{parse_labels}{logical if \code{TRUE} labels will be parsed to use subscript for the rate constant,
+clearances and inter-compartmental clearances index}
 
 \item{alpha}{transparency factor}
 
