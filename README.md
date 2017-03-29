@@ -19,7 +19,7 @@ Standard model diagrams
 
 Models are commonly represented as standard model diagrams (SMD) showing their structural properties but lacking any information on parameter and must therefore be used along with a parameter table.
 
-<img src="inst/img/smd_example.png", style="display: block; margin: auto">
+<img src="inst/img/smd_example.png">
 
 Examples of SMD can be viewed on the [modelviz app](https://guiastrennec.shinyapps.io/modelviz_app/).
 
@@ -183,7 +183,7 @@ The example dataset `onecomp` contains typical pharmacokinetic parameters values
 qmd(examples$onecomp, scaling = FALSE)
 ```
 
-<img src="inst/img/1_comp_unscaled.png", style="display: block; margin: auto">
+<img src="inst/img/1_comp_unscaled.png">
 
 #### QMD
 
@@ -191,7 +191,7 @@ qmd(examples$onecomp, scaling = FALSE)
 qmd(examples$onecomp, color_scaling = 'RSE')
 ```
 
-<img src="inst/img/1_comp.png", style="display: block; margin: auto">
+<img src="inst/img/1_comp.png">
 
 ### Two-compartment model
 
@@ -203,7 +203,7 @@ The example dataset `twocomp` contains typical pharmacokinetic parameters values
 qmd(examples$twocomp, scaling = FALSE)
 ```
 
-<img src="inst/img/2_comp_unscaled.png", style="display: block; margin: auto">
+<img src="inst/img/2_comp_unscaled.png">
 
 #### QMD
 
@@ -211,7 +211,7 @@ qmd(examples$twocomp, scaling = FALSE)
 qmd(examples$twocomp, color_scaling = 'RSE')
 ```
 
-<img src="inst/img/2_comp.png", style="display: block; margin: auto">
+<img src="inst/img/2_comp.png">
 
 ### Three-compartment model
 
@@ -223,7 +223,7 @@ The example dataset `threecomp` contains typical pharmacokinetic parameters valu
 qmd(examples$threecomp, scaling = FALSE)
 ```
 
-<img src="inst/img/3_comp_unscaled.png", style="display: block; margin: auto">
+<img src="inst/img/3_comp_unscaled.png">
 
 #### QMD
 
@@ -231,7 +231,7 @@ qmd(examples$threecomp, scaling = FALSE)
 qmd(examples$threecomp, color_scaling = 'IIV')
 ```
 
-<img src="inst/img/3_comp.png", style="display: block; margin: auto">
+<img src="inst/img/3_comp.png">
 
 ### Gastro-Intestinal Tansit Time (GITT) model
 
@@ -244,7 +244,7 @@ qmd(examples$gitt, scaling = FALSE,
     rank = c(1, 2, 2, 2, 2, 2, 3, 4, 5, 5))
 ```
 
-<img src="inst/img/gitt_unscaled.png", style="display: block; margin: auto">
+<img src="inst/img/gitt_unscaled.png">
 
 #### QMD
 
@@ -254,7 +254,7 @@ qmd(examples$gitt, color_scaling = 'IIV',
     arrow_scale_fun = function(x){sqrt(x)})
 ```
 
-<img src="inst/img/gitt.png", style="display: block; margin: auto">
+<img src="inst/img/gitt.png">
 
 ### Bedaquiline metabolites model
 
@@ -267,7 +267,7 @@ qmd(examples$metabolite, scaling = FALSE,
     rank = c(1, 2, 3, 4, 5, 6, 7, 7, 6, 7, 6, 7))
 ```
 
-<img src="inst/img/metabolite_unscaled.png", style="display: block; margin: auto">
+<img src="inst/img/metabolite_unscaled.png">
 
 #### QMD
 
@@ -285,7 +285,7 @@ qmd(examples$metabolite, color_scaling = 'IIV',
                            rep('coral', 2)))
 ```
 
-<img src="inst/img/metabolite.png", style="display: block; margin: auto">
+<img src="inst/img/metabolite.png">
 
 Note: In this case manual color scheme has been applied
 
@@ -300,7 +300,7 @@ qmd(examples$pbpk, scaling = FALSE,
     pbpk_layout = TRUE, color_scaling = 'PBPK')
 ```
 
-<img src="inst/img/pbpk_unscaled.png", style="display: block; margin: auto">
+<img src="inst/img/pbpk_unscaled.png">
 
 #### QMD
 
@@ -310,6 +310,6 @@ qmd(examples$pbpk, flipped = TRUE
     arrow_scale_fun = function(x){sqrt(2*x + 1)})
 ```
 
-<img src="inst/img/pbpk.png", style="display: block; margin: auto">
+<img src="inst/img/pbpk.png">
 
 Note: In this case `pbpk_layout` and `color_scaling = 'PBPK'` have been used.
