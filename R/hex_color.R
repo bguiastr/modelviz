@@ -12,7 +12,7 @@
 #' @export
 hex_color <- function(color = NULL, alpha = 1) {
 
-  if (!is.numeric(alpha) || alpha > 1 || alpha < 0) {
+  if (!all(is.numeric(alpha) & alpha >= 0 & alpha <= 1)) {
     stop('Argument \"alpha\" must be a number between 0 and 1')
   }
 
