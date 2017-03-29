@@ -16,7 +16,8 @@ create_qmd(comp = NULL, arrow = NULL, pbpk = NULL, graph_attrs = NULL,
 \item{pbpk}{a list created by \code{define_pbpk_layout}}
 
 \item{graph_attrs}{an optional data.frame of graph attribute statements that can
-serve as defaults for the graph}
+serve as defaults for the graph. The data.frame must contain the "attr",
+"value" and "type" columns. (e.g. data.frame(attr = "layout", value = "dot", type = "graph")}
 
 \item{flipped}{logical if \code{TRUE} the layout will be flipped}
 
