@@ -6,7 +6,8 @@
 #' @param arrow a data.frame created by \code{define_arrow_layout}
 #' @param pbpk a list created by \code{define_pbpk_layout}
 #' @param graph_attrs	an optional data.frame of graph attribute statements that can
-#' serve as defaults for the graph
+#' serve as defaults for the graph. The data.frame must contain the "attr",
+#' "value" and "type" columns. (e.g. data.frame(attr = "layout", value = "dot", type = "graph")
 #' @param flipped logical if \code{TRUE} the layout will be flipped
 #' @param title a title to be added to the graph
 #' @param save_qmd save the graph into a file (default \code{FALSE})
