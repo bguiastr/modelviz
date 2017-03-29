@@ -154,7 +154,7 @@ qmd(examples$onecomp, scaling = FALSE,
 qmd(examples$onecomp, scaling = FALSE)
 ```
 
-<img src="inst/img/1_comp_unscaled.png" align="center">
+<img src="inst/img/1_comp_unscaled.png">
 
 #### QMD
 ```{r onecomp file, eval = TRUE, echo = FALSE}
@@ -350,7 +350,7 @@ qmd(examples$pbpk, scaling = TRUE,
     arrow_scale_fun = function(x){sqrt(1.5*x + 1)},
     pbpk_layout = TRUE, color_scaling = 'PBPK',
     save_qmd = TRUE,
-    format = 'png', width = 800, height = 500,
+    format = 'png', width = 800,
     file_name = 'inst/img/pbpk.png')
 ```
 

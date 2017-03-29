@@ -183,7 +183,7 @@ The example dataset `onecomp` contains typical pharmacokinetic parameters values
 qmd(examples$onecomp, scaling = FALSE)
 ```
 
-<img src="inst/img/1_comp_unscaled.png" align="center">
+<img src="inst/img/1_comp_unscaled.png">
 
 #### QMD
 
