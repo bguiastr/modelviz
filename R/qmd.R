@@ -3,36 +3,10 @@
 #' @description Create and renders Quantitative Model Diagrams (QMD)
 #' for NONMEM models
 #'
-#' @param qmd_info a \code{list} containing the parameters, their RSE and the
-#'  nonmem subroutine ADVAN value
-#' @param scaling logical, if \code{TRUE} arrow width and colors will be scaled.
-#' If \code{FALSE} standard model diagram will be created
-#' @param comp_scale_fun a function to be used for compartment size scaling
-#' @param arrow_scale_fun a function to be used for arrow width scaling
-#' @param labels logical if \code{TRUE} labels are added to arrows
-#' @param parse_labels logical if \code{TRUE} arrow labels will be parsed to use subscript the rate
-#' constant name (\deqn{KA} will become \deqn{K_A}) and the inter-compartmental clearance number
-#' (\deqn{Q2} would become \deqn{Q_2})
-#' @param font font name of the compartment label
-#' @param comp_fontsize font size expansion factor
-#' @param arrow_fontsize font size expansion factor
-#' @param filled logical if \code{TRUE} compartment will be filled
-#'  If \code{FALSE} only the compartment edges will be drawn
-#' @param alpha transparency factor
-#' @param color_scaling can be 'iiv', 'rse', 'none' or 'pbpk'
-#' @param color_cutoff numeric vector of length 2 setting the cutoff limits in color coding
-#' for RSE (\%) or IIV (\%)
-#' @param arrow_color_manual manually set color for each arrow
-#' @param comp_color_manual manually set color for each compartment
-#' @param unscaled_color color of the unscaled compartments
-#' @param unscaled_shape shape of the unscaled compartments. Can be square, circle or diamond
-#' @param scaled_shape shape of the scaled compartments. Can be square, circle or diamond
+#' @inheritParams define_comp_layout
+#' @inheritParams define_arrow_layout
 #' @param flipped logical if \code{TRUE} the layout will be flipped
-#' @param rank integer vertor assigning a rank to each compartment. Can be used
-#' to obtain a specific layout. The ranks must be greater or equal to 1.
 #' @param title A title to be added to the graph
-#' @param clearance_mode logical if \code{TRUE} clearances will be represented by triangles
-#'  and their surface area will be proportional to the volume cleared per unit of time
 #' @param pbpk_layout logical if \code{TRUE} a PBPK layout will be applied
 #' @param vein_comp_label label of the veinous compartment
 #' @param artery_comp_label label of the arterial compartment
@@ -88,7 +62,7 @@ qmd <- function(qmd_info           = NULL,
   }
 
   # Create compartments -----------------------------------------------------
-  comp_data  <- define_comp_layout(qmd_info,
+  comp_data  <- define_comp_layout(qmd_info          = qmd_info,
                                    scaling           = scaling,
                                    rank              = rank,
                                    comp_scale_fun    = comp_scale_fun,
@@ -103,9 +77,8 @@ qmd <- function(qmd_info           = NULL,
                                    font              = font,
                                    comp_fontsize     = comp_fontsize)
 
-
   # Create arrows -----------------------------------------------------------
-  arrow_data <- define_arrow_layout(qmd_info,
+  arrow_data <- define_arrow_layout(qmd_info           = qmd_info,
                                     scaling            = scaling,
                                     arrow_scale_fun    = arrow_scale_fun,
                                     clearance_mode     = clearance_mode,

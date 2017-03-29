@@ -17,10 +17,10 @@ qmd(qmd_info = NULL, scaling = TRUE, comp_scale_fun = function(x) {
   format = "svg", width = NULL, height = NULL, graph_attrs = NULL)
 }
 \arguments{
-\item{qmd_info}{a \code{list} containing the parameters, their RSE and the
-nonmem subroutine ADVAN value}
+\item{qmd_info}{a \code{qmd_info} object generated with \code{import_qmd_info} or
+\code{skeleton_qmd_info}}
 
-\item{scaling}{logical, if \code{TRUE} arrow width and colors will be scaled.
+\item{scaling}{logical if \code{TRUE} compartment size and colors will be scaled.
 If \code{FALSE} standard model diagram will be created}
 
 \item{comp_scale_fun}{a function to be used for compartment size scaling}
@@ -29,9 +29,8 @@ If \code{FALSE} standard model diagram will be created}
 
 \item{labels}{logical if \code{TRUE} labels are added to arrows}
 
-\item{parse_labels}{logical if \code{TRUE} arrow labels will be parsed to use subscript the rate
-constant name (\deqn{KA} will become \deqn{K_A}) and the inter-compartmental clearance number
-(\deqn{Q2} would become \deqn{Q_2})}
+\item{parse_labels}{logical if \code{TRUE} labels will be parsed to use subscript the rate constant name (KA will become K subscript A)
+and the inter-compartmental clearance number (Q2 would become Q subscript 2)}
 
 \item{font}{font name of the compartment label}
 
