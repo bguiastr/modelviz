@@ -72,6 +72,9 @@ define_arrow_layout <- function(qmd_info           = NULL,
   if (length(arrow$prm[!is.na(arrow$prm)]) == 0) {
     msg('Warning: No parameter provided in \"qmd_info$parsed_arrow$prm\".', TRUE)
     scaling <- FALSE
+  } else if (!any(arrow$prm %in% colnames(qmd_info$theta))) {
+    msg('Warning: Unable to match arrow parameters (\"qmd_info$parsed_arrow$prm\") with their value (\"qmd_info$theta\")', TRUE)
+    scaling <- FALSE
   }
 
   ## Create arrow template structure
