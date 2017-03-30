@@ -52,9 +52,9 @@ parse_comp_data <- function(mod_file   = NULL,
       comp_labels  <- paste('Comp', 1:comp_labels)
 
     } else if (any(grepl('COMP\\s*=', comp_labels))) {
-      comp_labels  <- regmatches(comp_labels, gregexpr('COMP\\s*=\\s*\\((\\s|\\w)*\\)', comp_labels))
+      comp_labels  <- regmatches(comp_labels, gregexpr('COMP\\s*=\\s*\\((\\s|\\w|,)*\\)', comp_labels))
       comp_labels  <- unlist(comp_labels)
-      comp_labels  <- gsub('COMP\\s*=\\s*\\(|\\)', '', comp_labels)
+      comp_labels  <- gsub('COMP\\s*=\\s*\\(|,.*$|\\)', '', comp_labels)
       comp_labels  <- gsub('\\s+', '\n', comp_labels)
 
     } else {

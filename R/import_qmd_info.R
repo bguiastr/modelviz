@@ -96,7 +96,6 @@ import_qmd_info <- function(dir         = NULL,
                                    verbose   = verbose)
 
 
-
   # Parse comp --------------------------------------------------------------
   parsed_comp <- parse_comp_data(mod_file   = mod_file,
                                  parsed_ext = parsed_ext,
