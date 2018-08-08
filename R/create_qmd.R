@@ -106,7 +106,7 @@ create_qmd <- function(comp        = NULL,
 
   }
 
-  graph <- DiagrammeR::set_global_graph_attrs(graph     = graph,
+  graph <- DiagrammeR::add_global_graph_attrs(graph     = graph,
                                               attr      = graph_attrs[, 'attr'],
                                               value     = graph_attrs[, 'value'],
                                               attr_type = graph_attrs[, 'type'])
