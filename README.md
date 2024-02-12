@@ -2,8 +2,6 @@
 modelviz <img src="logo.png" align="right" />
 =============================================
 
-[![build\_status](https://travis-ci.org/guiastrennec/modelviz.svg?branch=master)](https://travis-ci.org/guiastrennec/modelviz) ![cran\_version](http://www.r-pkg.org/badges/version/modelviz) [![codecov](https://codecov.io/gh/guiastrennec/modelviz/branch/master/graph/badge.svg)](https://codecov.io/gh/guiastrennec/modelviz)
-
 Overview
 --------
 
@@ -21,8 +19,6 @@ Models are commonly represented as standard model diagrams (SMD) showing their s
 
 <img src="inst/img/smd_example.png">
 
-Examples of SMD can be viewed on the [modelviz app](https://guiastrennec.shinyapps.io/modelviz_app/).
-
 Quantitative model diagrams
 ---------------------------
 
@@ -30,19 +26,17 @@ Quantitative model diagrams (QMD) are used to intuitively displays the structura
 
 <img src="inst/img/qmd_example.jpg">
 
-Examples of QMD can be viewed on the [modelviz app](https://guiastrennec.shinyapps.io/modelviz_app/).
-
 Dynamic QMD
 -----------
 
-Dynamic QMD (dQMD) visually represent the dynamic processes proper to pharmacometric models. It allows to intuitively conceptualize complex processes such as feedback, non-linearity over time. Examples of dQMD are available on the [modelviz app](https://guiastrennec.shinyapps.io/modelviz_app/). dQMDs are currently only a concept and not a built-in feature of modelviz but will hopefully be coming in future updates.
+Dynamic QMD (dQMD) visually represent the dynamic processes proper to pharmacometric models. It allows to intuitively conceptualize complex processes such as feedback, non-linearity over time. dQMDs are currently only a concept and not a built-in feature of modelviz but will hopefully be coming in future updates.
 
 `modelviz` installation
 -----------------------
 
 ``` r
 # Install modelviz package (first time only)
-devtools::install_github("guiastrennec/modelviz")
+devtools::install_github("bguiastr/modelviz")
 
 # Load the modelviz package
 library(modelviz)
